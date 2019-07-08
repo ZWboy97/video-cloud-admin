@@ -1,12 +1,12 @@
 import React from 'react';
 import { Row, Col, Card, Modal, message } from 'antd';
-import BreadcrumbCustom from './BreadcrumbCustom';
-import StreamsTable from './tables/StreamsTable';
-import { SRSAPI } from '../axios/api'
+import BreadcrumbCustom from '../BreadcrumbCustom';
+import TransformTable from './TransformTable'
+import { SRSAPI } from '../../axios/api'
 const confirm = Modal.confirm
 
 
-class StreamsManager extends React.Component {
+class TransformManager extends React.Component {
     state = {
         streams: []
     };
@@ -58,12 +58,12 @@ class StreamsManager extends React.Component {
     render() {
         return (
             <div className="gutter-example button-demo">
-                <BreadcrumbCustom second="直播流管理" />
+                <BreadcrumbCustom second="直播流转码" />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
                             <Card title="在线直播流" bordered={false}>
-                                <StreamsTable streams={this.state.streams}
+                                <TransformTable streams={this.state.streams}
                                     kickoff={this.kickoff}
                                     preview={this.preview} />
                             </Card>
@@ -78,4 +78,4 @@ class StreamsManager extends React.Component {
     }
 }
 
-export default StreamsManager;
+export default TransformManager;

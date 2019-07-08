@@ -1,6 +1,5 @@
 /**
- * 路由组件出口文件
- * yezi 2018年6月24日
+ * 作为模块接口，导出所有的组件
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
@@ -28,9 +27,9 @@ import Cssmodule from './cssmodule';
 import MapUi from './ui/map';
 import QueryParams from './extension/QueryParams';
 import ClientsManager from './tables/ClientsManager';
-import StreamsManager from './StreamsManager'
-import DVRManager from './DVRManager'
-import TransformManager from './TransformManager'
+import StreamsManager from './broadcast/StreamsManager'
+import DVRManager from './broadcast/DVRManager.js'
+import TransformManager from './broadcast/TransformManager.js'
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
