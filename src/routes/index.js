@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom'; // https://www.jianshu.com/p/e3adc9b5f75c
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';          //导入所有的组件
 import routesConfig from './config';                //导入菜单栏路由配置
@@ -8,7 +8,8 @@ import queryString from 'query-string';
 export default class CRouter extends Component {
 
     /**
-     * 判断组件具有这个权限
+     * 高阶组件，组件具有这个权限
+     * 对于需要权限的组件进行权限检查，无权限的情况下重定向到404页面
      */
     requireAuth = (permission, component) => {
         const { auth } = this.props;

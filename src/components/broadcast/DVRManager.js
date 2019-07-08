@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Card, Modal, message } from 'antd';
-import BreadcrumbCustom from './BreadcrumbCustom';
+import BreadcrumbCustom from '../BreadcrumbCustom';
 import DVRTable from './DVRTable';
-import { SRSAPI } from '../axios/api'
+import { SRSAPI } from '../../axios/api'
 const confirm = Modal.confirm
 
 

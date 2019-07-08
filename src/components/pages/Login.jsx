@@ -35,6 +35,7 @@ class Login extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { setAlitaState } = this.props;
+                // TODO，hard code. 
                 this.setState({
                     logining: true
                 })

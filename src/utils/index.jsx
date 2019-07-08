@@ -2,15 +2,15 @@
  * 提供一些公用的工具函数
  */
 
-//解析url中的参数
+//解析当前浏览器地址中url？之后的参数，返回一个参数对象
 export const queryString = () => {
-    let _queryString = {};
-    const _query = window.location.search.substr(1);
+    let _queryString = {};//最终结果，初始化空对象
+    const _query = window.location.search.substr(1);//截取？之后的参数字段
     const _vars = _query.split('&');
     _vars.forEach((v, i) => {
-        const _pair = v.split('=');
+        const _pair = v.split('=');//{ property ： value }
         if (!_queryString.hasOwnProperty(_pair[0])) {
-            _queryString[_pair[0]] = decodeURIComponent(_pair[1]);
+            _queryString[_pair[0]] = decodeURIComponent(_pair[1]);//解码存储
         } else if (typeof _queryString[_pair[0]] === 'string') {
             const _arr = [_queryString[_pair[0]], decodeURIComponent(_pair[1])];
             _queryString[_pair[0]] = _arr;
