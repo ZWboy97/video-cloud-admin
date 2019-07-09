@@ -4,7 +4,8 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Spin, message } from 'antd';
 import { connectAlita } from 'redux-alita';
-import { UserApi, API } from '../../axios/api'
+import { VCloudAPI } from '../../axios/api'
+import { Link } from 'react-router-dom'
 const FormItem = Form.Item;
 
 class Login extends React.Component {
@@ -21,7 +22,8 @@ class Login extends React.Component {
 
     componentDidUpdate(prevProps) {
         const { auth: nextAuth = {}, history } = this.props;
-        if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
+        if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆成功
+            //登录成功，则直接条状
             localStorage.setItem('user', JSON.stringify(nextAuth.data));
             history.push('/');
         }
@@ -35,15 +37,12 @@ class Login extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { setAlitaState } = this.props;
-                // TODO，hard code. 
-                this.setState({
-                    logining: true
-                })
-                API.post('users', { userName: values.userName, passWord: values.password })
+                VCloudAPI.post('user', { userName: values.userName, passWord: values.password })
                     .then(response => {
                         console.log(response);
                         console.log(response.data);
                         if (response.status == 200) {
+                            //登录验证成功
                             if (response.data.role == 'admin') {
                                 setAlitaState({ funcName: 'admin', stateName: 'auth' });
                             } else {
@@ -60,6 +59,8 @@ class Login extends React.Component {
                         }
                     }).catch(r => {
                         message.error('登录失败，请稍后重试！')
+                        // TODO，hard code. 
+                        setAlitaState({ funcName: 'guest', stateName: 'auth' });
                     }).finally(() => {
                         this.setState({ logining: false })
                     });
@@ -107,9 +108,11 @@ class Login extends React.Component {
                                         <div className="login-form-forgot">忘记密码</div>
                                     </div>
                                     <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                                    <p style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Link
+                                        to='/register'
+                                        style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                         <span >现在注册</span>
-                                    </p>
+                                    </Link>
                                 </FormItem>
                             </Form>
                         </div>

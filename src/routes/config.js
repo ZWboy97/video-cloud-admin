@@ -1,5 +1,13 @@
 /**
  * 菜单路由配置
+ * key: 路由path
+ * route：路径路由，一般直接key来表示了
+ * title：菜单项名称
+ * icon：
+ * component：组件名称，需要和component模块的index.js导出的组件名称一致
+ * login：是否登录才能查看组件，默认为false（表示需要登录），为true（表示不需要登录）
+ * auth：查看该组件所需要的权限
+ * query：
  */
 export default {
     menus: [
