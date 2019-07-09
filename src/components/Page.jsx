@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * 页面容器组件
+ */
 class Page extends React.Component {
     render() {
         return (

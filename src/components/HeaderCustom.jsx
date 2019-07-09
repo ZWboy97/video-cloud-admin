@@ -24,10 +24,10 @@ class HeaderCustom extends Component {
 
     componentDidMount() {
         const QueryString = queryString();//获取当前URL的参数对象
-        const _user = JSON.parse(localStorage.getItem('user')) || '测试';//获取已登录的用户信息
+        const _user = JSON.parse(localStorage.getItem('user'));//获取已登录的用户信息
 
         if (!_user && QueryString.hasOwnProperty('code')) {
-            //TODO
+            //TODO 比如github账号体系登录验证方式
         } else {
             this.setState({
                 user: _user

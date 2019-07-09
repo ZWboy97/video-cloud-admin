@@ -6,14 +6,14 @@ const renderMenuItem = item => ( // item.route 菜单单独跳转的路由
     <Menu.Item
         key={item.key}
     >
-        <Link to={(item.route || item.key) + (item.query || '')}>   
+        <Link to={(item.route || item.key) + (item.query || '')}>
             {item.icon && <Icon type={item.icon} />}
             <span className="nav-text">{item.title}</span>
         </Link>
     </Menu.Item>
 );
 
-const renderSubMenu = item => ( 
+const renderSubMenu = item => (
     <Menu.SubMenu
         key={item.key}
         title={
@@ -27,9 +27,13 @@ const renderSubMenu = item => (
     </Menu.SubMenu>
 );
 
+/**
+ * 菜单Menu组件
+ * @param menus 父组件传入的菜单对象
+ */
 export default ({ menus, ...props }) => (
     <Menu {...props}>
-        {menus && menus.map(item => 
+        {menus && menus.map(item =>
             item.subs ? renderSubMenu(item) : renderMenuItem(item)
         )}
     </Menu>

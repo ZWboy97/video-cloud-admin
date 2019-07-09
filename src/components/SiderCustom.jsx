@@ -1,5 +1,6 @@
 /**
- * 
+ * 侧面菜单栏组件
+ * 完成对菜单栏以及顶部logo等组件的组装
  */
 import React, { Component } from 'react';
 import { Layout } from 'antd';
@@ -43,7 +44,7 @@ class SiderCustom extends Component {
     state = {
         mode: 'inline',
         openKey: '',
-        selectedKey: '',
+        selectedKey: '',   //被选菜单的key
         firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
     };
 
@@ -60,6 +61,7 @@ class SiderCustom extends Component {
         popoverHide && popoverHide();
     };
 
+    //被展开的菜单
     openMenu = v => {
         this.setState({
             openKey: v[v.length - 1],
@@ -75,8 +77,9 @@ class SiderCustom extends Component {
                 breakpoint="lg"
                 collapsed={collapsed}
                 style={{ overflowY: 'auto' }}
+                width="150"
             >
-                <div className="logo"><p>Live360</p></div>
+                <div className="logo"></div>
                 <SiderMenu
                     menus={routes.menus}
                     onClick={this.menuClick}
@@ -98,4 +101,6 @@ class SiderCustom extends Component {
     }
 }
 
+// withrouter将组件链接路由，将react-router 的 history、location、match 三个对象传入props对象上
+// 这样，代码中就可以通过props来访问match，history，location等属性。
 export default withRouter(SiderCustom);
