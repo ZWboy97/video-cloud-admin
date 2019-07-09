@@ -60,15 +60,22 @@ yarn build or npm run build
 ```
 
 #### 2. 项目依赖
+<<<<<<< HEAD
 ### 依赖模块
 <span style="color: rgb(184,49,47);">由create-react-app创建的，主要还是列出新加的功能依赖包</span>
 
 <span style="color: rgb(184,49,47);">点击名称可跳转相关网站😄😄</span>
+=======
+<span style="color: rgb(184,49,47);">由create-react-app创建的，主要还是列出新加的功能依赖包</span>
+
+<span style="color: rgb(184,49,47);">点击名称可跳转相关网站</span>
+>>>>>>> MOD: 用户登录网络请求接口, 登录权限认证, 用户登录状态管理,
 
 - [react](https://facebook.github.io/react/)
 - [react-router](https://react-guide.github.io/react-router-cn/)(<span style="color: rgb(243,121,52);">react路由，4.x的版本</span>)
 - [redux](https://redux.js.org/)(基础用法，但是封装了通用action和reducer，demo中主要用于权限控制
 - [antd](https://ant.design/index-cn)(<span style="color: rgb(243,121,52);">蚂蚁金服开源的react ui组件框架</span>)
+<<<<<<< HEAD
 - [axios](https://github.com/mzabriskie/axios)(<span style="color: rgb(243,121,52);">http请求模块，可用于前端任何场景，很强大👍</span>)
 - [echarts-for-react](https://github.com/hustcc/echarts-for-react)(<span style="color: rgb(243,121,52);">可视化图表，别人基于react对echarts的封装，足够用了</span>)
 - [recharts](http://recharts.org/#/zh-CN/)(<span style="color: rgb(243,121,52);">另一个基于react封装的图表，个人觉得是没有echarts好用</span>)
@@ -77,6 +84,16 @@ yarn build or npm run build
 - [react-draggable](https://github.com/mzabriskie/react-draggable)(<span style="color: rgb(243,121,52);">拖拽模块，找了个简单版的</span>)
 - [screenfull](https://github.com/sindresorhus/screenfull.js/)(<span style="color: rgb(243,121,52);">全屏插件</span>)
 - [photoswipe](https://github.com/dimsemenov/photoswipe)(<span style="color: rgb(243,121,52);">图片弹层查看插件，不依赖jQuery，还是蛮好用👍</span>)
+=======
+- [axios](https://github.com/mzabriskie/axios)(<span style="color: rgb(243,121,52);">http请求模块，可用于前端任何场景，很强大</span>)
+- [echarts-for-react](https://github.com/hustcc/echarts-for-react)(<span style="color: rgb(243,121,52);">可视化图表，别人基于react对echarts的封装，足够用了</span>)
+- [recharts](http://recharts.org/#/zh-CN/)(<span style="color: rgb(243,121,52);">另一个基于react封装的图表，个人觉得是没有echarts好用</span>)
+- [nprogress](https://github.com/rstacruz/nprogress)(<span style="color: rgb(243,121,52);">顶部加载条，蛮好用</span>)
+- [react-draft-wysiwyg](https://github.com/jpuri/react-draft-wysiwyg)(<span style="color: rgb(243,121,52);">别人基于react的富文本封装，如果找到其他更好的可以替换</span>)
+- [react-draggable](https://github.com/mzabriskie/react-draggable)(<span style="color: rgb(243,121,52);">拖拽模块，找了个简单版的</span>)
+- [screenfull](https://github.com/sindresorhus/screenfull.js/)(<span style="color: rgb(243,121,52);">全屏插件</span>)
+- [photoswipe](https://github.com/dimsemenov/photoswipe)(<span style="color: rgb(243,121,52);">图片弹层查看插件，不依赖jQuery，还是蛮好用</span>)
+>>>>>>> MOD: 用户登录网络请求接口, 登录权限认证, 用户登录状态管理,
 - [animate.css](http://daneden.me/animate)(<span style="color: rgb(243,121,52);">css动画库</span>)
 - [react-loadable](https://github.com/jamiebuilds/react-loadable)(代码拆分，按需加载，预加载，样样都行，具体见其文档，推荐使用)
 - [redux-alita](https://github.com/yezihaohao/redux-alita) 极简的redux2react工具
