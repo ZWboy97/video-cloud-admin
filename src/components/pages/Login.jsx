@@ -2,7 +2,7 @@
  *  用户登录页面
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox, Spin, message } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Spin, message, Layout } from 'antd';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../axios/api'
 import { Link } from 'react-router-dom'
@@ -75,50 +75,57 @@ class Login extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;      //解析出getFieldDecorator方法
         return (
-            <div className="login">
-                <div className="login-logo-image">
-                    <img src={require('../../style/imgs/logo.png')} alt="logo" />
-                    <div className="logo-text">视频云</div>
-                </div>
-                <Spin spinning={this.state.logining} delay={500}>
-                    <div className="login-form-container">
-                        <div className="login-form" >
-                            <div className="login-logo">视频云直播管理后台</div>
-                            <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
-                                <FormItem>
-                                    {getFieldDecorator('userName', {
-                                        rules: [{ required: true, message: '请输入用户名!' }],
-                                    })(
-                                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    {getFieldDecorator('password', {
-                                        rules: [{ required: true, message: '请输入密码!' }],
-                                    })(
-                                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    <div className="password-container">
-                                        {
-                                            getFieldDecorator('remember', { valuePropName: 'checked', initialValue: true, })(
-                                                <Checkbox className="login-form-remember">记住密码</Checkbox>)
-                                        }
-                                        <div className="login-form-forgot">忘记密码</div>
-                                    </div>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                                    <Link
-                                        to='/register'
-                                        style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <span >现在注册</span>
-                                    </Link>
-                                </FormItem>
-                            </Form>
-                        </div>
+            <div className="login-container">
+                <div className="login">
+                    <div className="login-logo-image">
+                        <img src={require('../../style/imgs/logo.png')} alt="logo" />
+                        <div className="logo-text">视频云</div>
                     </div>
-                </Spin>
+                    <Spin spinning={this.state.logining} delay={500}>
+                        <div className="login-form-container">
+                            <div className="login-form" >
+                                <div className="login-logo">视频云直播管理后台</div>
+                                <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
+                                    <FormItem>
+                                        {getFieldDecorator('userName', {
+                                            rules: [{ required: true, message: '请输入用户名!' }],
+                                        })(
+                                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
+                                        )}
+                                    </FormItem>
+                                    <FormItem>
+                                        {getFieldDecorator('password', {
+                                            rules: [{ required: true, message: '请输入密码!' }],
+                                        })(
+                                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
+                                        )}
+                                    </FormItem>
+                                    <FormItem>
+                                        <div className="password-container">
+                                            {
+                                                getFieldDecorator('remember', { valuePropName: 'checked', initialValue: true, })(
+                                                    <Checkbox className="login-form-remember">记住密码</Checkbox>)
+                                            }
+                                            <Link to='/forget' className="login-form-forgot">忘记密码</Link>
+                                        </div>
+                                        <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                                        <Link
+                                            to='/register'
+                                            style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            <span >现在注册</span>
+                                        </Link>
+                                    </FormItem>
+                                </Form>
+                            </div>
+                        </div>
+                    </Spin>
+                </div>
+                <div className="login-footer">
+                    版权所有 © 2019 视频云管理平台
+                </div>
             </div>
+
+
         );
     }
 }

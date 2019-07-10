@@ -11,12 +11,51 @@
  */
 export default {
     menus: [
-        { key: '/app/dashboard/index', title: '概览', icon: 'mobile', component: 'Dashboard' },
-        { key: '/app/streams', title: '流管理', icon: 'rocket', component: 'StreamsManager' },
-        { key: '/app/client', title: '用户管理', icon: 'copy', component: 'ClientsManager' },
-        { key: '/app/dvr', title: '流存储管理', icon: 'edit', component: 'DVRManager' },
-        { key: '/app/transform', title: '转码管理', icon: 'area-chart', component: 'TransformManager' },
-        { key: '/app/cssModule', title: '服务管理', icon: 'star', component: 'Cssmodule' },
+        { key: '/app/dashboard/index', title: '首页概览', icon: 'dashboard', component: 'Dashboard' },
+        {
+            key: '/app/live', title: '直播服务', icon: 'rocket',
+            subs: [
+                { key: '/app/lives/mylives', title: '我的直播', component: 'Buttons' },
+                { key: '/app/ui/recharts', title: '直播统计', component: 'Recharts' },
+                { key: '/app/ui/spins', title: '通用设置', component: 'Spins' },
+                { key: '/app/ui/modals', title: '应用中心', component: 'Modals' }
+            ]
+        },
+        {
+            key: '/app/vod', title: '点播服务', icon: 'copy',
+            subs: [
+                { key: '/app/ui/banners', title: '我的点播', component: 'Banners' },
+                { key: '/app/ui/echarts', title: '点播统计', component: 'Echarts' },
+                { key: '/app/ui/drags', title: '资源管理', component: 'Drags' },
+                { key: '/app/ui/gallery', title: '通用设置', component: 'Gallery' },
+                { key: '/app/ui/map', title: '广告管理', component: 'MapUi' },
+            ]
+        },
+        {
+            key: '/app/dvr', title: '用户画像', icon: 'edit',
+            subs: [
+                { key: '/app/ui/exampleAnimations', title: '直播用户', component: 'ExampleAnimations' },
+                { key: '/app/ui/advancedTable', title: '点播用户', component: 'AdvancedTable' },
+            ]
+        },
+        {
+            key: '/app/transform', title: '账户管理', icon: 'area-chart',
+            subs: [
+                { key: '/app/ui/exampleAnimations', title: '账户总览', component: 'ExampleAnimations' },
+                { key: '/app/ui/advancedTable', title: '充值提现', component: 'AdvancedTable' },
+                { key: '/app/ui/asynchronousTable', title: '账单流水', component: 'AsynchronousTable' },
+                { key: '/app/ui/basicForm', title: '认证服务', component: 'BasicForm' },
+            ]
+        },
+
+        {
+            key: '/app/cssModule', title: '用户中心', icon: 'star',
+            subs: [
+                { key: '/app/ui/notifications', title: '个人中心', component: 'Notifications' },
+                { key: '/app/ui/tabs', title: '操作日志', component: 'Tabs' },
+                { key: '/app/ui/basic', title: '权限管理', component: 'AuthBasic' },
+            ]
+        },
         {
             key: '/app/ui', title: 'UI', icon: 'scan',
             subs: [
