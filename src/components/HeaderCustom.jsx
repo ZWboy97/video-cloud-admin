@@ -8,7 +8,7 @@ import { Menu, Icon, Layout, Badge, Popover } from 'antd';
 import SiderCustom from './SiderCustom';
 import { queryString } from '../utils';//导入工具函数
 import screenfull from 'screenfull';
-import avater from '../style/imgs/b1.jpg';
+import avater from '../style/imgs/default_avtar.png';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
