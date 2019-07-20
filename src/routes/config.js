@@ -15,7 +15,7 @@ export default {
         {
             key: '/app/live', title: '直播服务', icon: 'rocket',
             subs: [
-                { key: '/app/lives/mylives', title: '我的直播', component: 'Dashboard' },
+                { key: '/app/lives/mylives', title: '我的直播', component: 'MyLivesPage' },
                 { key: '/app/ui/recharts', title: '直播统计', component: 'Dashboard' },
                 { key: '/app/ui/spins', title: '通用设置', component: 'Dashboard' },
                 { key: '/app/ui/modals', title: '应用中心', component: 'Dashboard' }
