@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-<<<<<<< HEAD
 import { Button, Modal, Form, Select, Input, DatePicker } from 'antd';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './style.less'
@@ -8,23 +7,13 @@ import { connectAlita } from 'redux-alita';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-=======
-import { Button, Modal } from 'antd';
-import './style.less'
-import { connectAlita } from 'redux-alita';
-
->>>>>>> d62b4f530c118965e8eefba9cb338f8d92f61358
 
 class CreateLiveModal extends Component {
 
     constructor(props) {
         super(props)
-<<<<<<< HEAD
         this.handleCancel = this.handleCancel.bind(this);
         this.handleOk = this.handleOk.bind(this);
-=======
-        this.handleCancel = this.handleCancel.bind(this)
->>>>>>> d62b4f530c118965e8eefba9cb338f8d92f61358
     }
 
 
@@ -39,7 +28,6 @@ class CreateLiveModal extends Component {
     }
 
     handleOk() {
-<<<<<<< HEAD
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return;
@@ -73,24 +61,6 @@ class CreateLiveModal extends Component {
         const { data } = create_live_modal;
         const { visible = false, loading = false } = data || {};
 
-=======
-        this.props.setAlitaState({
-            stateName: 'create_live_modal',
-            data: {
-                visible: true,
-                loading: true
-            }
-        })
-        //todu 读取输入的数据
-    }
-
-    render() {
-        console.log('alitastate', this.props.alitaState)
-        const { create_live_modal = {} } = this.props.alitaState;
-        const { data } = create_live_modal;
-        console.log('data:', data)
-        const { visible = false, loading = false } = data || {};
->>>>>>> d62b4f530c118965e8eefba9cb338f8d92f61358
         return (
             <div>
                 <Modal
@@ -99,7 +69,6 @@ class CreateLiveModal extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
-<<<<<<< HEAD
                         <Button key="cancel" onClick={this.handleCancel}>
                             取消</Button>,
                         <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
@@ -152,29 +121,13 @@ class CreateLiveModal extends Component {
                             )}
                         </Form.Item>
                     </Form>
-=======
-                        <Button key="cancel" onClick={() => this.handleCancel.bind(this)}>
-                            Return</Button>,
-                        <Button key="submit" type="primary" loading={() => loading} onClick={this.handleOk}>
-                            创建</Button>,
-                    ]}
-                >
->>>>>>> d62b4f530c118965e8eefba9cb338f8d92f61358
                 </Modal>
             </div>
         )
     }
-<<<<<<< HEAD
 }
 
 const WrappedApp = Form.create({ name: 'coordinated' })(CreateLiveModal);
 
 
 export default connectAlita()(WrappedApp);
-=======
-
-
-}
-// stateName 为create-live-modal，用于对创建直播的modal窗口进行控制
-export default connectAlita()(CreateLiveModal);
->>>>>>> d62b4f530c118965e8eefba9cb338f8d92f61358
