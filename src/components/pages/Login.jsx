@@ -37,17 +37,15 @@ class Login extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { setAlitaState } = this.props;
-                VCloudAPI.post('user', { userName: values.userName, passWord: values.password })
+                console.log('userName:', values.userName)
+                VCloudAPI.post('user/login_by_name/ljc', { user_name: values.userName, passWord: values.password })
                     .then(response => {
                         console.log(response);
                         console.log(response.data);
-                        if (response.status == 200) {
-                            //登录验证成功
-                            if (response.data.role == 'admin') {
-                                setAlitaState({ funcName: 'admin', stateName: 'auth' });
-                            } else {
-                                setAlitaState({ funcName: 'guest', stateName: 'auth' });
-                            }
+                        console.log('http-status,', response.status)
+                        if (response.status == 201) {
+                            message.success('登录成功！')
+                            setAlitaState({ funcName: 'admin', stateName: 'auth' });
                         } else if (response.status == 404) {
                             message.error('用户名不存在!');
                         } else if (response.status == 401) {
