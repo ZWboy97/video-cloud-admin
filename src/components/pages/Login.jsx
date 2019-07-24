@@ -33,6 +33,8 @@ class Login extends React.Component {
                                 stateName: 'session_id',
                                 data: response.data['session_id']
                             })
+                            localStorage.setItem('session_id', response.data['session_id']);
+                            this.props.history.push('/');
                         } else if (response.status == 404) {
                             message.error('用户名不存在!');
                         } else if (response.status == 401) {
@@ -44,7 +46,6 @@ class Login extends React.Component {
                     }).catch(r => {
                         message.error('登录失败，请稍后重试！')
                     }).finally(() => {
-                        this.props.history.push('/');
                     });
 
             }
