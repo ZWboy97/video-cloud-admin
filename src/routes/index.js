@@ -29,22 +29,12 @@ export default class CRouter extends Component {
      */
     requireLogin = (component, permission) => {
         //Todo, 基于本地信息判断用户是否已经登录，之后需要切换到更安全的验证方式
-        const _user = JSON.parse(localStorage.getItem('user'));
+        const _user = localStorage.getItem('session_id');
         if (!_user) {
             return <Redirect to={'/login'} />;
         } else {
             return permission ? this.requireAuth(permission, component) : component;
         }
-
-        const { auth } = this.props;
-        //从网络数据获得auth数据
-        //const { auth } = store.getState().httpData;
-        const { permissions } = auth.data;
-        //process.env.NODE_ENV === 'production' &&
-        if (!permissions) { //判断是否登录
-            return <Redirect to={'/login'} />;
-        }
-        return permission ? this.requireAuth(permission, component) : component;
     };
 
     render() {

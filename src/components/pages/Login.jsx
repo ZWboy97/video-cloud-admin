@@ -5,7 +5,7 @@ import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Spin, message, Layout } from 'antd';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../axios/api'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 const FormItem = Form.Item;
 
 class Login extends React.Component {
@@ -13,20 +13,6 @@ class Login extends React.Component {
     //控制的state，不从Redux中读取
     state = {
         logining: false
-    }
-
-    componentDidMount() {
-        const { setAlitaState } = this.props;
-        setAlitaState({ stateName: 'auth', data: null }); //进入登录界面后，初始化auth为null
-    }
-
-    componentDidUpdate(prevProps) {
-        const { auth: nextAuth = {}, history } = this.props;
-        if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆成功
-            //登录成功，则直接条状
-            localStorage.setItem('user', JSON.stringify(nextAuth.data));
-            history.push('/');
-        }
     }
 
     /**
@@ -40,27 +26,25 @@ class Login extends React.Component {
                 console.log('userName:', values.userName)
                 VCloudAPI.post('user/login_by_name/ljc', { user_name: values.userName, passWord: values.password })
                     .then(response => {
-                        console.log(response);
-                        console.log(response.data);
-                        console.log('http-status,', response.status)
+                        console.log('登录请求结果', response.data);
                         if (response.status == 201) {
                             message.success('登录成功！')
-                            setAlitaState({ funcName: 'admin', stateName: 'auth' });
+                            setAlitaState({
+                                stateName: 'session_id',
+                                data: response.data['session_id']
+                            })
                         } else if (response.status == 404) {
                             message.error('用户名不存在!');
                         } else if (response.status == 401) {
                             message.error('用户名或密码错误，请重新输入!')
                             this.props.form.resetFields()
                         } else {
-                            message.error('登录失败！')
-                            setAlitaState({ funcName: 'admin', stateName: 'auth' });
+                            message.error('登录失败，请稍后重试！')
                         }
                     }).catch(r => {
                         message.error('登录失败，请稍后重试！')
-                        // TODO，hard code. 
-                        setAlitaState({ funcName: 'guest', stateName: 'auth' });
                     }).finally(() => {
-                        this.setState({ logining: false })
+                        this.props.history.push('/');
                     });
 
             }
@@ -128,4 +112,4 @@ class Login extends React.Component {
     }
 }
 
-export default connectAlita(['auth'])(Form.create()(Login));
+export default connectAlita()(withRouter(Form.create()(Login)));
