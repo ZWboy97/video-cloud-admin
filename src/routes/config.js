@@ -24,7 +24,7 @@ export default {
         {
             key: '/app/vod', title: '点播服务', icon: 'copy',
             subs: [
-                { key: '/app/ui/banners', title: '我的点播', component: 'Dashboard' },
+                { key: '/app/videodemand/VideoDemand', title: '我的点播', component: 'VideoDemand' },
                 { key: '/app/ui/echarts', title: '点播统计', component: 'Dashboard' },
                 { key: '/app/ui/drags', title: '资源管理', component: 'Dashboard' },
                 { key: '/app/ui/gallery', title: '通用设置', component: 'Dashboard' },
@@ -51,7 +51,7 @@ export default {
         {
             key: '/app/cssModule', title: '用户中心', icon: 'star',
             subs: [
-                { key: '/app/ui/notifications', title: '个人中心', component: 'Dashboard' },
+                { key: '/app/usercenter/UserCenter', title: '个人中心', component: 'UserCenter' },
                 { key: '/app/ui/tabs', title: '操作日志', component: 'Dashboard' },
                 { key: '/app/ui/basic', title: '权限管理', component: 'Dashboard' },
             ]

@@ -3,7 +3,8 @@
  */
 import Dashboard from './dashboard/Dashboard';
 import MyLivesPage from './live/mylives/MyLivesPage';
-
+import UserCenter from './usercenter/UserCenter'
+import VideoDemand from './videodemand/VideoDemand'
 export default {
-    Dashboard, MyLivesPage
+    Dashboard, MyLivesPage, UserCenter, VideoDemand,
 }
