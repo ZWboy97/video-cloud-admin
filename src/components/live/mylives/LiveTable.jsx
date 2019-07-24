@@ -1,7 +1,76 @@
-import { Table } from 'antd'
+import { Table, Divider, Button} from 'antd'
 import React from 'react';
+import { connectAlita } from 'redux-alita';
+//import { VCloudAPI } from '../../axios/api'
 
 class LiveTable extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.handleLink=this.handleLink.bind(this);
+        this.handleSetting=this.handleSetting.bind(this);
+
+        this.columns = [
+            {
+                title: '频道号',
+                dataIndex: 'id',
+                key: 'id',
+                align: 'center',
+                render: (text) => { return "hahha" }
+            }, {
+                title: '直播名称',
+                dataIndex: 'name',
+                key: 'name',
+                align: 'center',
+            }, {
+                title: '分类',
+                dataIndex: 'kind',
+                key: 'kind',
+                align: 'center',
+            }, {
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status',
+                align: 'center',
+            }, {
+                title: '观看条件',
+                dataIndex: 'auth',
+                key: 'auth',
+                align: 'center',
+            }, {
+                title: '操作',
+                dataIndex: 'operation',
+                key: 'operation',
+                align: 'center',
+                render: (text)=>
+                <div>       
+                     <a className="live-link" href="#" onClick={this.handleLink}>链接</a>
+                     <Divider type="vertical" />
+                     <a className="live-link" href="#" onClick={this.handleSetting}>设置</a>
+                </div>
+            },
+        ]
+    }
+    handleLink(e) {
+        e.preventDefault();
+        console.log("click create button");
+        this.props.setAlitaState({
+            stateName: 'create_link_modal',
+            data: {
+                visible: true
+            }
+        })
+    }
+    handleSetting(e) {
+        console.log('click create button')
+        this.props.setAlitaState({
+            stateName: 'create_link_modal',
+            data: {
+                visible: true,
+                loading: false
+            }
+        })
+    }
 
     render() {
 
@@ -10,7 +79,7 @@ class LiveTable extends React.Component {
             < div >
                 <Table
                     dataSource={data}
-                    columns={columns}
+                    columns={this.columns}
                     bordered={true}
                     size='small'
                 />
@@ -18,43 +87,13 @@ class LiveTable extends React.Component {
         );
     }
 
+
+    
+
 }
 
 // 直播表格表头
-const columns = [
-    {
-        title: '频道号',
-        dataIndex: 'id',
-        key: 'id',
-        align: 'center',
-        render: (text) => { return "hahha" }
-    }, {
-        title: '直播名称',
-        dataIndex: 'name',
-        key: 'name',
-        align: 'center',
-    }, {
-        title: '分类',
-        dataIndex: 'kind',
-        key: 'kind',
-        align: 'center',
-    }, {
-        title: '状态',
-        dataIndex: 'status',
-        key: 'status',
-        align: 'center',
-    }, {
-        title: '观看条件',
-        dataIndex: 'auth',
-        key: 'auth',
-        align: 'center',
-    }, {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation',
-        align: 'center',
-    },
-]
+
 
 const data = [
     {
@@ -132,4 +171,4 @@ const data = [
     },
 ]
 
-export default LiveTable;
+export default connectAlita()(LiveTable);
