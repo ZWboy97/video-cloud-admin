@@ -23,11 +23,6 @@ class App extends Component {
     };
 
     componentWillMount() {
-        // 从props中解析出setAlitaStae方法
-        const { setAlitaState } = this.props;
-        //从localStorage读取用户数据
-        const user = JSON.parse(localStorage.getItem('user'));
-        user && setAlitaState({ stateName: 'auth', data: user });
         // 计算宽度，并存储到state中
         this.getClientWidth();
         // 设置监听，当window宽度变化的时候，再次判断
