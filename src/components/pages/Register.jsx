@@ -1,17 +1,16 @@
 /**
  * 登录界面
+ * @author NingNing.Wang
  */
-
-// todo
-
-import {
-    Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message
-} from 'antd';
 import React from 'react';
+import {
+    Form, Input, Tooltip, Icon, Row, Col, Button, message
+} from 'antd';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../axios/api'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 class Register extends React.Component {
+
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
@@ -21,38 +20,33 @@ class Register extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const { setAlitaState } = this.props;
-                VCloudAPI.post('user/register', { user_name: values.user_name, password: values.password, email: values.email})
+                VCloudAPI.post('user/register',
+                    {
+                        email: values.email,
+                        user_name: values.user_name,
+                        password: values.password
+                    })
                     .then(response => {
-                        console.log(response);
-                        console.log(response.data);
-                        console.log(response.status);
-                        if (response.status === 201) {
-                           message.info("注册成功");
-                           console.log("111");
-
+                        console.log('register response:', response)
+                        if (response.status === 200) {
+                            const { data } = response;
+                            if (data.code === 200) {
+                                message.info("注册成功");
+                                this.props.history.push('/login');
+                            } else {
+                                message.info('注册失败');
+                            }
                         } else {
-                            message.warning("注册失败");
-                            console.log("222");
+                            message.warning("注册失败，请重新尝试");
                         }
                     }).catch(r => {
-                      
+                        message.warning("网络错误，注册失败");
                     }).finally(() => {
                         this.setState({ logining: false })
                     });
-
             }
         });
     };
-
-    // handleSubmit = e => {
-    //     e.preventDefault();
-    //     this.props.form.validateFieldsAndScroll((err, values) => {
-    //         if (!err) {
-    //             console.log('Received values of form: ', values);
-    //         }
-    //     });
-    // };
 
     handleConfirmBlur = e => {
         const { value } = e.target;
@@ -62,7 +56,7 @@ class Register extends React.Component {
     compareToFirstPassword = (rule, value, callback) => {
         const { form } = this.props;
         if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
+            callback('两次输入的密码不一致');
         } else {
             callback();
         }
@@ -79,7 +73,6 @@ class Register extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
         const formItemLayout = {
             labelCol: {
                 xs: { span: 12 },
@@ -105,7 +98,7 @@ class Register extends React.Component {
         return (
             <div className="login-container">
                 <Row className="register-row" type="flex" justify="space-around" align="middle">
-                    <Col className="register-colum" span="5">
+                    <Col className="register-colum" span={5}>
                         <div className="register-form">
                             <div className="register-text">欢迎注册</div>
                             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
@@ -114,11 +107,11 @@ class Register extends React.Component {
                                         rules: [
                                             {
                                                 type: 'email',
-                                                message: 'The input is not valid E-mail!',
+                                                message: '请输入合法的邮箱地址',
                                             },
                                             {
                                                 required: true,
-                                                message: 'Please input your E-mail!',
+                                                message: '请输入您的邮箱地址',
                                             },
                                         ],
                                     })(<Input />)}
@@ -127,14 +120,14 @@ class Register extends React.Component {
                                     label={
                                         <span>
                                             用户名&nbsp;
-                                                <Tooltip title="What do you want others to call you?">
+                                                <Tooltip title="您的个性化昵称">
                                                 <Icon type="question-circle-o" />
                                             </Tooltip>
                                         </span>
                                     }
                                 >
                                     {getFieldDecorator('user_name', {
-                                        rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+                                        rules: [{ required: true, message: '请输入您的用户昵称', whitespace: true }],
                                     })(<Input />)}
                                 </Form.Item>
 
@@ -143,7 +136,7 @@ class Register extends React.Component {
                                         rules: [
                                             {
                                                 required: true,
-                                                message: 'Please input your password!',
+                                                message: '请输入您的密码',
                                             },
                                             {
                                                 validator: this.validateToNextPassword,
@@ -156,7 +149,7 @@ class Register extends React.Component {
                                         rules: [
                                             {
                                                 required: true,
-                                                message: 'Please confirm your password!',
+                                                message: '请确认您的密码',
                                             },
                                             {
                                                 validator: this.compareToFirstPassword,
@@ -167,9 +160,9 @@ class Register extends React.Component {
                                 <Form.Item {...tailFormItemLayout}>
                                     <Button className="register-button" type="primary" htmlType="submit">
                                         注册 </Button>
-                                        <Link
-                                            to='/login'>
-                                            &nbsp;&nbsp;&nbsp;?&nbsp;已有账号，去登陆
+                                    <Link
+                                        to='/login'>
+                                        &nbsp;&nbsp;&nbsp;?&nbsp;已有账号，去登陆
                                         </Link>
                                 </Form.Item>
                             </Form>
@@ -180,4 +173,4 @@ class Register extends React.Component {
         );
     }
 }
-export default connectAlita(['auth'])(Form.create()(Register));;
+export default withRouter(connectAlita()(Form.create()(Register)));
