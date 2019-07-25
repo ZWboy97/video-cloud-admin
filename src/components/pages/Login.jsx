@@ -31,13 +31,17 @@ class Login extends React.Component {
                     .then(response => {
                         console.log('login response:', response.data)
                         if (response.status === 200) {
-                            const { data } = response;
-                            if (data.code === 201) {
+                            const { code = 0, data = {}, msg = {} } = response.data || {};
+                            if (code === 201) {
                                 message.success('登录成功！')
-                                localStorage.setItem('session_id', response.data['session_id']);
-                                localStorage.setItem('user', response.data['user']);
+                                setAlitaState({
+                                    stateName: 'session_id',
+                                    data: data.session_id
+                                });
+                                localStorage.setItem('session_id', data.session_id);
+                                localStorage.setItem('user', JSON.stringify(data.user));
                                 this.props.history.push('/');
-                            } else if (data.code === 401) {
+                            } else if (code === 401) {
                                 message.error('用户名或密码错误，请重新输入!')
                                 this.props.form.resetFields()
                             }
@@ -45,7 +49,6 @@ class Login extends React.Component {
                             message.error('登录失败，请稍后重试！')
                         }
                     }).catch(r => {
-                        message.error('网络错误，请稍后重试！')
                     }).finally(() => {
                     });
 
