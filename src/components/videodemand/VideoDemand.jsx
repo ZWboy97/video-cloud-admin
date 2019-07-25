@@ -139,7 +139,7 @@ class VideoDemand extends Component {
                                             }
                                         }}
                                         defaultFileList={[...fileList]}
-                                        
+
                                     >
                                         <Button>
                                             <Icon type="upload"/> 点击上传视频
