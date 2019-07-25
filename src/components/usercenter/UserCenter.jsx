@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Select,Descriptions, Avatar } from 'antd';
+import { Row, Col, Card, Button, Select, Avatar } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 const { Option } = Select;
 const options = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
@@ -50,12 +50,7 @@ class UserCenter extends Component {
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Card  bordered={false}>
-                                <Descriptions title="账户信息" layout="vertical">
-                                    <Descriptions.Item label="用户名">AAAA</Descriptions.Item>
-                                    <Descriptions.Item label="邮箱">aaa@qq.com</Descriptions.Item>
-                                    <Descriptions.Item label="手机号码">110</Descriptions.Item>
-                                </Descriptions>
+                            <Card bordered={false}>
                                 <Button className='modify-button' type='primary'> 点击修改 </Button>
                             </Card>
                         </div>
