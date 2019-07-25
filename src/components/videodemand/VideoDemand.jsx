@@ -53,9 +53,8 @@ class VideoDemand extends Component {
     state = {
         previewVisible: false,
         previewImage: '',
-        fileList: [
-
-        ],
+        fileList: [],
+        fileList2: []
     };
     viewAttachment = file => {
         let reader = new FileReader();
@@ -92,8 +91,9 @@ class VideoDemand extends Component {
     };
 
     handleChange = ({ fileList }) => this.setState({ fileList });
+    handleChange2 = ({ fileList }) => this.setState({ fileList2: fileList });
     render() {
-        const {previewVisible, previewImage, fileList} = this.state;
+        const {previewVisible, previewImage, fileList, fileList2} = this.state;
         const uploadButton = (
             <div>
                 <Icon type={this.state.loading ? 'loading' : 'plus'}/>
@@ -139,6 +139,7 @@ class VideoDemand extends Component {
                                             }
                                         }}
                                         defaultFileList={[...fileList]}
+                                        
                                     >
                                         <Button>
                                             <Icon type="upload"/> 点击上传视频
@@ -192,12 +193,12 @@ class VideoDemand extends Component {
                                 <Upload
                                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                     listType="picture-card"
-                                    fileList={fileList}
+                                    fileList={fileList2}
                                     onPreview={this.handlePreview}
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChange2}
 
                                 >
-                                    {fileList.length >= 3 ? null : uploadButton}
+                                    {fileList2.length >= 3 ? null : uploadButton}
                                 </Upload>
                                 <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                                     <img alt="example" style={{width: '100%'}} src={previewImage}/>
