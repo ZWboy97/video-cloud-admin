@@ -1,11 +1,11 @@
 /**
- * 登录界面
+ * 注册界面
  */
 
 // todo
 
 import {
-    Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message
+    Form, Input, Tooltip, Icon, Row, Col, Checkbox, Button, AutoComplete,message
 } from 'antd';
 import React from 'react';
 import { connectAlita } from 'redux-alita';

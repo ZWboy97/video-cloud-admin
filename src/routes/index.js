@@ -48,7 +48,6 @@ export default class CRouter extends Component {
                                 return (
                                     <Route
                                         key={r.route || r.key}
-                                        exact
                                         path={r.route || r.key}
                                         render={props => {
                                             const reg = /\?\S*/g;
