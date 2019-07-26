@@ -2,6 +2,7 @@ import { Table, Divider, Button} from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 //import { VCloudAPI } from '../../axios/api'
+import { Link, withRouter } from 'react-router-dom';
 
 class LiveTable extends React.Component {
 
@@ -44,9 +45,9 @@ class LiveTable extends React.Component {
                 align: 'center',
                 render: (text)=>
                 <div>       
-                     <a className="live-link" href="#" onClick={this.handleLink}>链接</a>
+                     <a className="live-link" href="javascript:;" onClick={this.handleLink}>链接</a>
                      <Divider type="vertical" />
-                     <a className="live-link" href="#" onClick={this.handleSetting}>设置</a>
+                     <a className="live-link" href="javascript:;" onClick={this.handleSetting}>设置</a>
                 </div>
             },
         ]
@@ -62,14 +63,15 @@ class LiveTable extends React.Component {
         })
     }
     handleSetting(e) {
-        console.log('click create button')
-        this.props.setAlitaState({
-            stateName: 'create_link_modal',
-            data: {
-                visible: true,
-                loading: false
-            }
-        })
+        console.log('click setting button')
+        this.props.history.push('/app/lives/mylives/details/') ;
+        // this.props.setAlitaState({
+        //     stateName: 'create_link_modal',
+        //     data: {
+        //         visible: true,
+        //         loading: false
+        //     }
+        // })
     }
 
     render() {
@@ -171,4 +173,4 @@ const data = [
     },
 ]
 
-export default connectAlita()(LiveTable);
+export default connectAlita()(withRouter(LiveTable));

@@ -1,10 +1,10 @@
 /**
- * 登录界面
+ * 注册界面
  * @author NingNing.Wang
  */
 import React from 'react';
 import {
-    Form, Input, Tooltip, Icon, Row, Col, Button, message
+    Form, Input, Tooltip, Icon, Row, Col, Button,message
 } from 'antd';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../axios/api'
