@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Row, Col, Card, Button, notification, Icon, Select, Upload, message, Modal} from 'antd';
+import {Row, Col, Card, Button, Icon, Select, Upload, Modal} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
+import {connectAlita} from 'redux-alita'
+import CreateChannelModal from "./CreateChannelModal";
 
 const {Option} = Select;
 const options = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
@@ -16,7 +18,7 @@ const props = {
             .then(res => res.json())
             .then(({thumbnail}) => thumbnail);
     },
-    onChange({ file, fileList }) {
+    onChange({file, fileList}) {
         if (file.status !== 'uploading') {
             console.log(file, fileList);
         }
@@ -28,6 +30,7 @@ const props2 = {
     listType: 'picture',
     defaultFileList: [...fileList],
 };
+
 function getBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -37,36 +40,21 @@ function getBase64(file) {
     });
 }
 
-function beforeUpload(file) {
-    const isJPG = file.type === 'image/jpeg';
-    if (!isJPG) {
-        message.error('You can only upload JPG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJPG && isLt2M;
-}
 
 class VideoDemand extends Component {
     state = {
         previewVisible: false,
         previewImage: '',
         fileList: [],
-        fileList2: []
+        fileList2: [],
+        selectedAttachment: null,
     };
     viewAttachment = file => {
         let reader = new FileReader();
-
-        //if reading completed
         reader.onload = e => {
-            //set values of selected attachment
             let newSelectedAttachment = {};
             newSelectedAttachment.file = file;
             newSelectedAttachment.blobData = e.target.result;
-
-            //if file type is image then show the attachment or download the same
             if (file.type.includes("video")) {
                 this.setState({
                     selectedAttachment: newSelectedAttachment
@@ -77,7 +65,7 @@ class VideoDemand extends Component {
         //read the file
         reader.readAsDataURL(file);
     };
-    handleCancel = () => this.setState({ previewVisible: false });
+    handleCancel = () => this.setState({previewVisible: false});
 
     handlePreview = async file => {
         if (!file.url && !file.preview) {
@@ -90,8 +78,20 @@ class VideoDemand extends Component {
         });
     };
 
-    handleChange = ({ fileList }) => this.setState({ fileList });
-    handleChange2 = ({ fileList }) => this.setState({ fileList2: fileList });
+    handleCreateChannnel(e) {
+        console.log('click create button')
+        this.props.setAlitaState({
+            stateName: 'create_channel_modal',
+            data: {
+                visible: true,
+                loading: false
+            }
+        })
+    }
+
+    handleChange = ({fileList}) => this.setState({fileList});
+    handleChange2 = ({fileList}) => this.setState({fileList2: fileList});
+
     render() {
         const {previewVisible, previewImage, fileList, fileList2} = this.state;
         const uploadButton = (
@@ -100,7 +100,6 @@ class VideoDemand extends Component {
                 <div className="ant-upload-text">Upload</div>
             </div>
         );
-        const {imageUrl} = this.state;
         return (
             <div className="gutter-example button-demo">
                 <BreadcrumbCustom first="我的点播"/>
@@ -112,7 +111,7 @@ class VideoDemand extends Component {
                                     {...props2}
                                 >
                                     <Button>
-                                        <Icon type="upload" /> 点击上传封面
+                                        <Icon type="upload"/> 点击上传封面
                                     </Button>
                                 </Upload>
 
@@ -126,9 +125,9 @@ class VideoDemand extends Component {
                             <Card title='我的视频' bordered={false}>
                                 <React.Fragment>
                                     <Upload
-                                        multiple={false}
+                                        multiple={true}
                                         beforeUpload={e => false}
-                                        showUploadList={false}
+                                        showUploadList={true}
                                         onChange={info => {
                                             if (info.file.status !== "uploading") {
                                                 let newFileList = this.state.fileList;
@@ -136,10 +135,11 @@ class VideoDemand extends Component {
                                                 this.setState({
                                                     fileList: newFileList
                                                 });
+
                                             }
                                         }}
+                                        onRemove={true}
                                         defaultFileList={[...fileList]}
-
                                     >
                                         <Button>
                                             <Icon type="upload"/> 点击上传视频
@@ -177,11 +177,10 @@ class VideoDemand extends Component {
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
                             <Card title='我的频道' bordered={false}>
-                                <Upload {...props}>
-                                    <Button>
-                                        <Icon type="upload"/> 点击上传视频至频道
-                                    </Button>
-                                </Upload>
+                                <Button type="primary" className="create-button" onClick={(e) => this.handleCreateChannnel(this)}>
+                                    点击创建频道
+                                </Button>
+                                <CreateChannelModal></CreateChannelModal>
                             </Card>
                         </div>
                     </Col>
@@ -191,6 +190,7 @@ class VideoDemand extends Component {
                         <div className="gutter-box">
                             <Card title='我的相簿' bordered={false}>
                                 <Upload
+                                    data={(file) => file.name = 'foo'}
                                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                     listType="picture-card"
                                     fileList={fileList2}
@@ -208,8 +208,9 @@ class VideoDemand extends Component {
                     </Col>
                 </Row>
             </div>
+
         )
     }
 }
 
-export default VideoDemand;
+export default connectAlita()(VideoDemand)
