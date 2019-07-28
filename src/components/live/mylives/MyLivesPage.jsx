@@ -5,14 +5,14 @@ import LiveTable from './LiveTable';
 import HeaderPanel from './HeaderPanel';
 import './style.less';
 import CreateLiveModal from './CreateLiveModal';
-import CreateLinkModal from './CreateLinkModal';
+import CreateLinkModal from './LiveUrlModal';
 import { connectAlita } from 'redux-alita';
 
 
 
 /**
  * 我的直播界面,展示已经创建的直播列表
- * @author JackChance.Li
+ * @author JiaChang.Li
  */
 class MyLivesPage extends React.Component {
 

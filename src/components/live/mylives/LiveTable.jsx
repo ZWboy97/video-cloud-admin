@@ -1,4 +1,4 @@
-import { Table, Divider, Button} from 'antd'
+import { Table, Divider, Button } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 //import { VCloudAPI } from '../../axios/api'
@@ -8,8 +8,8 @@ class LiveTable extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleLink=this.handleLink.bind(this);
-        this.handleSetting=this.handleSetting.bind(this);
+        this.handleLink = this.handleLink.bind(this);
+        this.handleSetting = this.handleSetting.bind(this);
 
         this.columns = [
             {
@@ -43,12 +43,12 @@ class LiveTable extends React.Component {
                 dataIndex: 'operation',
                 key: 'operation',
                 align: 'center',
-                render: (text)=>
-                <div>       
-                     <a className="live-link" href="javascript:;" onClick={this.handleLink}>链接</a>
-                     <Divider type="vertical" />
-                     <a className="live-link" href="javascript:;" onClick={this.handleSetting}>设置</a>
-                </div>
+                render: (text) =>
+                    <div>
+                        <a className="live-link" href="javascript:;" onClick={this.handleLink}>链接</a>
+                        <Divider type="vertical" />
+                        <a className="live-link" href="javascript:;" onClick={this.handleSetting}>设置</a>
+                    </div>
             },
         ]
     }
@@ -64,7 +64,7 @@ class LiveTable extends React.Component {
     }
     handleSetting(e) {
         console.log('click setting button')
-        this.props.history.push('/app/lives/mylives/setting/') ;
+        this.props.history.push('/app/lives/mylives/setting/');
         // this.props.setAlitaState({
         //     stateName: 'create_link_modal',
         //     data: {
@@ -90,7 +90,7 @@ class LiveTable extends React.Component {
     }
 
 
-    
+
 
 }
 

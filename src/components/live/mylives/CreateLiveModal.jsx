@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { Button, Modal, Form, Select, Input, DatePicker } from 'antd';
+import { Button, Modal, Form, Select, Input, DatePicker, message } from 'antd';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './style.less'
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from '../../../axios/api';
+import { getObjFromLocalStorage } from '../../../utils/index';
+import { checkUserInfo } from '../../../utils/UserUtils';
+import { withRouter } from 'react-router-dom';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -49,9 +53,35 @@ class CreateLiveModal extends Component {
                 }
             })
             //todu 读取输入的数据
+
+            if (!checkUserInfo(this.props.history)) {
+                return;
+            }
+            const user = getObjFromLocalStorage('user');
+            VCloudAPI.post("/com/" + user.aid + '/liverooms/', {
+                aid: user.aid,
+                ...data
+            }).then(response => {
+                if (response.status === 200) {
+                    const { code = 0, data = {}, msg = {} } = response.data || {};
+                    if (code === 200) {
+                        message.success('创建成功!');
+                        this.props.form.resetFields();
+                        // 向用户直播列表中添加一个记录i
+                        // setAlitaState({
+                        //     stateName: 'session_id',
+                        //     data: data.session_id
+                        // });
+                    } else {
+                        message.error('创建失败!')
+                    }
+                } else {
+                    message.error('网络请求失败！')
+                }
+            }).catch(r => {
+                message.error('网络请求失败!');
+            })
         })
-
-
     }
 
     render() {
@@ -89,13 +119,13 @@ class CreateLiveModal extends Component {
                                 rules: [{ required: true, message: '请选择直播规模' }],
                             })(
                                 <Select placeholder="请选择直播规模">
-                                    <Option value="10">最多10人</Option>
-                                    <Option value="20">最多20人</Option>
-                                    <Option value="50">最多50人</Option>
-                                    <Option value="100">最多100人</Option>
-                                    <Option value="200">最多200人</Option>
-                                    <Option value="500">最多500人</Option>
-                                    <Option value="1000">500人以上</Option>
+                                    <Option value={10}>最多10人</Option>
+                                    <Option value={20}>最多20人</Option>
+                                    <Option value={50}>最多50人</Option>
+                                    <Option value={100}>最多100人</Option>
+                                    <Option value={200}>最多200人</Option>
+                                    <Option value={500}>最多500人</Option>
+                                    <Option value={1000}>500人以上</Option>
                                 </Select>,
                             )}
                         </Form.Item>
@@ -105,8 +135,8 @@ class CreateLiveModal extends Component {
                                 rules: [{ required: true, message: '请选择直播类型' }],
                             })(
                                 <Select placeholder="请选择直播类型">
-                                    <Option value="normal">普通视频直播</Option>
-                                    <Option value="panoramic">全景视频直播</Option>
+                                    <Option value={1}>普通视频直播</Option>
+                                    <Option value={2}>全景视频直播</Option>
                                 </Select>,
                             )}
                         </Form.Item>
@@ -130,4 +160,4 @@ class CreateLiveModal extends Component {
 const WrappedApp = Form.create({ name: 'coordinated' })(CreateLiveModal);
 
 
-export default connectAlita()(WrappedApp);
+export default withRouter(connectAlita()(WrappedApp));
