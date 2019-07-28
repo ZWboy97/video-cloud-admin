@@ -3,8 +3,9 @@
  */
 import Dashboard from './dashboard/Dashboard';
 import MyLivesIndex from './live/MyLivesIndex';
+import LiveDetailPage from './live/livebasicinfo/LiveBasicPage'
 import UserCenter from './usercenter/UserCenter';
 import VideoDemand from './videodemand/VideoDemand';
 export default {
-    Dashboard, MyLivesIndex, UserCenter, VideoDemand,
+    Dashboard, MyLivesIndex, UserCenter, VideoDemand,LiveDetailPage
 }

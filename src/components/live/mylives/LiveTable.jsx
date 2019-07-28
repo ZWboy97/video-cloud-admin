@@ -64,7 +64,7 @@ class LiveTable extends React.Component {
     }
     handleSetting(e) {
         console.log('click setting button')
-        this.props.history.push('/app/lives/mylives/details/') ;
+        this.props.history.push('/app/lives/mylives/setting/') ;
         // this.props.setAlitaState({
         //     stateName: 'create_link_modal',
         //     data: {
