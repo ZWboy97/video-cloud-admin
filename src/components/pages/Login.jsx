@@ -23,28 +23,32 @@ class Login extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { setAlitaState } = this.props;
-                console.log('userName:', values.userName)
-                VCloudAPI.post('user/login_by_name/ljc', { user_name: values.userName, passWord: values.password })
+                VCloudAPI.post('/user/login',
+                    {
+                        email: values.email,
+                        passWord: values.password
+                    })
                     .then(response => {
-                        console.log('登录请求结果', response.data);
-                        if (response.status == 201) {
-                            message.success('登录成功！')
-                            setAlitaState({
-                                stateName: 'session_id',
-                                data: response.data['session_id']
-                            })
-                            localStorage.setItem('session_id', response.data['session_id']);
-                            this.props.history.push('/');
-                        } else if (response.status == 404) {
-                            message.error('用户名不存在!');
-                        } else if (response.status == 401) {
-                            message.error('用户名或密码错误，请重新输入!')
-                            this.props.form.resetFields()
+                        console.log('login response:', response.data)
+                        if (response.status === 200) {
+                            const { code = 0, data = {}, msg = {} } = response.data || {};
+                            if (code === 201) {
+                                message.success('登录成功！')
+                                setAlitaState({
+                                    stateName: 'session_id',
+                                    data: data.session_id
+                                });
+                                localStorage.setItem('session_id', data.session_id);
+                                localStorage.setItem('user', JSON.stringify(data.user));
+                                this.props.history.push('/');
+                            } else if (code === 401) {
+                                message.error('用户名或密码错误，请重新输入!')
+                                this.props.form.resetFields()
+                            }
                         } else {
                             message.error('登录失败，请稍后重试！')
                         }
                     }).catch(r => {
-                        message.error('登录失败，请稍后重试！')
                     }).finally(() => {
                     });
 
@@ -70,10 +74,10 @@ class Login extends React.Component {
                                 <div className="login-logo">视频云直播管理后台</div>
                                 <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
                                     <FormItem>
-                                        {getFieldDecorator('userName', {
-                                            rules: [{ required: true, message: '请输入用户名!' }],
+                                        {getFieldDecorator('email', {
+                                            rules: [{ required: true, message: '请输入邮箱!' }],
                                         })(
-                                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
+                                            <Input prefix={<Icon type="mail" style={{ fontSize: 13 }} />} type="mail" placeholder="登录邮箱" />
                                         )}
                                     </FormItem>
                                     <FormItem>

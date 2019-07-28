@@ -9,6 +9,7 @@ import ForgetPsd from './components/pages/ForgetPsd';
 /**
  * Page 页面， 由Router包裹
  */
+console.log('page')
 export default () => (
     <Router>
         <Switch>

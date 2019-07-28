@@ -5,6 +5,7 @@ import LiveTable from './LiveTable';
 import HeaderPanel from './HeaderPanel';
 import './style.less';
 import CreateLiveModal from './CreateLiveModal';
+import CreateLinkModal from './CreateLinkModal';
 import { connectAlita } from 'redux-alita';
 
 
@@ -24,6 +25,7 @@ class MyLivesPage extends React.Component {
                 </div>
                 <div className="live-table-panel">
                     <CreateLiveModal></CreateLiveModal>
+                    <CreateLinkModal></CreateLinkModal>
                     <LiveTable></LiveTable>
                 </div>
             </div>
