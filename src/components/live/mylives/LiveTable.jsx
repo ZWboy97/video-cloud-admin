@@ -1,10 +1,17 @@
-import { Table, Divider, Button } from 'antd'
+import { Table, Divider, message } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-//import { VCloudAPI } from '../../axios/api'
-import { Link, withRouter } from 'react-router-dom';
+import { YMOCKAPI, VCloudAPI } from '../../../axios/api';
+import { withRouter } from 'react-router-dom';
+import { getObjFromLocalStorage } from '../../../utils/index';
+import { checkUserInfo } from '../../../utils/UserUtils';
 
 class LiveTable extends React.Component {
+
+    state = {
+        isLoading: false,
+
+    }
 
     constructor(props) {
         super(props);
@@ -14,56 +21,83 @@ class LiveTable extends React.Component {
         this.columns = [
             {
                 title: '频道号',
-                dataIndex: 'id',
-                key: 'id',
+                dataIndex: 'lid',
                 align: 'center',
-                render: (text) => { return "hahha" }
+                render: (text) => { return text }
             }, {
                 title: '直播名称',
                 dataIndex: 'name',
-                key: 'name',
                 align: 'center',
             }, {
                 title: '分类',
                 dataIndex: 'kind',
-                key: 'kind',
                 align: 'center',
+                render: (value) => {
+                    switch (value) {
+                        case 1:
+                            return '普通';
+                        case 2:
+                            return '全景';
+                        default: return '普通';
+                    }
+                }
             }, {
                 title: '状态',
                 dataIndex: 'status',
-                key: 'status',
                 align: 'center',
+                render: (value) => {
+                    switch (value) {
+                        case 1:
+                            return '进行中';
+                        case 2:
+                            return '未进行';
+                        case 3:
+                            return '已关闭';
+                        default: return '未知'
+                    }
+                }
             }, {
                 title: '观看条件',
-                dataIndex: 'auth',
-                key: 'auth',
+                dataIndex: 'permission',
                 align: 'center',
+                render: (value) => {
+                    if (value === 'none') {
+                        return '公开';
+                    } else if (value === 'code') {
+                        return '验证码';
+                    } else if (value === 'pay') {
+                        return '支付';
+                    } else if (value === 'login') {
+                        return '登录';
+                    } else {
+                        return '未知';
+                    }
+                }
             }, {
                 title: '操作',
                 dataIndex: 'operation',
-                key: 'operation',
                 align: 'center',
-                render: (text) =>
+                render: (text, record) =>
                     <div>
-                        <a className="live-link" href="javascript:;" onClick={this.handleLink}>链接</a>
+                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleLink(e, record)}>链接</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={this.handleSetting}>设置</a>
+                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                     </div>
             },
         ]
     }
-    handleLink(e) {
+    handleLink(e, record) {
         e.preventDefault();
-        console.log("click create button");
         this.props.setAlitaState({
-            stateName: 'create_link_modal',
+            stateName: 'live_url_modal',
             data: {
-                visible: true
+                visible: true,
+                liveData: record
             }
         })
     }
-    handleSetting(e) {
-        console.log('click setting button')
+    handleSetting(e, record) {
+        e.preventDefault();
         this.props.history.push('/app/lives/mylives/setting/');
         // this.props.setAlitaState({
         //     stateName: 'create_link_modal',
@@ -74,103 +108,66 @@ class LiveTable extends React.Component {
         // })
     }
 
-    render() {
+    componentDidMount() {
+        if (!checkUserInfo(this.props.history)) {
+            return;
+        }
+        var user = getObjFromLocalStorage('user');
+        this.setState({
+            isLoading: true
+        })
+        //TODO 之后需要切换到VCloudAPI
+        VCloudAPI.get('/com/' + user.cid + '/liverooms?aid=' + user.aid
+        ).then(response => {
+            console.log('success：', response.data)
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                if (code === 200) {
+                    this.props.setAlitaState({
+                        stateName: 'my_live_list',
+                        data: data
+                    });
+                } else {
+                    message.error('获取直播列表失败!');
+                }
+            } else {
+                message.error('获取直播列表失败!');
+            }
+        }).catch((e) => {
+            message.error('获取直播列表失败!');
+        }).finally(() => {
+            this.setState({
+                isLoading: false
+            })
+        })
+    }
 
-
-        return (
-            < div >
-                <Table
-                    dataSource={data}
-                    columns={this.columns}
-                    bordered={true}
-                    size='small'
-                />
-            </div >
-        );
+    compare = (property) => {
+        return function (obj1, obj2) {
+            var value1 = Date.parse(obj1[property]);
+            var value2 = Date.parse(obj2[property]);
+            return value2 - value1;     // 升序
+        }
     }
 
 
-
-
+    render() {
+        const { my_live_list } = this.props.alitaState;
+        var { data = [] } = my_live_list || {};
+        data.sort(this.compare('create_time'));
+        return (
+            <div>
+                <Table
+                    loading={this.state.isLoading}
+                    dataSource={data}
+                    columns={this.columns}
+                    bordered={true}
+                    size='large'
+                    rowKey='lid'
+                />
+            </div>
+        );
+    }
 }
-
-// 直播表格表头
-
-
-const data = [
-    {
-        key: '1',
-        id: '000001',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '2',
-        id: '000002',
-        name: '直播名称',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '3',
-        id: '000003',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '4',
-        id: '000004',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '5',
-        id: '000005',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '6',
-        id: '000001',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '7',
-        id: '000007',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '8',
-        id: '000008',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    }, {
-        key: '9',
-        id: '000009',
-        name: '第一个直播',
-        kind: '全景直播',
-        status: '未进行',
-        auth: '无',
-        operation: '无'
-    },
-]
 
 export default connectAlita()(withRouter(LiveTable));

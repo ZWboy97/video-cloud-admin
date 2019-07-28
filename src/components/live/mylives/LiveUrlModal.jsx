@@ -14,7 +14,7 @@ class LiveUrlModal extends Component {
     }
     handleCancel() {
         this.props.setAlitaState({
-            stateName: 'create_link_modal',
+            stateName: 'live_url_modal',
             data: {
                 visible: false
             }
@@ -23,12 +23,9 @@ class LiveUrlModal extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log('alitastate', this.props.alitaState);
-        console.log('lalala')
-        const { create_link_modal = {} } = this.props.alitaState;
-        const { data } = create_link_modal;
-        const { visible = false } = data || {};
-        console.log('alitastate', this.props.alitaState);
+        const { live_url_modal = {} } = this.props.alitaState;
+        const { data } = live_url_modal;
+        const { visible = false, liveData = {} } = data || {};
 
         return (
             <div>
@@ -44,60 +41,52 @@ class LiveUrlModal extends Component {
 
                         <Form.Item label="推流地址">
                             <Row >
-                                <Col span={12}>
-                                    <Input disabled={true} placeholder='请输入直播频道名称' />
+                                <Col span={16}>
+                                    <Input placeholder='推流地址' value={liveData.push_url} />
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;打开链接</a>
+                                <Col span={8}>
+                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                        e.preventDefault();
+                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">复制链接</a>
-                                </Col>
-
                             </Row>
                         </Form.Item>
 
-                        <Form.Item label="拉流地址">
+                        <Form.Item label="HLS拉流地址">
                             <Row >
-                                <Col span={12}>
-                                    <Input disabled={true} placeholder='hls:' />
+                                <Col span={16}>
+                                    <Input placeholder='HLS协议直播拉流地址' value={liveData.pull_hls_url} />
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;打开链接</a>
+                                <Col span={8}>
+                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                        e.preventDefault();
+                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">复制链接</a>
-                                </Col>
-
                             </Row>
                         </Form.Item>
 
-                        <Form.Item label="拉流地址">
+                        <Form.Item label="FLV拉流地址">
                             <Row >
-                                <Col span={12}>
-                                    <Input disabled={true} placeholder='rtmp:' />
+                                <Col span={16}>
+                                    <Input placeholder='HTTP-FLV直播拉流地址' value={liveData.pull_rtmp_url} />
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;打开链接</a>
+                                <Col span={8}>
+                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                        e.preventDefault();
+                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">复制链接</a>
-                                </Col>
-
                             </Row>
                         </Form.Item>
-                        <Form.Item label="拉流地址">
+                        <Form.Item label="播放页面地址">
                             <Row >
-                                <Col span={12}>
-                                    <Input disabled={true} placeholder='https-flv:' />
+                                <Col span={16}>
+                                    <Input placeholder='直播页面地址' value={liveData.display_url} />
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;打开链接</a>
+                                <Col span={8}>
+                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                        e.preventDefault();
+                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;打开链接</a>
                                 </Col>
-                                <Col span={5}>
-                                    <a className="live-link" href="#">复制链接</a>
-                                </Col>
-
                             </Row>
                         </Form.Item>
                     </Form>
