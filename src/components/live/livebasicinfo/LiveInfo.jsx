@@ -7,6 +7,21 @@ import { connectAlita } from 'redux-alita';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+
+
+const formItemLayout = {
+    labelCol: {
+        xs: { span: 12 },
+        sm: { span: 5 },
+    },
+    wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 11 },
+    },
+};
+
 function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -24,7 +39,9 @@ function beforeUpload(file) {
     }
     return isJpgOrPng && isLt2M;
 }
+
 class LiveInfo extends React.Component {
+
     state = {
         loading: false,
     };
@@ -35,7 +52,6 @@ class LiveInfo extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl =>
                 this.setState({
                     imageUrl,
@@ -46,27 +62,10 @@ class LiveInfo extends React.Component {
     };
 
     render() {
-        const { Option } = Select;
-        const { RangePicker } = DatePicker;
-
-        console.log('1')
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 12 },
-                sm: { span: 5 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 11 },
-            },
-        };
-        console.log('2')
+        //从alitastate中解析数据
+        const { live_setting_page = {} } = this.props.alitaState || {};
+        const { liveData = {} } = live_setting_page.data || {}
         const { getFieldDecorator } = this.props.form;
-        console.log('3')
-        const { edit_info = {} } = this.props.alitaState;
-        const { data } = edit_info;
-        const { disable = true } = data || {};
-
 
         const uploadButton = (
             <div>
@@ -78,19 +77,16 @@ class LiveInfo extends React.Component {
 
         return (
             <Row type="flex" justify="space-around" align="middle">
-                <Col span="20">
+                <Col span={20}>
                     <div>
                         <Form className="form-style" {...formItemLayout} >
                             <Form.Item label="直播封面">
                                 {getFieldDecorator('cover', {
-                                    // initialValue: 123456,
-                                    // rules: [{ required: true, message: '请输入直播频道名称' }],
                                 })(
                                     <Row>
                                         <Col span={8}>
                                             <Upload
                                                 name="avatar"
-                                                disabled={disable}
                                                 listType="picture-card"
                                                 className="avatar-uploader"
                                                 showUploadList={false}
@@ -110,89 +106,81 @@ class LiveInfo extends React.Component {
                             </Form.Item>
                             <Form.Item label="频道号">
                                 {getFieldDecorator('id', {
-                                    initialValue: 123456,
+                                    initialValue: liveData.lid || '未知',
                                     rules: [{ required: true, message: '请输入直播频道名称' }],
                                 })(<Input disabled={true} />)}
                             </Form.Item>
                             <Form.Item label="直播名称">
                                 {getFieldDecorator('name', {
-                                    initialValue: "第一个直播",
+                                    initialValue: liveData.name || '未知',
                                     rules: [{ required: true, message: '请输入直播频道名称' }],
-                                })(<Input disabled={disable} />)}
+                                })(<Input />)}
                             </Form.Item>
                             <Form.Item label="直播规模">
                                 {getFieldDecorator('size', {
-                                    initialValue: "10",
+                                    initialValue: liveData.size || 10,
                                     rules: [{ required: true, message: '请输入直播频道名称' }],
                                 })(
-                                    <Select placeholder="请选择直播规模" disabled={disable}>
-                                        <Option value="10">最多10人</Option>
-                                        <Option value="20">最多20人</Option>
-                                        <Option value="50">最多50人</Option>
-                                        <Option value="100">最多100人</Option>
-                                        <Option value="200">最多200人</Option>
-                                        <Option value="500">最多500人</Option>
-                                        <Option value="1000">500人以上</Option>
+                                    <Select placeholder="请选择直播规模" >
+                                        <Option value={10}>最多10人</Option>
+                                        <Option value={20}>最多20人</Option>
+                                        <Option value={50}>最多50人</Option>
+                                        <Option value={100}>最多100人</Option>
+                                        <Option value={200}>最多200人</Option>
+                                        <Option value={500}>最多500人</Option>
+                                        <Option value={1000}>500人以上</Option>
                                     </Select>,
                                 )}
                             </Form.Item>
                             <Form.Item label="直播类型">
                                 {getFieldDecorator('kind', {
-                                    initialValue: "normal",
+                                    initialValue: liveData.kind || 1,
                                     rules: [{ required: true, message: '请输入直播频道名称' }],
                                 })(
-                                    <Select disabled={disable} placeholder="请选择直播类型">
-                                        <Option value="normal">普通视频直播</Option>
-                                        <Option value="panoramic">全景视频直播</Option>
+                                    <Select placeholder="请选择直播类型">
+                                        <Option value={1}>普通视频直播</Option>
+                                        <Option value={2}>全景视频直播</Option>
                                     </Select>,
                                 )}
                             </Form.Item>
 
                             <Form.Item label="直播时间">
+                                <RangePicker
+                                    locale={locale}
+                                    defaultValue={[moment(liveData.start_time, 'YYYY-MM-DD HH:mm:ss'), moment(liveData.end_time, 'YYYY-MM-DD HH:mm:ss')]}
+                                    format="YYYY-MM-DD HH:mm" />
                                 {getFieldDecorator('range_time', {
-                                    //initialValue: "1230",
-                                    defaultValue: [moment('2019-09-03 11:11:11', 'YYYY-MM-DD HH:mm:ss'), moment('2019-09-03 12:11:11', 'YYYY-MM-DD HH:mm:ss')],
                                     rules: [{ type: 'array', required: true, message: '请选择您的直播时间区间' }],
                                 })(
-                                    <RangePicker
-                                        disabled={disable}
-                                        locale={locale}
-                                        showTime format="MM-DD HH:mm:ss" />
+                                    <div></div>
                                 )}
                             </Form.Item>
                             <Form.Item label="观看条件">
-                                {getFieldDecorator('email', {
-                                    initialValue: 'all'
+                                {getFieldDecorator('permission', {
+                                    initialValue: liveData.permission || 'none',
+                                    rules: [{ required: true }]
                                 })(
-                                    <Select disabled={disable} placeholder="请选择直播类型">
-                                        <Option value="all">所有人</Option>
-                                        <Option value="vip">会员</Option>
+                                    <Select placeholder="请选择直播类型">
+                                        <Option value="none">公开</Option>
+                                        <Option value="code">验证码</Option>
+                                        <Option value="pay">支付</Option>
+                                        <Option value="login">登录</Option>
                                     </Select>)}
                             </Form.Item>
                             <Form.Item label="状态">
-                                {getFieldDecorator('status', {
-                                    initialValue: "未进行"
-                                })(<Input disabled={true} />)}
+                                <Input value={liveData.status} />
                             </Form.Item>
                             <Form.Item label="推流地址">
-                                {getFieldDecorator('push', {
-                                    initialValue: "http://wdwedwec"
-                                })(<Input disabled={true} />)}
+                                <Input value={liveData.push_url} />
                             </Form.Item>
-                            <Form.Item label="拉流地址">
-                                {getFieldDecorator('pull_hls', {
-                                    initialValue: "hls:sfdwefawef"
-                                })(<Input disabled={true} />)}
+                            <Form.Item label="HLS拉流地址">
+                                <Input value={liveData.pull_hls_url} />
                             </Form.Item>
-                            <Form.Item label="拉流地址">
-                                {getFieldDecorator('pull_rtmp', {
-                                    initialValue: 'rtmp:wfwe'
-                                })(<Input disabled={true} />)}
+                            <Form.Item label="RTMP拉流地址">
+                                <Input value={liveData.pull_rtmp_url} />
                             </Form.Item>
-                            <Form.Item label="拉流地址">
-                                {getFieldDecorator('pull_https', {
-                                    initialValue: 'https:sdfaweaf'
-                                })(<Input disabled={true} />)}
+                            <Form.Item label="FLV拉流地址">
+                                <Input value={liveData.pull_http_flv_url} />
                             </Form.Item>
                         </Form>
                     </div>
