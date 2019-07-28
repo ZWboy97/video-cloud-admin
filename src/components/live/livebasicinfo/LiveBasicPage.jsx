@@ -17,7 +17,6 @@ class LiveSettingPage extends React.Component {
         console.log('LiveSettingPage')
         return (
             <div className="live-page">
-                <BreadcrumbCustom first="我的直播" second="直播设置" />
                 <div className="header-panel">
                     <HeaderEdit />
                 </div>
