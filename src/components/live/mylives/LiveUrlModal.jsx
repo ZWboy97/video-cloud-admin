@@ -6,7 +6,7 @@ import { connectAlita } from 'redux-alita';
 
 
 
-class CreateLinkModal extends Component {
+class LiveUrlModal extends Component {
 
     constructor(props) {
         super(props);
@@ -40,7 +40,7 @@ class CreateLinkModal extends Component {
                     width={600}
                 >
 
-                    <Form labelCol={{ span: 6}} wrapperCol={{ span: 18 }} onSubmit={this.handleOk}>
+                    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} onSubmit={this.handleOk}>
 
                         <Form.Item label="推流地址">
                             <Row >
@@ -73,7 +73,7 @@ class CreateLinkModal extends Component {
                         </Form.Item>
 
                         <Form.Item label="拉流地址">
-                        <Row >
+                            <Row >
                                 <Col span={12}>
                                     <Input disabled={true} placeholder='rtmp:' />
                                 </Col>
@@ -87,7 +87,7 @@ class CreateLinkModal extends Component {
                             </Row>
                         </Form.Item>
                         <Form.Item label="拉流地址">
-                        <Row >
+                            <Row >
                                 <Col span={12}>
                                     <Input disabled={true} placeholder='https-flv:' />
                                 </Col>
@@ -107,7 +107,7 @@ class CreateLinkModal extends Component {
     }
 }
 
-const WrappedApp = Form.create({ name: 'coordinate' })(CreateLinkModal);
+const WrappedApp = Form.create({ name: 'coordinate' })(LiveUrlModal);
 
 
 export default connectAlita()(WrappedApp);
