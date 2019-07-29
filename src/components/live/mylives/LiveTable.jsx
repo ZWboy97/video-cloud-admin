@@ -116,7 +116,7 @@ class LiveTable extends React.Component {
             isLoading: true
         })
         //TODO 之后需要切换到VCloudAPI
-        VCloudAPI.get('/com/' + user.cid + '/liverooms?aid=' + user.aid
+        VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
         ).then(response => {
             console.log('success：', response.data)
             if (response.status === 200) {

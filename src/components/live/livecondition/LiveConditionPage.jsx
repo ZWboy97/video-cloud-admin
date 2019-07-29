@@ -11,43 +11,43 @@ class LiveConditionPage extends React.Component {
         super(props)
         this.handleSwitch = this.handleSwitch.bind(this);
     }
-    handleSwitch(switchValue){
+    handleSwitch(switchValue) {
         console.log(switchValue)
-        if(switchValue===false){
-            const closeContent=(
-                <div className="switch-content"><ConditionSelect/></div>
-           );
-           this.props.setAlitaState({
-               stateName: 'conditionSwitch_content',
-               data: {
-                   content: closeContent
-   
-               }
-           })
+        if (switchValue === false) {
+            const closeContent = (
+                <div className="switch-content"><ConditionSelect /></div>
+            );
+            this.props.setAlitaState({
+                stateName: 'conditionSwitch_content',
+                data: {
+                    content: closeContent
 
-       }
-        else{
-            const openContent=(
-                <div/>
-           );
-           this.props.setAlitaState({
-               stateName: 'conditionSwitch_content',
-               data: {
-                   content: openContent
-   
-               }
-           })
+                }
+            })
+
         }
-       
+        else {
+            const openContent = (
+                <div />
+            );
+            this.props.setAlitaState({
+                stateName: 'conditionSwitch_content',
+                data: {
+                    content: openContent
+
+                }
+            })
+        }
+
     }
     render() {
-        const swiContent=(
-            <div/>
+        const swiContent = (
+            <div />
         );
-         const { conditionSwitch_content = {} } = this.props.alitaState;
-         const { data } = conditionSwitch_content;
-         const { content=swiContent} = data || {};
-         console.log(content);
+        const { conditionSwitch_content = {} } = this.props.alitaState;
+        const { data } = conditionSwitch_content;
+        const { content = swiContent } = data || {};
+        console.log(content);
         return (
             <div >
                 <Row>
