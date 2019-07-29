@@ -1,4 +1,4 @@
-import { Form, Row, Col, Input, Select, Icon, Switch,Button } from 'antd';
+import { Form, Row, Col, Input, Select, Icon, Switch, Button } from 'antd';
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 //import { VCloudAPI } from '../../../axios/api';
@@ -13,7 +13,7 @@ class PayCondition extends React.Component {
 
         return (
             <div >
-                <Form labelCol={{ span: 3 }} wrapperCol={{ span: 7 }} onSubmit={this.handleOk}>
+                <Form labelCol={{ span: 5 }} wrapperCol={{ span: 8 }} onSubmit={this.handleOk}>
 
                     <Form.Item label="欢迎标题">
                         {getFieldDecorator('title', {
@@ -52,12 +52,12 @@ class PayCondition extends React.Component {
                     <Form.Item >
                         <Row>
                             <Col span={3} offset={18}>
-                            <Button className="save-button" type="primary" htmlType="submit" className="login-form-button">保存</Button>
-                    </Col>
-                    </Row>
-                    
+                                <Button className="save-button" type="primary" htmlType="submit" className="login-form-button">保存</Button>
+                            </Col>
+                        </Row>
+
                     </Form.Item>
-                    
+
 
                 </Form>
             </div>

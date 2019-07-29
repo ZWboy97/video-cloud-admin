@@ -2,7 +2,6 @@ import { Table, Form, Button, Row, Col, Input, Popconfirm } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 //import { VCloudAPI } from '../../axios/api'
-import { Link, withRouter } from 'react-router-dom';
 
 class WhiteCondition extends React.Component {
 
@@ -82,7 +81,7 @@ class WhiteCondition extends React.Component {
             <div>
                 <Form layout="inline" onSubmit={this.handleAdd}>
                     <Row>
-                        <Col span={5} offset={2}>
+                        <Col span={7} offset={2}>
                             <Form.Item >
                                 {getFieldDecorator('id', {
                                     rules: [{ required: true, message: '请输入用户ID!' }],
@@ -97,7 +96,7 @@ class WhiteCondition extends React.Component {
                     </Row>
                 </Form>
                 <Row className="table-content">
-                    <Col span={12}>
+                    <Col span={15}>
                         <Table
                             indentSize={5}
                             dataSource={dataSource}

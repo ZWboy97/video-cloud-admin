@@ -3,6 +3,7 @@ import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import LiveBasicPage from './livebasicinfo/LiveBasicPage'
 import LiveConditionPage from './livecondition/LiveConditionPage'
+import LiveRightPage from './liveright/LiveRightPage'
 const { TabPane } = Tabs;
 
 class LiveSetting extends React.Component {
@@ -33,7 +34,7 @@ class LiveSetting extends React.Component {
                     Content of Tab Pane 6
                 </TabPane>
                 <TabPane tab="权限安全设置" key="7">
-                    Content of Tab Pane 7
+                    <LiveRightPage/>
                 </TabPane>
             </Tabs>
             </div>
