@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import {Row, Col, Card, Button, Icon, Select, Upload, Modal} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import {connectAlita} from 'redux-alita'
-import CreateChannelModal from "./CreateChannelModal";
 
-const {Option} = Select;
-const options = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
+
 const fileList = [];
 const props = {
     action: '//jsonplaceholder.typicode.com/posts/',
@@ -61,8 +59,6 @@ class VideoDemand extends Component {
                 });
             }
         };
-
-        //read the file
         reader.readAsDataURL(file);
     };
     handleCancel = () => this.setState({previewVisible: false});
@@ -176,21 +172,9 @@ class VideoDemand extends Component {
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Card title='我的频道' bordered={false}>
-                                <Button type="primary" className="create-button" onClick={(e) => this.handleCreateChannnel(this)}>
-                                    点击创建频道
-                                </Button>
-                                <CreateChannelModal></CreateChannelModal>
-                            </Card>
-                        </div>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col className="gutter-row" md={24}>
-                        <div className="gutter-box">
                             <Card title='我的相簿' bordered={false}>
                                 <Upload
-                                    data={(file) => file.name = 'foo'}
+                                    //data={(file) => file.name = 'foo'}
                                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                     listType="picture-card"
                                     fileList={fileList2}
