@@ -2,6 +2,32 @@
  * 提供一些公用的工具函数
  */
 
+// 从localStorage读取Object
+export const getObjFromLocalStorage = (key) => {
+    const str = window.localStorage.getItem(key);
+    if (isJson(str)) {
+        return JSON.parse(str);
+    } else {
+        return undefined;
+    }
+}
+
+// 检查json是否合法
+const isJson = (jsonStr) => {
+    if (typeof jsonStr === 'string') {
+        try {
+            var obj = JSON.parse(jsonStr);
+            if (typeof obj === 'object' && obj) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+            return false;
+        }
+    }
+}
+
 //解析当前浏览器地址中url？之后的参数，返回一个参数对象
 export const queryString = () => {
     let _queryString = {};//最终结果，初始化空对象
