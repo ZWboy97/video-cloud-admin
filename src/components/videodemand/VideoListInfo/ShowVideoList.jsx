@@ -3,18 +3,15 @@ import React, {Component} from "react";
 import VideoSetting from './VideoSetting'
 import PlaySetting from './PlaySetting'
 import {connectAlita} from 'redux-alita';
-import Player from 'griffith'
+import VideoCard from './VideoCard'
 
-const sources = {
-    hd: {
-        play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-    },
-    sd: {
-        play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-    },
+
+const props2 = {
+    cover:"https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    title:"test"
 }
-
 class ShowVideoList extends Component {
+
     state = {visible: false};
 
     showModal = () => {
@@ -90,7 +87,7 @@ class ShowVideoList extends Component {
                 </Row>
                 </Card>
                 <Card>
-                    <Player sources={sources} />
+                    <VideoCard/>
                 </Card>
             </div>
         )
