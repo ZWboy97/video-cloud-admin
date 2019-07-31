@@ -31,38 +31,36 @@ class VideoSetting extends React.Component {
 
                 <Row type="flex" justify="space-around" align="middle">
                     <Col span="20">
-                            <div>
-                                <Form className="form-style" {...formItemLayout} >
-                                    <Form.Item label="标题">
-                                        {getFieldDecorator('name', {
-                                            initialValue: "",
-                                            rules: [{required: true, message: '请输入视频标题'}],
-                                        })(<Input/>)}
-                                    </Form.Item>
-                                    <Form.Item label="标签">
-                                        {getFieldDecorator('tag', {
-                                            initialValue: "",
-                                            rules: [{required: true, message: '请输入视频标签'}],
-                                        })(<Input/>)}
-                                    </Form.Item>
-                                    <Form.Item label="外链">
-                                        {getFieldDecorator('link', {
-                                            initialValue: "",
-                                        })
-                                        (<Input/>)
-                                        }
-                                    </Form.Item>
-                                    <Form.Item label="简介">
-                                        {getFieldDecorator('introduction', {
-                                            initialValue: ""
-                                        })(<Input/>)}
-                                    </Form.Item>
-                                </Form>
-                            </div>
-
+                        <div>
+                            <Form className="form-style" {...formItemLayout} >
+                                <Form.Item label="标题">
+                                    {getFieldDecorator('name', {
+                                        initialValue: "",
+                                        rules: [{required: true, message: '请输入视频标题'}],
+                                    })(<Input/>)}
+                                </Form.Item>
+                                <Form.Item label="标签">
+                                    {getFieldDecorator('tag', {
+                                        initialValue: "",
+                                        rules: [{required: true, message: '请输入视频标签'}],
+                                    })(<Input/>)}
+                                </Form.Item>
+                                <Form.Item label="外链">
+                                    {getFieldDecorator('link', {
+                                        initialValue: "",
+                                    })
+                                    (<Input/>)
+                                    }
+                                </Form.Item>
+                                <Form.Item label="简介">
+                                    {getFieldDecorator('introduction', {
+                                        initialValue: ""
+                                    })(<Input/>)}
+                                </Form.Item>
+                            </Form>
+                        </div>
                     </Col>
                 </Row>
-
             </div>
 
         );
