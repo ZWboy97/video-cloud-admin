@@ -10,7 +10,6 @@ import moment from 'moment';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-
 const formItemLayout = {
     labelCol: {
         xs: { span: 12 },
