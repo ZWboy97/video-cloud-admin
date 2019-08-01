@@ -7,6 +7,7 @@ import LiveRightPage from './liveright/LiveRightPage'
 import LiveIntroPage from './liveintro/LiveIntroPage'
 import LiveServePage from './liveserve/LiveServePage'
 import LiveCopyrightPage from './livecopyright/LiveCopyrightPage'
+import LiveShowPage from './liveshow/LiveShowPage'
 const { TabPane } = Tabs;
 
 class LiveSetting extends React.Component {
@@ -25,7 +26,7 @@ class LiveSetting extends React.Component {
                     <LiveIntroPage />
                 </TabPane>
                 <TabPane tab="直播页面设置" key="3">
-                    Content of Tab Pane 3
+                    <LiveShowPage />
                 </TabPane>
                 <TabPane tab="观看条件设置" key="4">
                     <LiveConditionPage />

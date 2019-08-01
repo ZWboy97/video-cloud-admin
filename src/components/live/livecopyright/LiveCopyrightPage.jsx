@@ -1,4 +1,4 @@
-import { Row, Col, Checkbox, Select, Form, Input, message, Icon, Switch, Divider } from 'antd';
+import { Row, Col, Form, Switch, Divider } from 'antd';
 import React from 'react';
 import './style.less';
 import { connectAlita } from 'redux-alita';
@@ -6,7 +6,6 @@ import LogoSetting from './LogoSetting';
 import LampSetting from './LampSetting';
 //import { VCloudAPI } from '../../../axios/api';
 
-const { Option } = Select;
 class LiveCopyrightPage extends React.Component {
     constructor(props){
         super(props);
@@ -97,7 +96,7 @@ class LiveCopyrightPage extends React.Component {
 
         return (
             <div>
-                <Form labelCol={{ span: 4 }} wrapperCol={{ span: 15 }} onSubmit={this.handleOk}>
+                <Form labelCol={{ span: 3 }} wrapperCol={{ span: 15 }} onSubmit={this.handleOk}>
                     <Form.Item label="logo">
                         {getFieldDecorator('logo', {
                         })(

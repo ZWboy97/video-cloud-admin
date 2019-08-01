@@ -1,4 +1,4 @@
-import { Row, Col, Radio, Select, Form, Input, message, Icon, Slider, Divider, Button } from 'antd';
+import { Row, Col, Radio, Form, Input, Slider, Button } from 'antd';
 import React from 'react';
 import './style.less';
 import { connectAlita } from 'redux-alita';
