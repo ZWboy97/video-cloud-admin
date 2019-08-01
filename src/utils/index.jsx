@@ -2,41 +2,46 @@
  * 提供一些公用的工具函数
  */
 
-// 从localStorage读取Object
-export const getObjFromLocalStorage = (key) => {
-    const str = window.localStorage.getItem(key);
-    if (isJson(str)) {
-        return JSON.parse(str);
-    } else {
-        return undefined;
+// 添加本地存储
+export const setLocalStorage = (name, data) => {
+    let dataType = typeof data;
+    // json对象
+    if (dataType === 'object') {
+        window.localStorage.setItem(name, JSON.stringify(data));
+    }
+    // 基础类型
+    else if (['number', 'string', 'boolean'].indexOf(dataType) >= 0) {
+        window.localStorage.setItem(name, data);
+    }
+    // 其他不支持的类型
+    else {
+        alert('该类型不能用于本地存储');
     }
 }
-
-// 检查json是否合法
-const isJson = (jsonStr) => {
-    if (typeof jsonStr === 'string') {
-        try {
-            var obj = JSON.parse(jsonStr);
-            if (typeof obj === 'object' && obj) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (e) {
-            return false;
-        }
+// 取出本地存储内容
+export const getLocalStorage = (name) => {
+    let data = window.localStorage.getItem(name);
+    if (data) {
+        return JSON.parse(data);
     }
+    else {
+        return '';
+    }
+}
+// 删除本地存储
+export const removeStorage = (name) => {
+    window.localStorage.removeItem(name);
 }
 
 //解析当前浏览器地址中url？之后的参数，返回一个参数对象
-export const queryString = () => {
+export const getUrlParams = () => {
     let _queryString = {};//最终结果，初始化空对象
     const _query = window.location.search.substr(1);//截取？之后的参数字段
     const _vars = _query.split('&');
     _vars.forEach((v, i) => {
         const _pair = v.split('=');//{ property ： value }
         if (!_queryString.hasOwnProperty(_pair[0])) {
-            _queryString[_pair[0]] = decodeURIComponent(_pair[1]);//解码存储
+            _queryString[_pair[0]] = decodeURIComponent(_pair[1]);
         } else if (typeof _queryString[_pair[0]] === 'string') {
             const _arr = [_queryString[_pair[0]], decodeURIComponent(_pair[1])];
             _queryString[_pair[0]] = _arr;

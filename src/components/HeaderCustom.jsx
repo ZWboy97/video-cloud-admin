@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { connectAlita } from 'redux-alita';
 import { Menu, Icon, Layout, Badge, Popover } from 'antd';
 import SiderCustom from './SiderCustom';
-import { queryString } from '../utils';//导入工具函数
+import { getUrlParams } from '../utils';//导入工具函数
 import screenfull from 'screenfull';
 import avater from '../style/imgs/default_avtar.png';
 
@@ -23,12 +23,8 @@ class HeaderCustom extends Component {
     };
 
     componentDidMount() {
-        const QueryString = queryString();//获取当前URL的参数对象
-        const _user = JSON.parse(localStorage.getItem('user'));//获取已登录的用户信息
-
-        if (!_user && QueryString.hasOwnProperty('code')) {
-            //TODO 比如github账号体系登录验证方式
-        } else {
+        const _user = JSON.parse(localStorage.getItem('user')) || {};//获取已登录的用户信息
+        if (_user) {
             this.setState({
                 user: _user
             });
@@ -61,8 +57,9 @@ class HeaderCustom extends Component {
 
     //注销登录逻辑
     logout = () => {
-        localStorage.removeItem('user');//clear local user 
-        this.props.history.push('/login')//router to login page
+        //TODO logout的时候，也需要向服务器发送请求
+        localStorage.removeItem('user');
+        this.props.history.push('/login');
     };
 
     //popover可见性变化
@@ -110,7 +107,7 @@ class HeaderCustom extends Component {
                     </Menu.Item>
                     <SubMenu title={<span className="avatar"><img src={avater} alt="头像" />
                         <i className="on bottom b-white" /></span>}>
-                        <MenuItemGroup title={"您好" + this.props.user.userName}>
+                        <MenuItemGroup title={"您好" + this.state.user.name}>
                             <Menu.Item key="profile">个人中心</Menu.Item>
                             <Menu.Item key="logout">退出登录</Menu.Item>
                         </MenuItemGroup>

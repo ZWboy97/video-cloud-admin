@@ -5,6 +5,7 @@ import SiderCustom from './components/SiderCustom';
 import HeaderCustom from './components/HeaderCustom';
 import { Layout, notification, Icon } from 'antd';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from './axios/api';
 
 const { Content, Footer } = Layout;
 
@@ -21,6 +22,12 @@ class App extends Component {
         collapsed: false,       //边栏是否收缩
         title: ''
     };
+
+    constructor(props) {
+        super(props);
+        const session_id = window.localStorage.getItem('session_id');
+        VCloudAPI.defaults.headers.common['session_id'] = session_id;
+    }
 
     componentWillMount() {
         // 计算宽度，并存储到state中

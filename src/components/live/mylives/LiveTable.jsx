@@ -1,9 +1,9 @@
 import { Table, Divider, message } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-import { YMOCKAPI, VCloudAPI } from '../../../axios/api';
+import { VCloudAPI } from '../../../axios/api';
 import { withRouter } from 'react-router-dom';
-import { getObjFromLocalStorage } from '../../../utils/index';
+import { getLocalStorage } from '../../../utils/index';
 import { checkUserInfo } from '../../../utils/UserUtils';
 
 class LiveTable extends React.Component {
@@ -111,11 +111,10 @@ class LiveTable extends React.Component {
         if (!checkUserInfo(this.props.history)) {
             return;
         }
-        var user = getObjFromLocalStorage('user');
+        var user = getLocalStorage('user');
         this.setState({
             isLoading: true
         })
-        //TODO 之后需要切换到VCloudAPI
         VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
         ).then(response => {
             console.log('success：', response.data)

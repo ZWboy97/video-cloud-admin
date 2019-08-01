@@ -4,7 +4,7 @@ import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './style.less'
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI, YMOCKAPI } from '../../../axios/api';
-import { getObjFromLocalStorage } from '../../../utils/index';
+import { getLocalStorage } from '../../../utils/index';
 import { checkUserInfo } from '../../../utils/UserUtils';
 import { withRouter } from 'react-router-dom';
 
@@ -49,13 +49,13 @@ class CreateLiveModal extends Component {
             if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
                 return;
             }
-            const user = getObjFromLocalStorage('user');
+            const user = getLocalStorage('user');
             VCloudAPI.post("/com/" + user.aid + '/liverooms/', {
                 aid: user.aid,
                 ...data
             }).then(response => {
                 if (response.status === 200) {
-                    const { code = 0, data = { }, msg = {} } = response.data || {};
+                    const { code = 0, data = {}, msg = {} } = response.data || {};
                     if (code === 200) {
                         message.success('创建成功!');
                         this.props.form.resetFields();
