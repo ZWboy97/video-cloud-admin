@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col ,Card,PageHeader} from 'antd';
+import { Row, Col, Card, PageHeader } from 'antd';
 import VideoPlayer from '../../videoplayer/FlvVideoPlayer/VideoPanel';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import ChattingPanel from './livechatting/ChattingPanel'
@@ -12,7 +12,7 @@ class LiveControlPanel extends React.Component {
         return (
             <div>
                 <BreadcrumbCustom first="我的直播" second="直播控制台" />
-               
+
                 <Row>
                     <Col span={3}>
                         <div className="live-name">直播名称</div>
@@ -28,26 +28,34 @@ class LiveControlPanel extends React.Component {
                         </Row>
                     </Col>
                 </Row>
+                <div  className="video-box">
                 <Row>
                     <Col span={15}>
-                        <Row>
-                            <Col span={15}>
-                            <Card>
-                                <VideoPlayer />
-                                </Card>
-                            </Col>
-                            <Col span={8} offset={1}>
-                            <Card>
-                              wefr
+                        
+                            <Row>
+                                <Col span={17}>
+                                    
+                                        <VideoPlayer />
+                                    
+                                </Col>
+                                <Col span={6} >
+                                    <div className="data-show">
+                                    <Card title="实时监控数据">
+                                        <p>观看量：5</p>
+                                        <p>在线人数：5</p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
                               </Card>
-                            </Col>
-                        </Row>
+                              </div>
+                                </Col>
+                            </Row>
                         <MeansPanel />
                     </Col>
-                    <Col span={8} offset={1}>
+                    <Col span={8} >
                         <ChattingPanel />
                     </Col>
                 </Row>
+                </div>
             </div>
 
         )
