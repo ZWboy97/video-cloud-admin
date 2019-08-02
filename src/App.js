@@ -26,7 +26,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         const session_id = window.localStorage.getItem('session_id');
-        VCloudAPI.defaults.headers.common['session_id'] = session_id;
+        console.log('设置头部')
+        //VCloudAPI.defaults.headers.common['X-Session-Id'] = session_id;
     }
 
     componentWillMount() {

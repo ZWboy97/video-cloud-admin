@@ -33,6 +33,8 @@ export const removeStorage = (name) => {
     window.localStorage.removeItem(name);
 }
 
+
+
 //解析当前浏览器地址中url？之后的参数，返回一个参数对象
 export const getUrlParams = () => {
     let _queryString = {};//最终结果，初始化空对象
