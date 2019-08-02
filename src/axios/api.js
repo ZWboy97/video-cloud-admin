@@ -29,12 +29,16 @@ function createVCloudAPI() {
     // 添加响应拦截器
     Axios.interceptors.response.use(function (response) {
         // 对响应数据做点什么
-        const { data } = response;
-        if (data.code === 401) {
-            // 携带参数redirect,表明从哪个界面跳转到登录界面
-            history.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
+        if (response.status === 200) {
+            const { data } = response;
+            if (data.code === 401) {
+                // 携带参数redirect,表明从哪个界面跳转到登录界面
+                history.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
+            }
+            return response;
+        } else {
+            message.error("请求失败，状态码：" + response.status);
         }
-        return response;
     }, function (error) {
         // 对响应错误做点什么
         message.error("网络失败,请稍后重试");
