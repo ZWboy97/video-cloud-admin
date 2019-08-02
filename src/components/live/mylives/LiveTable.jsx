@@ -17,6 +17,7 @@ class LiveTable extends React.Component {
         super(props);
         this.handleLink = this.handleLink.bind(this);
         this.handleSetting = this.handleSetting.bind(this);
+        this.handleControl = this.handleControl.bind(this);
 
         this.columns = [
             {
@@ -82,6 +83,8 @@ class LiveTable extends React.Component {
                         <a className="live-link" href="javascript:;" onClick={(e) => this.handleLink(e, record)}>链接</a>
                         <Divider type="vertical" />
                         <a className="live-link" href="javascript:;" onClick={(e) => this.handleSetting(e, record)}>设置</a>
+                        <Divider type="vertical" />
+                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleControl(e, record)}>控制台</a>
                     </div>
             },
         ]
@@ -99,6 +102,17 @@ class LiveTable extends React.Component {
     handleSetting(e, record) {
         e.preventDefault();
         this.props.history.push('/app/lives/mylives/setting/');
+        this.props.setAlitaState({
+            stateName: 'live_setting_page',
+            data: {
+                liveData: record
+            }
+        })
+    }
+
+    handleControl(e, record) {
+        e.preventDefault();
+        this.props.history.push('/app/lives/mylives/controlpanel/');
         this.props.setAlitaState({
             stateName: 'live_setting_page',
             data: {
