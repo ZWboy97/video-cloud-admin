@@ -6,7 +6,8 @@ import { Form, Icon, Input, Button, Checkbox, Spin, message, Layout } from 'antd
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../axios/api';
 import { Link, withRouter } from 'react-router-dom';
-import { setLocalStorage } from '../../utils/index';
+import { setLocalStorage, getUrlParams } from '../../utils/index';
+
 const FormItem = Form.Item;
 
 class Login extends React.Component {
@@ -14,11 +15,17 @@ class Login extends React.Component {
     //控制的state，不从Redux中读取
     state = {
         logining: false,
-        redirect: ''        //从url读取参数，跳转来源（登录成功后要成功回去），为空的话就跳转到根首页
+        redirect: ''
     }
 
     componentWillMount() {
         document.title = '登录-视频云管理平台';
+        const { redirect } = getUrlParams();
+        if (redirect) {
+            this.setState({
+                redirect: redirect  //从url读取参数，跳转来源（登录成功后要成功回去），为空的话就跳转到根首页
+            });
+        }
     }
 
     /**
@@ -28,7 +35,6 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const { setAlitaState } = this.props;
                 VCloudAPI.post('/user/login',
                     {
                         email: values.email,
@@ -40,10 +46,12 @@ class Login extends React.Component {
                             if (code === 201) {
                                 message.success('登录成功！')
                                 setLocalStorage('session_id', data.session_id);
-                                VCloudAPI.defaults.headers.common['session_id'] = data.session_id;
                                 setLocalStorage('user', data.user);
-                                this.props.history.push('/');
-                                // todo, 登录成功不一定跳转首页，基于redirect参数返回到跳转之前的界面
+                                if (this.state.redirect === '') {
+                                    this.props.history.push('/');
+                                } else {
+                                    this.props.history.push(this.state.redirect);   //登录成功之后，跳转回之前的界面
+                                }
                             } else if (code === 401) {
                                 message.error('用户名或密码错误，请重新输入!')
                                 this.props.form.resetFields()
