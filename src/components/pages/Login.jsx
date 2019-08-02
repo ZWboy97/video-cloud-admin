@@ -41,27 +41,21 @@ class Login extends React.Component {
                         passWord: values.password
                     })
                     .then(response => {
-                        if (response.status === 200) {
-                            const { code = 0, data = {}, msg = {} } = response.data || {};
-                            if (code === 201) {
-                                message.success('登录成功！')
-                                setLocalStorage('session_id', data.session_id);
-                                setLocalStorage('user', data.user);
-                                if (this.state.redirect === '') {
-                                    this.props.history.push('/');
-                                } else {
-                                    this.props.history.push(this.state.redirect);   //登录成功之后，跳转回之前的界面
-                                }
-                            } else if (code === 401) {
-                                message.error('用户名或密码错误，请重新输入!')
-                                this.props.form.resetFields()
+                        const { code = 0, data = {}, msg = {} } = response.data || {};
+                        if (code === 201) {
+                            message.success('登录成功！')
+                            setLocalStorage('session_id', data.session_id);
+                            setLocalStorage('user', data.user);
+                            if (this.state.redirect === '') {
+                                this.props.history.push('/');
+                            } else {
+                                this.props.history.push(this.state.redirect);   //登录成功之后，跳转回之前的界面
                             }
-                        } else {
-                            message.error('登录失败，请稍后重试！')
+                        } else if (code === 401) {
+                            message.error('用户名或密码错误，请重新输入!')
+                            this.props.form.resetFields()
                         }
-                    }).catch(r => {
-                    }).finally(() => {
-                    });
+                    })
 
             }
         });
