@@ -4,15 +4,28 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Spin, message, Layout } from 'antd';
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI } from '../../axios/api'
-import { Link, withRouter } from 'react-router-dom'
+import { VCloudAPI } from '../../axios/api';
+import { Link, withRouter } from 'react-router-dom';
+import { setLocalStorage, getUrlParams } from '../../utils/index';
+
 const FormItem = Form.Item;
 
 class Login extends React.Component {
 
     //控制的state，不从Redux中读取
     state = {
-        logining: false
+        logining: false,
+        redirect: ''
+    }
+
+    componentWillMount() {
+        document.title = '登录-视频云管理平台';
+        const { redirect } = getUrlParams();
+        if (redirect) {
+            this.setState({
+                redirect: redirect  //从url读取参数，跳转来源（登录成功后要成功回去），为空的话就跳转到根首页
+            });
+        }
     }
 
     /**
@@ -22,35 +35,27 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const { setAlitaState } = this.props;
                 VCloudAPI.post('/user/login',
                     {
                         email: values.email,
                         passWord: values.password
                     })
                     .then(response => {
-                        console.log('login response:', response.data)
-                        if (response.status === 200) {
-                            const { code = 0, data = {}, msg = {} } = response.data || {};
-                            if (code === 201) {
-                                message.success('登录成功！')
-                                setAlitaState({
-                                    stateName: 'session_id',
-                                    data: data.session_id
-                                });
-                                localStorage.setItem('session_id', data.session_id);
-                                localStorage.setItem('user', JSON.stringify(data.user));
+                        const { code = 0, data = {}, msg = {} } = response.data || {};
+                        if (code === 201) {
+                            message.success('登录成功！')
+                            setLocalStorage('session_id', data.session_id);
+                            setLocalStorage('user', data.user);
+                            if (this.state.redirect === '') {
                                 this.props.history.push('/');
-                            } else if (code === 401) {
-                                message.error('用户名或密码错误，请重新输入!')
-                                this.props.form.resetFields()
+                            } else {
+                                this.props.history.push(this.state.redirect);   //登录成功之后，跳转回之前的界面
                             }
-                        } else {
-                            message.error('登录失败，请稍后重试！')
+                        } else if (code === 401) {
+                            message.error('用户名或密码错误，请重新输入!')
+                            this.props.form.resetFields()
                         }
-                    }).catch(r => {
-                    }).finally(() => {
-                    });
+                    })
 
             }
         });

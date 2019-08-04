@@ -1,7 +1,7 @@
 /**
  * 与用户相关的工具函数
  */
-import { getObjFromLocalStorage } from './index';
+import { getLocalStorage } from './index';
 import { message } from 'antd';
 
 /**
@@ -9,7 +9,7 @@ import { message } from 'antd';
  * @param history 传入 router的history属性
 */
 export const checkUserInfo = (history) => {
-    var user = getObjFromLocalStorage('user');
+    var user = getLocalStorage('user');
     if (typeof user === 'undefined') {
         message.error('登录状态异常，请重新登录');
         history.push('/login');

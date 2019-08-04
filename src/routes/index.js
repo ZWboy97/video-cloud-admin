@@ -4,8 +4,9 @@ import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';          //导入所有的组件
 import routesConfig from './config';                //导入菜单栏路由配置
 import queryString from 'query-string';
+import { connectAlita } from 'redux-alita';
 
-export default class CRouter extends Component {
+class CRouter extends Component {
 
     /**
      * 组件高阶函数
@@ -13,11 +14,9 @@ export default class CRouter extends Component {
      * 各个组件需要的权限在路由的config文件中进行配置
      */
     requireAuth = (permission, component) => {
-        const { auth } = this.props;
-        //从网络数据获得auth数据
-        //const { auth } = store.getState().httpData;
-        const { permissions } = auth.data;
-        if (!permissions || !permissions.includes(permission))
+        const { user_permissions } = this.props.alitaState || {};
+        const { data = [] } = user_permissions || {};
+        if (!data || !data.includes(permission))
             return <Redirect to={'404'} />;
         return component;
     };
@@ -27,14 +26,22 @@ export default class CRouter extends Component {
      * @param component 需要登录检查的组件
      * @param permission 查看该组件所需要的权限
      */
-    requireLogin = (component, permission) => {
-        //Todo, 基于本地信息判断用户是否已经登录，之后需要切换到更安全的验证方式
-        const _user = localStorage.getItem('session_id');
-        if (!_user) {
-            return <Redirect to={'/login'} />;
-        } else {
-            return permission ? this.requireAuth(permission, component) : component;
+    requireLogin = (component, auth, permissions) => {
+        if (!auth) {
+            //基于本地信息判断用户是否已经登录
+            const _user = localStorage.getItem('session_id');
+            if (!_user) {
+                localStorage.removeItem('user');
+                localStorage.removeItem('session_id');
+                return <Redirect to={'/login?redirect=' + encodeURIComponent(window.location.pathname)} />;
+            } else {
+                // 登录之后，查看用户是否具有访问该组件的权限
+                return permissions ? this.requireAuth(permissions, component) : component;
+            }
+        } else {    //不需要登录的组件
+            return component;
         }
+
     };
 
     render() {
@@ -50,6 +57,7 @@ export default class CRouter extends Component {
                                         key={r.route || r.key}
                                         path={r.route || r.key}
                                         render={props => {
+                                            // 将URL后的参数解析为props传到组件中
                                             const reg = /\?\S*/g;
                                             // 匹配?及其以后字符串
                                             const queryParams = window.location.hash.match(reg);
@@ -68,7 +76,7 @@ export default class CRouter extends Component {
                                             )
                                             return r.login
                                                 ? wrappedComponent
-                                                : this.requireLogin(wrappedComponent, r.auth)
+                                                : this.requireLogin(wrappedComponent, r.auth, r.permissions)
                                         }}
                                     />
                                 )
@@ -82,3 +90,5 @@ export default class CRouter extends Component {
         )
     }
 }
+
+export default connectAlita()(CRouter);
