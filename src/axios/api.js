@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { message } from 'react';
+import { message } from 'antd';
 import history from '../routes/history';
 
 //视频云后端接口
