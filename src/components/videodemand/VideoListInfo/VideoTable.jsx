@@ -304,11 +304,11 @@ class VideoTable extends Component {
                 dataIndex:'preview',
                 width:600,
                 render:preview=>(
-                    <video src={preview.hd.play_url} width="320"  controls="controls" />
+                    <video  src={preview.hd.play_url} width="320"  controls="controls" poster="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                 )
             },
             {
-                title:'名称',
+                title:'标题',
                 dataIndex:'name',
             ...this.getColumnSearchProps('name'),
 

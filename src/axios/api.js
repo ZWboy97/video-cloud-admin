@@ -19,3 +19,10 @@ export const YMOCKAPI = axios.create({
         'Content-Type': 'application/x-www-form-urlencoded',
     }
 })
+
+export const STSAPI = axios.create({
+    baseURL: 'http://114.116.180.115:9002/',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+})
