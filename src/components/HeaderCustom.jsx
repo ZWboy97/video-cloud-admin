@@ -59,6 +59,7 @@ class HeaderCustom extends Component {
     logout = () => {
         //TODO logout的时候，也需要向服务器发送请求
         localStorage.removeItem('user');
+        localStorage.removeItem('session_id');
         this.props.history.push('/login');
     };
 
