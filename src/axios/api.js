@@ -33,6 +33,8 @@ function createVCloudAPI() {
             const { data } = response;
             if (data.code === 401) {
                 // 携带参数redirect,表明从哪个界面跳转到登录界面
+                window.localStorage.removeItem('session_id');
+                window.localStorage.removeItem('user');
                 history.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
             }
             return response;

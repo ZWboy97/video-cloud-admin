@@ -31,6 +31,8 @@ class CRouter extends Component {
             //基于本地信息判断用户是否已经登录
             const _user = localStorage.getItem('session_id');
             if (!_user) {
+                localStorage.removeItem('user');
+                localStorage.removeItem('session_id');
                 return <Redirect to={'/login?redirect=' + encodeURIComponent(window.location.pathname)} />;
             } else {
                 // 登录之后，查看用户是否具有访问该组件的权限
