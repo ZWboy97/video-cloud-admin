@@ -2,19 +2,21 @@ import React, {Component} from 'react';
 import {Row, Col, Card, Button, Icon, message, Upload} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import {connectAlita} from 'redux-alita'
-import oss from 'ali-oss'
 import {STSAPI} from '../../axios/api'
 
-const client = async (self)=> {
+const OSS = require('ali-oss')
+
+const client = async () => {
 
     const token = await STSAPI.get('/ljczjnjyl/')
 
     console.log(token)
-    return new oss({
+    return new OSS({
         accessKeyId: token.data.AccessKeyId,
         accessKeySecret: token.data.AccessKeySecret,
-        bucket:'video-cloud-bupt',
-        region:'oss-cn-beijing.aliyuncs.com'
+        bucket: 'video-cloud-bupt',
+        region: 'oss-cn-beijing.aliyuncs.com',
+        //stsToken:token.data.SecurityToken
     });
 
 }
@@ -22,18 +24,17 @@ const uploadPath = (path, file) => {
     return `${path}/${file.name.split(".")[0]}-${file.uid}.${file.type.split("/")[1]}`
 }
 
-const UploadToOss = (self, path, file) => {
+const UploadToOss = (path, file) => {
     const url = uploadPath(path, file)
-
+    console.log(client())
     return new Promise((resolve, reject) => {
-        client(self).multipartUpload(url, file).then(data => {
+        client.put('123', new Buffer(file.buffer)).then(data => {
             resolve(data);
         }).catch(error => {
             reject(error)
         })
     })
 }
-
 
 
 class VideoUpload extends Component {
@@ -44,17 +45,25 @@ class VideoUpload extends Component {
         preview: "",
         visible: false,
         videoList: [],
-        loading:false
+        loading: false
     }
 
 
-
+    handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            this.setState({loading: true});
+            return;
+        }
+        if (info.file.status === 'done') {
+            this.setState({loading: false,})
+        }
+    }
 
 
     render() {
         const props = {
             onRemove: (file) => {
-                this.setState(({ videoList }) => {
+                this.setState(({videoList}) => {
                     const index = videoList.indexOf(file);
                     const newFileList = videoList.slice();
                     newFileList.splice(index, 1);
@@ -65,7 +74,8 @@ class VideoUpload extends Component {
             fileList: this.state.videoList,
             onPreview: this.handlePreview,
             accept: "video/*",
-            listType: "picture-card"
+            listType: "picture-card",
+            onChange: this.handleChange
         };
 
         const {preview, visible, videoList} = this.state
@@ -91,15 +101,13 @@ class VideoUpload extends Component {
         )
 
     }
+
     beforeUpload = file => {
         let reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsArrayBuffer(file);
         reader.onloadend = () => {
-
-
-
-            UploadToOss(this, '/', file).then(data => {
-                this.setState(({ videoList }) => ({
+            UploadToOss('test', file).then(data => {
+                this.setState(({videoList}) => ({
                     videoList: [{
                         uid: file.uid,
                         name: file.name,
