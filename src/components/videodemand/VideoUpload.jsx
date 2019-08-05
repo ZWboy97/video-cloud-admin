@@ -1,87 +1,22 @@
-import React, {Component} from 'react';
-import {Row, Col, Card, Button, Icon, message, Upload} from 'antd';
+import React, { Component } from 'react';
+import { Row, Col, Card, Button, Icon, message, Upload } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import {connectAlita} from 'redux-alita'
-import oss from 'ali-oss'
-import {STSAPI} from '../../axios/api'
-
-const client = async (self)=> {
-
-    const token = await STSAPI.get('/ljczjnjyl/')
-
-    console.log(token)
-    return new oss({
-        accessKeyId: token.data.AccessKeyId,
-        accessKeySecret: token.data.AccessKeySecret,
-        bucket:'video-cloud-bupt',
-        region:'oss-cn-beijing.aliyuncs.com'
-    });
-
-}
-const uploadPath = (path, file) => {
-    return `${path}/${file.name.split(".")[0]}-${file.uid}.${file.type.split("/")[1]}`
-}
-
-const UploadToOss = (self, path, file) => {
-    const url = uploadPath(path, file)
-
-    return new Promise((resolve, reject) => {
-        client(self).multipartUpload(url, file).then(data => {
-            resolve(data);
-        }).catch(error => {
-            reject(error)
-        })
-    })
-}
-
-
+import { connectAlita } from 'redux-alita';
+import OssUploader from '../../utils/OssUploader';
 
 class VideoUpload extends Component {
 
-
-    state = {
-
-        preview: "",
-        visible: false,
-        videoList: [],
-        loading:false
-    }
-
-
-
-
-
     render() {
-        const props = {
-            onRemove: (file) => {
-                this.setState(({ videoList }) => {
-                    const index = videoList.indexOf(file);
-                    const newFileList = videoList.slice();
-                    newFileList.splice(index, 1);
-                    return {videoList: newFileList};
-                });
-            },
-            beforeUpload: this.beforeUpload,
-            fileList: this.state.videoList,
-            onPreview: this.handlePreview,
-            accept: "video/*",
-            listType: "picture-card"
-        };
-
-        const {preview, visible, videoList} = this.state
-
-
         return (
             <div className="gutter-example button-demo">
-
-                <BreadcrumbCustom first="我的点播"/>
+                <BreadcrumbCustom first="我的点播" />
                 <div className="gutter-box">
                     <Card title='上传视频' bordered={false}>
                         <Upload
-                            {...props}
+                            beforeUpload={this.beforeUpload}
                         >
                             <Button>
-                                <Icon type="upload"/> 点击上传视频
+                                <Icon type="upload" /> 点击上传视频
                             </Button>
                         </Upload>
                     </Card>
@@ -92,33 +27,45 @@ class VideoUpload extends Component {
 
     }
     beforeUpload = file => {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
+        // 配置STS Token， 之后需要从STS服务器去取
+        const options = {
+            config: {
+                region: 'oss-cn-beijing',
+                accessKeyId: "STS.NJcghefdsatk9C6Qfb6XGzVRb",
+                accessKeySecret: "56UE7nBjtM5uUQCm3kr6f2MTRRsc6JDC7SrhY7AmScKX",
+                stsToken: "CAISkwJ1q6Ft5B2yfSjIr4nWLNLRi7tS1raAO2WHtWY3OtdrlZP5gDz2IH1KeHBsAugctvw/mmFX7PgSlqB6T55OSAmcNZIoBlGAGq3kMeT7oMWQweEuuv/MQBquaXPS2MvVfJ+OLrf0ceusbFbpjzJ6xaCAGxypQ12iN+/m6/Ngdc9FHHP7D1x8CcxROxFppeIDKHLVLozNCBPxhXfKB0ca3WgZgGhku6Ok2Z/euFiMzn+Ck7dL99mgfsT1MJE8Yc8jD+3YhrImKvDztwdL8AVP+atMi6hJxCzKpNn1ASMKvkvaaraPqoc3dF8nN/dgRf5e3/H4lOxlvOvIjJjwyBtLMuxTXj7WWIe62szAFfM14h+KhSJhUhqAAQLSvcrMjulCjF+FBxvglcQ7LHhNBgDcP1EFu5A16zf6xlXUfg8p1nezLZs5m1SCcfM4UUN3DqfB+mqMjL03s63SbhQXgN8woKO7UB+6Nfn5z2Pdt7l9mcmGAc7LHNTcWo8rVJTyml+NWzdA4w9l58ex3r2THu5MOdhn+hjihpic",
+                bucket: 'video-cloud-bupt',
+            },
+            dirname: '',
+            progress: this.progress,
 
-
-
-            UploadToOss(this, '/', file).then(data => {
-                this.setState(({ videoList }) => ({
-                    videoList: [{
-                        uid: file.uid,
-                        name: file.name,
-                        status: file.status,
-                        type: file.type,
-                        result: data.name,
-                        url: reader.result
-                    }],
-                }));
-            })
         }
-        return false;
+        // 创建Uploader
+        const upload = new OssUploader({
+            ...options,                 // 与文件无关的一些配置
+            file,                       // 待上传的文件
+        });
+        // 开始上传
+        upload.start(
+            res => {
+                console.log('OSS上传返回结果', res)
+                if (res.res.status === 200) {
+                    message.success('文件上传成功');
+                    const url = res.res.requestUrls[0];
+                    console.log('上传文件的返回URL为', url);
+                } else {
+                    message.error('文件上传失败');
+                }
+            },
+            error => {
+                message.error('文件上传失败');
+            }
+        );
+        return false;       // 在这里，我们自己通过OSS上传，所以返回false，拦截Upload自己的上传
     }
 
-    handlePreview = (file) => {
-        this.setState({
-            preview: file.url || file.thumbUrl,
-            visible: true,
-        });
+    progress = (percent) => {
+        console.log('上传进度:', parseInt(percent * 100));
     }
 }
 
