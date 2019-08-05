@@ -40,6 +40,10 @@ function beforeUpload(file) {
 }
 
 class LiveInfo extends React.Component {
+    constructor(props) {
+        super(props)
+        //this.onValuesChange=this.onValuesChange.bind(this);
+    }
 
     state = {
         loading: false,
@@ -64,6 +68,7 @@ class LiveInfo extends React.Component {
         //从alitastate中解析数据
         const { live_setting_page = {} } = this.props.alitaState || {};
         const { liveData = {} } = live_setting_page.data || {}
+        console.log(liveData)
         const { getFieldDecorator } = this.props.form;
 
         const uploadButton = (
@@ -73,6 +78,7 @@ class LiveInfo extends React.Component {
             </div>
         );
         const { imageUrl } = this.state;
+        console.log(imageUrl)
 
         return (
             <Row type="flex" justify="space-around" align="middle">
@@ -144,14 +150,14 @@ class LiveInfo extends React.Component {
                             </Form.Item>
 
                             <Form.Item label="直播时间">
-                                <RangePicker
-                                    locale={locale}
-                                    defaultValue={[moment(liveData.start_time, 'YYYY-MM-DD HH:mm:ss'), moment(liveData.end_time, 'YYYY-MM-DD HH:mm:ss')]}
-                                    format="YYYY-MM-DD HH:mm" />
+
                                 {getFieldDecorator('range_time', {
                                     rules: [{ type: 'array', required: true, message: '请选择您的直播时间区间' }],
                                 })(
-                                    <div></div>
+                                    <RangePicker
+                                        locale={locale}
+                                        //defaultValue={[moment(liveData.start_time, 'YYYY-MM-DD HH:mm:ss'), moment(liveData.end_time, 'YYYY-MM-DD HH:mm:ss')]}
+                                        format="YYYY-MM-DD HH:mm" />
                                 )}
                             </Form.Item>
                             <Form.Item label="观看条件">
@@ -160,10 +166,10 @@ class LiveInfo extends React.Component {
                                     rules: [{ required: true }]
                                 })(
                                     <Select placeholder="请选择直播类型">
-                                        <Option value="none">公开</Option>
-                                        <Option value="code">验证码</Option>
-                                        <Option value="pay">支付</Option>
-                                        <Option value="login">登录</Option>
+                                        <Option value={1}>公开</Option>
+                                        <Option value={2}>验证码</Option>
+                                        <Option value={3}>支付</Option>
+                                        <Option value={4}>登录</Option>
                                     </Select>)}
                             </Form.Item>
                             <Form.Item label="状态">
@@ -188,4 +194,34 @@ class LiveInfo extends React.Component {
         );
     }
 }
-export default connectAlita()(Form.create()(LiveInfo));
+export default connectAlita()(Form.create(
+    {
+        onValuesChange(props, changedValues, allValues) {
+            console.log(allValues);
+            const { live_setting_page = {} } = props.alitaState || {};
+            const { liveData = {} } = live_setting_page.data || {}
+            console.log(changedValues)
+            if(changedValues.hasOwnProperty('range_time')){
+                const changedRange = {
+                    'start_time': changedValues.range_time[0].format('YYYY-MM-DD HH:mm:ss'),
+                    'end_time': changedValues.range_time[1].format('YYYY-MM-DD HH:mm:ss')
+                };
+                console.log(changedRange)
+                const data = { liveData: { ...liveData, ...changedRange } }
+                console.log(data)
+                props.setAlitaState({
+                        stateName: 'live_setting_page',
+                        data: data
+                });
+            }
+            else{
+                const data = { liveData: { ...liveData, ...changedValues } }
+                    console.log(data)
+                    props.setAlitaState({
+                        stateName: 'live_setting_page',
+                        data: data
+                    });
+            }
+            
+        }
+    })(LiveInfo));

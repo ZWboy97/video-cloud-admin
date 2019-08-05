@@ -2,6 +2,9 @@ import { Row, Col, Button, Upload, Form, Input, message, Icon, Switch } from 'an
 import React from 'react';
 import './style.less';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI, YMOCKAPI } from '../../../../axios/api';
+import { getLocalStorage } from '../../../../utils/index';
+import { checkUserInfo } from '../../../../utils/UserUtils';
 //import { VCloudAPI } from '../../../axios/api';
 
 function getBase64(img, callback) {
@@ -24,6 +27,7 @@ function beforeUpload(file) {
 class LiveIntroSet extends React.Component {
     constructor(props) {
         super(props);
+        this.handleSave=this.handleSave.bind(this);
     }
 
     handleChange = info => {
@@ -64,6 +68,53 @@ class LiveIntroSet extends React.Component {
         }
 
     }
+    handleSave(){
+        this.props.form.validateFields((err, fieldsValue) => {
+            if (err) {
+                return;
+            }
+            console.log(fieldsValue["pre_pic"])
+            console.log(fieldsValue["qorder"])
+            var data={};
+            if(fieldsValue["qorder"]){
+                data={
+                    "pre_pic":'fgjierpgjerkol',
+                    "qorder":1
+                }
+            }
+            else{
+                data={
+                    "pre_pic":'fgjierpgjerkol',
+                    "qorder":0
+                }
+            }
+            // //读取表单数据 
+            // let data = {
+            //     ...fieldsValue,
+            // }
+          console.log(data)
+            if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+                return;
+            }
+            const user = getLocalStorage('user');
+            VCloudAPI.put("/com/" + user.cid + '/liveroom/intro/?aid='+user.aid, {
+                ...data
+            }).then(response => {
+                if (response.status === 200) {
+                    const { code = 0, data = {}, msg = {} } = response.data || {};
+                    if (code === 200) {
+                        message.success('修改成功!');
+                        
+                    } else {
+                        message.error('修改失败!')
+                    }
+                } else {
+                    message.error('网络请求失败！')
+                }
+            }).catch(r => {
+            })
+        })
+    }
     render() {
 
         const { getFieldDecorator } = this.props.form;
@@ -78,7 +129,7 @@ class LiveIntroSet extends React.Component {
                     <Row>
                         <Col span={15}>
                             <Form.Item label="引导页图片">
-                                {getFieldDecorator('introPicture', {
+                                {getFieldDecorator('pre_pic', {
 
                                 })(
                                     <Upload
@@ -103,7 +154,7 @@ png格式，大小不超过 2M</div>
                     <Row>
                         <Col span={15}>
                             <Form.Item label="是否需要预约">
-                                {getFieldDecorator('order', {
+                                {getFieldDecorator('qorder', {
 
                                 })(
                                     <div>
@@ -118,6 +169,14 @@ png格式，大小不超过 2M</div>
                             </Form.Item>
                         </Col>
                     </Row>
+
+
+                    <div className="save-button">
+                        <Button
+                           onClick={this.handleSave}
+                           type="primary"
+                        >保存</Button>
+                    </div>
                 </Form>
 
             </div>
