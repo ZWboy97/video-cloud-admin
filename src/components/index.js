@@ -6,7 +6,7 @@ import MyLivesIndex from './live/MyLivesIndex';
 import LiveDetailPage from './live/livesetting/livebasicinfo/LiveBasicPage'
 import UserCenter from './usercenter/UserCenter';
 import VideoUpload from './videodemand/VideoUpload';
-import VideoList from './videodemand/VideoList'
+import VideoListPage from './videodemand/VideoListPage'
 export default {
-    Dashboard, MyLivesIndex, UserCenter, VideoUpload, LiveDetailPage, VideoList
+    Dashboard, MyLivesIndex, UserCenter, VideoUpload, LiveDetailPage, VideoListPage
 }
