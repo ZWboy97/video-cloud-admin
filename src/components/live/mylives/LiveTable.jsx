@@ -166,7 +166,7 @@ class LiveTable extends React.Component {
     render() {
         const { my_live_list } = this.props.alitaState;
         var { data = [] } = my_live_list || {};
-        data.sort(this.compare('create_time'));
+        data && data.sort(this.compare('create_time'));
         return (
             <div>
                 <Table
