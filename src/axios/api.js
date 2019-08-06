@@ -68,3 +68,11 @@ export const STSAPI = axios.create({
         'Content-Type': 'application/x-www-form-urlencoded',
     }
 })
+
+
+export const TESTJYLAPI = axios.create({
+    baseURL: 'http://10.128.234.231:9000/',
+    headers: {
+        'Content-Type': 'application/json',
+    }
+})

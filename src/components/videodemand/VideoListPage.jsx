@@ -5,11 +5,10 @@ import ShowVideoList from './VideoListInfo/ShowVideoList'
 
 const {TabPane} = Tabs;
 
-class VideoList extends Component {
+class VideoListPage extends Component {
     callback(key) {
         console.log(key);
     }
-
 
     render() {
 
@@ -39,4 +38,4 @@ class VideoList extends Component {
     }
 }
 
-export default VideoList
+export default VideoListPage

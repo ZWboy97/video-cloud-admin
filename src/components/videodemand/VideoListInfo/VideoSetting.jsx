@@ -1,4 +1,4 @@
-import {Form, Input, Row, Col, Upload,Icon,Button,message} from 'antd';
+import {Form, Input, Row, Col, Upload, Icon, Button, message, Modal} from 'antd';
 import React from 'react';
 import {connectAlita} from 'redux-alita';
 
@@ -28,11 +28,36 @@ class VideoSetting extends React.Component {
         }
         return e && e.fileList;
     };
+    state = {
+        modalVisible: false,
+    };
+    setModalVisible(modalVisible) {
+        this.setState({ modalVisible });
+    }
+    handleCancel() {
+        this.setModalVisible(false)
+    }
+    handleOk() {
 
+        this.props.form.validateFields((err, fieldsValue) => {
+            if (err) {
+                return;
+            }
+            //读取表单数据
+            let formData = {
+                name:fieldsValue['name']
+            }
+            console.log(formData)
+            this.props.setAlitaState({
+                stateName:'video_setting',
+                data:formData
+            })
+        })
+        this.setModalVisible(false)
+    }
     render() {
 
 
-        console.log('1')
         const formItemLayout = {
             labelCol: {
                 xs: {span: 12},
@@ -43,12 +68,9 @@ class VideoSetting extends React.Component {
                 sm: {span: 11},
             },
         };
-        console.log('2')
         const {getFieldDecorator} = this.props.form;
-        console.log('3')
-        const {edit_info = {}} = this.props.alitaState;
-        const {data} = edit_info;
-        const {disable = true} = data || {};
+        const {video_setting = {}} = this.props.alitaState;
+        console.log('video_setting',video_setting)
 
         return (
             <div>
@@ -56,46 +78,46 @@ class VideoSetting extends React.Component {
                 <Row type="flex" justify="space-around" align="middle">
                     <Col span="20">
                         <div>
-                            <Form className="form-style" {...formItemLayout} >
-                                <Form.Item label="标题">
-                                    {getFieldDecorator('name', {
-                                        initialValue: "",
-                                        rules: [{required: true, message: '请输入视频标题'}],
-                                    })(<Input/>)}
-                                </Form.Item>
-                                <Form.Item label="标签">
-                                    {getFieldDecorator('tag', {
-                                        initialValue: "",
-                                        rules: [{required: true, message: '请输入视频标签'}],
-                                    })(<Input/>)}
-                                </Form.Item>
-                                <Form.Item label="外链">
-                                    {getFieldDecorator('link', {
-                                        initialValue: "",
-                                    })
-                                    (<Input/>)
-                                    }
-                                </Form.Item>
-                                <Form.Item label="简介">
-                                    {getFieldDecorator('introduction', {
-                                        initialValue: ""
-                                    })(<Input/>)}
-                                </Form.Item>
-                                <Form.Item label="封面">
-                                    <div className="dropbox">
-                                        {getFieldDecorator('dragger', {
-                                            valuePropName: 'fileList',
-                                            getValueFromEvent: this.normFile,
-                                        })(
-                                            <Upload {...props}>
-                                                <Button>
-                                                    <Icon type="upload" /> 点击上传封面
-                                                </Button>
-                                            </Upload>,
-                                        )}
-                                    </div>
-                                </Form.Item>
-                            </Form>
+                            <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "edit">
+                                视频设置
+                            </Button>
+                            <Modal
+                                title="视频设置"
+                                visible={this.state.modalVisible}
+                                onOk={() => this.handleOk()}
+                                okText="确认"
+                                cancelText="取消"
+                                onCancel={() => this.handleCancel()}
+                            >
+                                <Form className="form-style" {...formItemLayout} >
+                                    <Form.Item label="标题">
+                                        {getFieldDecorator('name', {
+                                            initialValue:"",
+                                            rules: [{message: '请输入视频标题'}],
+                                        })(<Input/>)}
+                                    </Form.Item>
+                                    <Form.Item label="简介">
+                                        {getFieldDecorator('introduction', {
+                                            initialValue:""
+                                        })(<Input/>)}
+                                    </Form.Item>
+                                    <Form.Item label="封面">
+                                        <div className="dropbox">
+                                            {getFieldDecorator('dragger', {
+                                                valuePropName: 'fileList',
+                                                getValueFromEvent: this.normFile,
+                                            })(
+                                                <Upload {...props}>
+                                                    <Button>
+                                                        <Icon type="upload" /> 点击上传封面
+                                                    </Button>
+                                                </Upload>,
+                                            )}
+                                        </div>
+                                    </Form.Item>
+                                </Form>
+                            </Modal>
+
                         </div>
                     </Col>
                 </Row>
