@@ -1,6 +1,7 @@
 import {Form, Input, Row, Col, Upload, Icon, Button, message, Modal} from 'antd';
 import React from 'react';
 import {connectAlita} from 'redux-alita';
+import {TESTJYLAPI} from '../../../axios/api'
 
 const props = {
     name: 'file',
@@ -21,6 +22,7 @@ const props = {
 };
 
 class VideoSetting extends React.Component {
+
     normFile = e => {
         console.log('Upload event:', e);
         if (Array.isArray(e)) {
@@ -50,14 +52,53 @@ class VideoSetting extends React.Component {
             console.log(formData)
             this.props.setAlitaState({
                 stateName:'video_setting',
-                data:formData
+                data:{name:formData.name,isClicked:true},
+
             })
+            const {rowSelectedInfo = {}} = this.props.alitaState
+            console.log('rowSel',rowSelectedInfo)
+            const {data_source = {}} = this.props.alitaState;
+            console.log('data_src',data_source)
+            const data_send = []
+            if (typeof (rowSelectedInfo) !== 'undefined'&&typeof (rowSelectedInfo.data) !== 'undefined'&&typeof (rowSelectedInfo.data.selectedRows) !== 'undefined') {
+
+                for (var i = 0;i < rowSelectedInfo.data.selectedRowKeys.length;i++) {
+
+
+                    let data  = {
+                        name:fieldsValue['name'],
+                        rid:rowSelectedInfo.data.selectedRows[i].rid,
+                        label:rowSelectedInfo.data.selectedRows[i].label,
+                        pic_url: rowSelectedInfo.data.selectedRows[i].pic_url,
+                    }
+
+                    data_source.data[rowSelectedInfo.data.selectedRowKeys[i]].name = fieldsValue['name']
+                    data_send.push(data)
+                    TESTJYLAPI.put('com/test/resourses/?test',data)
+                }
+                this.props.setAlitaState({
+                    stateName: 'data_source',
+                    data:data_source.data
+                })
+
+
+            }
         })
         this.setModalVisible(false)
     }
     render() {
 
 
+        // const disable = () =>{
+        //     if (typeof(rowSelect) !== 'undefined' && typeof(rowSelect.selectedRows) !== 'undefined') {
+        //         if (rowSelect.selectedRows.length() === 1){
+        //             return true
+        //         }
+        //     }
+        //     return false
+        // }
+
+        // console.log(disable())
         const formItemLayout = {
             labelCol: {
                 xs: {span: 12},
@@ -78,7 +119,7 @@ class VideoSetting extends React.Component {
                 <Row type="flex" justify="space-around" align="middle">
                     <Col span="20">
                         <div>
-                            <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "edit">
+                            <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "edit" >
                                 视频设置
                             </Button>
                             <Modal

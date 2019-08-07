@@ -1,4 +1,4 @@
-import {Button, Row, Col, Modal, Card, Form,Select,Input,Icon,Table} from 'antd';
+import {Button, Card, Input,Icon,Table} from 'antd';
 import React, {Component} from "react";
 import {connectAlita} from 'redux-alita';
 import Highlighter from 'react-highlight-words';
@@ -12,10 +12,14 @@ class VideoTable extends Component {
         searchText: '',
         data:[]
     };
-    componentDidMount(){
+    componentWillMount(){
         TESTJYLAPI.get('com/test/resourses/').then(res=>{
             console.log('res',res)
             this.setState({data:res.data.data})
+            this.props.setAlitaState({
+                stateName:'data_source',
+                data:res.data.data
+            })
         })
     }
     getColumnSearchProps = dataIndex => ({
@@ -81,24 +85,15 @@ class VideoTable extends Component {
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-                var {video_setting} = this.props.alitaState
-
-                console.log('setting_got',video_setting)
-                if (typeof (video_setting)!= 'undefined') {
-                    const data = {
-                        rid:selectedRows[0].rid,
-                        label:selectedRows[0].label,
-                        name:video_setting.data.name||selectedRows[0].name,
-                        pic_url:selectedRows[0].pic_url,
-                    }
-                    console.log('data',data)
-                    TESTJYLAPI.put('com/test/resourses/?test',data)
-                    TESTJYLAPI.get('com/test/resourses/').then(res=>{
-                        console.log('res',res)
-                        this.setState({data:res.data.data})
-                    })
+                const info = {
+                    selectedRowKeys:selectedRowKeys,
+                    selectedRows:selectedRows
                 }
+                this.props.setAlitaState({
+                    stateName: 'rowSelectedInfo',
+                    data: info
+                })
+
 
             },
 
@@ -139,10 +134,14 @@ class VideoTable extends Component {
                 // ...this.getColumnSearchProps('url')
             }
         ]
+        const {data_source = {}} = this.props.alitaState;
+        const {data =[]} = data_source || {};
+        console.log('src',data)
+        console.log('source',data_source)
         return (
             <div>
                 <Card>
-                    <Table  columns={columns} dataSource={this.state.data} rowSelection={rowSelection} pagination={{ pageSize: 10 }}/>,
+                    <Table  columns={columns} dataSource={data} rowSelection={rowSelection} pagination={{ pageSize: 10 }}/>,
                 </Card>
             </div>
         )
