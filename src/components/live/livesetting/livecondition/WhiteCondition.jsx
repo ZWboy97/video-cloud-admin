@@ -1,7 +1,9 @@
-import { Table, Form, Button, Row, Col, Input, Popconfirm } from 'antd'
+import { Table, Form, Button, Row, Col, Input, Popconfirm,message } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-//import { VCloudAPI } from '../../axios/api'
+import { VCloudAPI, YMOCKAPI } from '../../../../axios/api';
+import { getLocalStorage } from '../../../../utils/index';
+import { checkUserInfo } from '../../../../utils/UserUtils';
 
 class WhiteCondition extends React.Component {
 
@@ -27,55 +29,105 @@ class WhiteCondition extends React.Component {
                 align: 'center',
                 render: (text, record) =>
                     <div>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.email)}>
                             <a href="javascript:;">Delete</a>
                         </Popconfirm>
                     </div>
             },
         ]
     }
-    handleDelete = key => {
-        const { white_user_table = {} } = this.props.alitaState;
-        const { data } = white_user_table;
-        const { dataSource = [], count = 0 } = data || {};
-        this.props.setAlitaState({
-            stateName: 'white_user_table',
-            data: {
-                dataSource: dataSource.filter(item => item.key !== key),
-                count: count,
+    handleDelete = email => {
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        const lid =liveConfig.live_room_info.lid;
+        const config={
+            "lid":lid,
+            "condition":liveConfig.condition,
+            "condition_type":liveConfig.condition_type,
+            "email": this.props.form.getFieldValue("email"),
+        }
+        console.log(config);
+        if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+            return;
+        }
+        const user = getLocalStorage('user');
+        VCloudAPI.put("/com/" + user.cid + '/liveroom/condition/?aid=' + user.aid, {
+            ...config
+        }).then(response => {
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                if (code === 200) {
+                    message.success('修改成功!');
+                    const configData = {
+                        ...liveConfig, 
+                        "white_user_list":data,
+                    };
+                    this.props.setAlitaState({
+                        stateName: 'my_live_config',
+                        data: configData
+                    });
+
+
+                } else {
+                    message.error('修改失败!')
+                }
+            } else {
+                message.error('网络请求失败！')
             }
-        })
+        }).catch(r => {
+        });
+        
     };
     handleAdd = e => {
         e.preventDefault();
-        console.log("click create button");
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log("if")
-                const { white_user_table = {} } = this.props.alitaState;
-                const { data } = white_user_table;
-                const { dataSource = [], count = 0 } = data || {};
-                const newData = {
-                    key: count,
-                    id: values.id,
-                    name: '小红',
-                };
-                this.props.setAlitaState({
-                    stateName: 'white_user_table',
-                    data: {
-                        dataSource: [...dataSource, newData],
-                        count: count + 1,
-                    }
-                })
+        console.log(this.props.form.getFieldValue("email"))
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        const lid =liveConfig.live_room_info.lid;
+        const config={
+            "lid":lid,
+            "condition":liveConfig.condition,
+            "condition_type":liveConfig.condition_type,
+            "email": this.props.form.getFieldValue("email"),
+        }
+        console.log(config);
+        if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+            return;
+        }
+        const user = getLocalStorage('user');
+        VCloudAPI.put("/com/" + user.cid + '/liveroom/condition/?aid=' + user.aid, {
+            ...config
+        }).then(response => {
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                if (code === 200) {
+                    message.success('修改成功!');
+                    const configData = {
+                        ...liveConfig, 
+                        "white_user_list":data,
+                    };
+                    this.props.setAlitaState({
+                        stateName: 'my_live_config',
+                        data: configData
+                    });
+
+
+                } else {
+                    message.error('修改失败!')
+                }
+            } else {
+                message.error('网络请求失败！')
             }
+        }).catch(r => {
         });
+        
     };
     render() {
 
         const { getFieldDecorator } = this.props.form;
-        const { white_user_table = {} } = this.props.alitaState;
-        const { data } = white_user_table;
-        const { dataSource = [] } = data || {};
+
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
 
         return (
             <div>
@@ -83,14 +135,14 @@ class WhiteCondition extends React.Component {
                     <Row>
                         <Col span={7} offset={2}>
                             <Form.Item >
-                                {getFieldDecorator('id', {
-                                    rules: [{ required: true, message: '请输入用户ID!' }],
-                                })(<Input placeholder={"请输入用户ID"} />)}
+                                {getFieldDecorator('email', {
+                                    rules: [{ required: true, message: '请输入用户邮箱!' }],
+                                })(<Input placeholder={"请输入用户邮箱"} />)}
                             </Form.Item>
                         </Col>
                         <Col span={4} offset={1}>
                             <Form.Item >
-                                <Button type="primary" htmlType="submit" >添加</Button>
+                                <Button type="primary">添加</Button>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -99,7 +151,7 @@ class WhiteCondition extends React.Component {
                     <Col span={15}>
                         <Table
                             indentSize={5}
-                            dataSource={dataSource}
+                            dataSource={liveConfig.white_user_list}
                             columns={this.columns}
                             bordered={true}
                             size='small'
