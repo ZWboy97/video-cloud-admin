@@ -11,7 +11,7 @@ class VerifyCondition extends React.Component {
     constructor(props){
         super(props);
         this.handleSave=this.handleSave.bind(this);
-        this.handleChange.this.handleChange.bind(this);
+        this.handleChange=this.handleChange.bind(this);
     }
 
     handleSave(){

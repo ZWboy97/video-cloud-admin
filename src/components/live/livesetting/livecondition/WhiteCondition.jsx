@@ -10,12 +10,13 @@ class WhiteCondition extends React.Component {
     constructor(props) {
         super(props);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleAdd=this.handleAdd.bind(this)
 
         this.columns = [
             {
-                title: '用户ID',
-                dataIndex: 'id',
-                key: 'id',
+                title: '用户邮箱',
+                dataIndex: 'email',
+                key: 'email',
                 align: 'center',
             }, {
                 title: '用户姓名',
@@ -78,8 +79,7 @@ class WhiteCondition extends React.Component {
         });
         
     };
-    handleAdd = e => {
-        e.preventDefault();
+    handleAdd (){
         console.log(this.props.form.getFieldValue("email"))
         const { my_live_config = {} } = this.props.alitaState || {};
         const liveConfig = my_live_config.data || {}
@@ -100,11 +100,13 @@ class WhiteCondition extends React.Component {
         }).then(response => {
             if (response.status === 200) {
                 const { code = 0, data = {}, msg = {} } = response.data || {};
+                const {white_user_list} =data
+                console.log(data);
                 if (code === 200) {
                     message.success('修改成功!');
                     const configData = {
                         ...liveConfig, 
-                        "white_user_list":data,
+                        "white_user_list":white_user_list,
                     };
                     this.props.setAlitaState({
                         stateName: 'my_live_config',
@@ -131,7 +133,7 @@ class WhiteCondition extends React.Component {
 
         return (
             <div>
-                <Form layout="inline" onSubmit={this.handleAdd}>
+                <Form layout="inline">
                     <Row>
                         <Col span={7} offset={2}>
                             <Form.Item >
@@ -142,7 +144,7 @@ class WhiteCondition extends React.Component {
                         </Col>
                         <Col span={4} offset={1}>
                             <Form.Item >
-                                <Button type="primary">添加</Button>
+                                <Button type="primary" onClick={this.handleAdd}>添加</Button>
                             </Form.Item>
                         </Col>
                     </Row>
