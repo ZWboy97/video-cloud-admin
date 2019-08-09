@@ -5,6 +5,8 @@ import PlaySetting from './PlaySetting'
 import {connectAlita} from 'redux-alita';
 import VideoTable from './VideoTable'
 import DeleteList from './DeleteList'
+import VideoDownload from './VideoDownload'
+import AddPlayList from "./AddPlayList";
 class ShowVideoList extends Component {
 
 
@@ -22,17 +24,13 @@ class ShowVideoList extends Component {
                         <PlaySetting/>
                     </Col>
                     <Col span={3}>
-                        <Button type="primary"  size='large' icon= "download">
-                            下载视频
-                        </Button>
+                        <VideoDownload/>
                     </Col>
                     <Col span={3}>
                         <DeleteList/>
                     </Col>
                     <Col span={3}>
-                        <Button type="primary"  size='large' icon = "plus">
-                            播放列表
-                        </Button>
+                        <AddPlayList/>
                     </Col>
                     <Col span={3}>
                         <Button type="primary"  size='large' icon = "scissor">

@@ -75,7 +75,7 @@ class VideoUpload extends Component {
                         name:res.name,
                         rtype:'video',
                         size:3.0,
-                        label:'默认',
+                        label:['默认列表','dsfsdf','fsdfdsfd'],
                         res_url:url,
                         pic_url:url+'&x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast',
                     }
