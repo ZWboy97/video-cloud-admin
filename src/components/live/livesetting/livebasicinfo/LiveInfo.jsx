@@ -110,10 +110,8 @@ class LiveInfo extends React.Component {
                                 )}
                             </Form.Item>
                             <Form.Item label="频道号">
-                                {getFieldDecorator('id', {
-                                    initialValue: liveData.lid || '未知',
-                                    rules: [{ required: true, message: '请输入直播频道名称' }],
-                                })(<Input disabled={true} />)}
+                               
+                            <Input value={liveData.lid} />
                             </Form.Item>
                             <Form.Item label="直播名称">
                                 {getFieldDecorator('name', {

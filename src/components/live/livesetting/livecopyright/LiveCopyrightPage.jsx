@@ -144,7 +144,11 @@ class LiveCopyrightPage extends React.Component {
                             </Col>
                         </Row> : []}
                     </div>
-                    <Button type="primary" onClick={this.handleSave}>保存</Button>
+                    <Row>
+                        <Col span={2} offset={9}>
+                            <Button type="primary" onClick={this.handleSave}>保存</Button>
+                        </Col>
+                    </Row>
 
                 </Form>
 

@@ -20,8 +20,8 @@ class WhiteCondition extends React.Component {
                 align: 'center',
             }, {
                 title: '用户姓名',
-                dataIndex: 'name',
-                key: 'name',
+                dataIndex: 'uname',
+                key: 'uname',
                 align: 'center',
             }, {
                 title: '操作',
@@ -58,7 +58,7 @@ class WhiteCondition extends React.Component {
             if (response.status === 200) {
                 const { code = 0, data = {}, msg = {} } = response.data || {};
                 if (code === 200) {
-                    message.success('修改成功!');
+                    message.success('成功删除!');
                     const configData = {
                         ...liveConfig, 
                         "white_user_list":data,
@@ -70,7 +70,7 @@ class WhiteCondition extends React.Component {
 
 
                 } else {
-                    message.error('修改失败!')
+                    message.error('删除失败!')
                 }
             } else {
                 message.error('网络请求失败！')
@@ -103,7 +103,7 @@ class WhiteCondition extends React.Component {
                 const {white_user_list} =data
                 console.log(data);
                 if (code === 200) {
-                    message.success('修改成功!');
+                    message.success('添加成功!');
                     const configData = {
                         ...liveConfig, 
                         "white_user_list":white_user_list,
@@ -114,8 +114,10 @@ class WhiteCondition extends React.Component {
                     });
 
 
-                } else {
-                    message.error('修改失败!')
+                }else if(code===406) {
+                    message.error('您所添加的用户未注册!')
+                }else if(code===500) {
+                    message.error('您所添加的用户已添加!')
                 }
             } else {
                 message.error('网络请求失败！')

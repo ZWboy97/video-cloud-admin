@@ -1,4 +1,4 @@
-import { Form, Row, Col, Input, Select, Icon, Switch, Button,message } from 'antd';
+import { Form, Row, Col, InputNumber, Select, Icon, Switch, Button,message } from 'antd';
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI, YMOCKAPI } from '../../../../axios/api';
@@ -15,6 +15,7 @@ class PayCondition extends React.Component {
     }
 
     handleSave(){
+        let data={};
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return;
@@ -26,22 +27,24 @@ class PayCondition extends React.Component {
             delete formData.try_to_see;
             console.log(formData)
 
-            const data={...liveConfig, ...formData} 
+            data={...liveConfig, ...formData} 
             this.props.setAlitaState({
                 stateName: 'my_live_config',
                 data: data
             });
+         
         })
 
-        const { my_live_config = {} } = this.props.alitaState || {};
-        const liveConfig = my_live_config.data || {}
-        const lid =liveConfig.live_room_info.lid;
+       
+        const lid =data.live_room_info.lid;
 
-        const data = (({condition,condition_type,price,duration,try_to_see}) => 
-        ({condition,condition_type,price,duration,try_to_see}))(liveConfig)
+        console.log(data)
+
+        const configData = (({condition,condition_type,price,duration,try_to_see}) => 
+        ({condition,condition_type,price,duration,try_to_see}))(data)
         const config={
             "lid":lid,
-            ...data
+            ...configData
         }
         console.log(config)
         if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
@@ -103,7 +106,7 @@ class PayCondition extends React.Component {
                     <Form.Item label="观看价格">
                         {getFieldDecorator('price', {
                                initialValue:liveConfig.price
-                        })(<Input placeholder={"请输入观看直播所需要的价格"} />)}
+                        })(<InputNumber placeholder={"请输入观看直播所需要的价格"} />)}
                     </Form.Item>
                     <Form.Item label="付费有效期">
                         {getFieldDecorator('duration', {

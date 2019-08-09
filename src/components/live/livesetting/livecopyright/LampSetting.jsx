@@ -18,7 +18,7 @@ class LampSetting extends React.Component {
    handleSlider(value){
     const { my_live_config = {} } = this.props.alitaState || {};
     const liveConfig = my_live_config.data || {}
-    const data={...liveConfig,"lamp_tranparency":value}
+    const data={...liveConfig,"lamp_transparency":value}
     this.props.setAlitaState({
         stateName: 'my_live_config',
         data: data
@@ -107,7 +107,7 @@ class LampSetting extends React.Component {
                     </Form.Item>
                     <Form.Item label="透明度">
                         {getFieldDecorator('transparency', {
-                            initialValue: liveConfig.lamp_tranparency
+                            initialValue: liveConfig.lamp_transparency
                         })(
                             <Slider onChange={this.handleSlider} />
                         )}

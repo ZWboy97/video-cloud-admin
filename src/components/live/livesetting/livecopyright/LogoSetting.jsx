@@ -95,7 +95,7 @@ class LogoSetting extends React.Component {
                                 showUploadList={false}                              
                                 beforeUpload={this.beforeUpload}
                             >
-                                <img src={liveConfig.logo_url} alt="avatar" style={{ width: '100%' }} />
+                                <img src={liveConfig.logo_url} alt="avatar" style={{ width: '30%' }} />
                             </Upload>
                         )}
                     </Form.Item>

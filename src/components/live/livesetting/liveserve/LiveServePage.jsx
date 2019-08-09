@@ -205,10 +205,10 @@ class LiveServePage extends React.Component {
                         {liveConfig.record?<div>
                     <Row>
                         <Col span={6} offset={4}>
-                            <Select defaultValue="lucy" onChange={this.handleSelect}>
-                                <Option value="jack">Jack</Option>
-                                <Option value="lucy">Lucy</Option>
-                                <Option value="Yiminghe">yiminghe</Option>
+                            <Select defaultValue={liveConfig.record_type} onChange={this.handleSelect}>
+                                <Option value={1}>Jack</Option>
+                                <Option value={2}>Lucy</Option>
+                                <Option value={3}>yiminghe</Option>
                             </Select>
                         </Col>
                     </Row>
@@ -216,7 +216,11 @@ class LiveServePage extends React.Component {
 
                 </div>:[]}
                     </div>
-                    <Button type="primary" onClick={this.handleSave}>保存</Button>
+                    <Row>
+                        <Col span={2} offset={6}>
+                            <Button type="primary" onClick={this.handleSave}>保存</Button>
+                        </Col>
+                    </Row>
 
                     <Form.Item label="导播">
                         {getFieldDecorator('lead', {
