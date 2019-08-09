@@ -67,6 +67,7 @@ class OssUploader {
                     if (result.res.status == 200) {
                         resolve && resolve(result);
                     }
+                    console.log('success callback ')
                 } catch (error) {
                     console.log(error)
                     if (client.isCancel()) {

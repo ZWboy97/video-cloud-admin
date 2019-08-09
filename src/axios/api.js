@@ -62,9 +62,9 @@ export const YMOCKAPI = axios.create({
     }
 })
 
-export const STSAPI = axios.create({
-    baseURL: 'http://114.116.180.115:9002/',
+export const TESTJYLAPI = axios.create({
+    baseURL: 'http://114.116.180.115:9000/',
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
     }
 })

@@ -1,27 +1,27 @@
-import React, {Component} from 'react';
-import {Row, Col, Card, Tabs, Icon, Select, Upload} from 'antd';
+import React, { Component } from 'react';
+import { Tabs } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import ShowVideoList from './VideoListInfo/ShowVideoList'
+import ShowVideoList from './VideoListInfo/ShowVideoList';
+import PlayList from './PlayListInfo/PlayList'
 
-const {TabPane} = Tabs;
+const { TabPane } = Tabs;
 
-class VideoList extends Component {
+class VideoListPage extends Component {
     callback(key) {
         console.log(key);
     }
-
 
     render() {
 
         return (
             <div>
-                <BreadcrumbCustom first="视频列表"  />
+                <BreadcrumbCustom first="视频列表" />
                 <Tabs className="video-list" defaultActiveKey="1" onChange={this.callback} tabPosition={'left'}>
                     <TabPane tab="视频列表" key="1">
-                        <ShowVideoList/>
+                        <ShowVideoList />
                     </TabPane>
                     <TabPane tab="播放列表 " key="2">
-                        Content of Tab Pane 2
+                        <PlayList />
                     </TabPane>
                     <TabPane tab="视频回收站" key="3">
                         Content of Tab Pane 3
@@ -39,4 +39,4 @@ class VideoList extends Component {
     }
 }
 
-export default VideoList
+export default VideoListPage

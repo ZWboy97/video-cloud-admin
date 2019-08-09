@@ -1,242 +1,27 @@
-import {Button, Row, Col, Modal, Card, Form,Select,Input,Icon,Table} from 'antd';
-import React, {Component} from "react";
-import {connectAlita} from 'redux-alita';
+import { Button, Card, Input, Icon, Table } from 'antd';
+import React, { Component } from "react";
+import { connectAlita } from 'redux-alita';
 import Highlighter from 'react-highlight-words';
-
-const dataSource = [
-    {
-        key:1,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名1',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:2,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名2',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:3,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名3',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:4,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名4',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:5,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名5',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:6,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名6',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:7,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名7',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
-    {
-        key:8,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名8',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },    {
-        key:9,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名9',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },    {
-        key:10,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名10',
-        tag:'测试',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },    {
-        key:11,
-        preview:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-        name: '测试用名11',
-        tag:'tag',
-        url:{
-            hd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4',
-            },
-            sd: {
-                play_url: 'https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_sd.mp4',
-            }},
-
-    },
+import { TESTJYLAPI } from '../../../axios/api'
 
 
-]
-
-const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-
-};
 
 
 class VideoTable extends Component {
     state = {
         searchText: '',
+        data: []
     };
+    componentWillMount() {
+        TESTJYLAPI.get('com/test/resourses/').then(res => {
+            console.log('res', res)
+            this.setState({ data: res.data.data })
+            this.props.setAlitaState({
+                stateName: 'data_source',
+                data: res.data.data
+            })
+        })
+    }
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div style={{ padding: 8 }}>
@@ -257,10 +42,10 @@ class VideoTable extends Component {
                     size="small"
                     style={{ width: 90, marginRight: 8 }}
                 >
-                    Search
+                    搜索
                 </Button>
                 <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                    Reset
+                    重置
                 </Button>
             </div>
         ),
@@ -298,45 +83,71 @@ class VideoTable extends Component {
     };
 
     render() {
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                const info = {
+                    selectedRowKeys: selectedRowKeys,
+                    selectedRows: selectedRows
+                }
+                this.props.setAlitaState({
+                    stateName: 'rowSelectedInfo',
+                    data: info
+                })
+
+
+            },
+
+        };
         const columns = [
             {
-                title:'预览',
-                dataIndex:'preview',
-                width:600,
-                render:preview=>(
-                    <video  src={preview.hd.play_url} width="320"  controls="controls" poster="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
+                title: '预览',
+                dataIndex: 'res_url',
+                width: 600,
+                render: res_url => (
+                    <video src={res_url} width="320" height="240" controls="controls" />
                 )
             },
             {
-                title:'标题',
-                dataIndex:'name',
-            ...this.getColumnSearchProps('name'),
+                title: '标题',
+                dataIndex: 'name',
+                width: 150,
+                ...this.getColumnSearchProps('name'),
 
             },
             {
-                title:'标签',
-                dataIndex:'tag',
-                ...this.getColumnSearchProps('tag'),
+                title: '所属列表',
+                dataIndex: 'label',
+                ...this.getColumnSearchProps('label'),
+                render: label => (
+                    //console.log(label)
+                    label.map(item => (
+                        <li key={item}>{item}</li>
+                    ))
+                )
 
             },
             {
-                title:'链接',
-                dataIndex:'url',
-                width:150,
-                render:url=>(
+                title: '链接',
+                dataIndex: 'res_url',
+                width: 150,
+                render: res_url => (
                     <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
-                        <a href={url.hd.play_url}>
-                            {url.hd.play_url}
+                        <a href={res_url}>
+                            {res_url}
                         </a>
                     </div>
                 ),
                 // ...this.getColumnSearchProps('url')
             }
         ]
+        const { data_source = {} } = this.props.alitaState;
+        const { data = [] } = data_source || {};
+        console.log('src', data)
+        console.log('source', data_source)
         return (
             <div>
                 <Card>
-                    <Table  columns={columns} dataSource={dataSource} rowSelection={rowSelection} pagination={{ pageSize: 10 }}/>,
+                    <Table rowKey="rid" columns={columns} dataSource={data} rowSelection={rowSelection} pagination={{ pageSize: 10 }} />,
                 </Card>
             </div>
         )
@@ -344,4 +155,4 @@ class VideoTable extends Component {
 
 }
 
-export default connectAlita()(Form.create()(VideoTable));
+export default connectAlita()(VideoTable);
