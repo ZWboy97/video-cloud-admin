@@ -1,9 +1,7 @@
-import {Form, Input, Row, Col, Upload, Icon, Button, message, Modal} from 'antd';
+import { Form, Input, Row, Col, Upload, Icon, Button, message, Modal } from 'antd';
 import React from 'react';
-import {connectAlita} from 'redux-alita';
-import {TESTJYLAPI} from '../../../axios/api'
-
-const props = {};
+import { connectAlita } from 'redux-alita';
+import { TESTJYLAPI } from '../../../axios/api'
 
 class AddPlayList extends React.Component {
 
@@ -13,7 +11,7 @@ class AddPlayList extends React.Component {
     };
 
     setModalVisible(modalVisible) {
-        this.setState({modalVisible});
+        this.setState({ modalVisible });
     }
 
     handleCancel() {
@@ -34,32 +32,32 @@ class AddPlayList extends React.Component {
             console.log(formData)
             this.props.setAlitaState({
                 stateName: 'add_play_list',
-                data: {playlist: formData.playlist, isClicked: true},
+                data: { playlist: formData.playlist, isClicked: true },
 
             })
-            const {rowSelectedInfo = {}} = this.props.alitaState
+            const { rowSelectedInfo = {} } = this.props.alitaState
             console.log('rowSel', rowSelectedInfo)
-            const {data_source = {}} = this.props.alitaState;
+            const { data_source = {} } = this.props.alitaState;
             console.log('data_src', data_source)
 
             if (typeof (rowSelectedInfo) !== 'undefined' && typeof (rowSelectedInfo.data) !== 'undefined' && typeof (rowSelectedInfo.data.selectedRows) !== 'undefined') {
 
                 for (var i = 0; i < rowSelectedInfo.data.selectedRowKeys.length; i++) {
 
-                if (!rowSelectedInfo.data.selectedRows[i].label.includes(fieldsValue['playlist'])) {
-                    let data = {
-                        name: rowSelectedInfo.data.selectedRows[i].name,
-                        rid: rowSelectedInfo.data.selectedRows[i].rid,
-                        label: rowSelectedInfo.data.selectedRows[i].label,
-                        pic_url: rowSelectedInfo.data.selectedRows[i].pic_url,
-                    }
-                    data.label.push(formData.playlist)
+                    if (!rowSelectedInfo.data.selectedRows[i].label.includes(fieldsValue['playlist'])) {
+                        let data = {
+                            name: rowSelectedInfo.data.selectedRows[i].name,
+                            rid: rowSelectedInfo.data.selectedRows[i].rid,
+                            label: rowSelectedInfo.data.selectedRows[i].label,
+                            pic_url: rowSelectedInfo.data.selectedRows[i].pic_url,
+                        }
+                        data.label.push(formData.playlist)
 
-                    //rowSelectedInfo.data.selectedRows[i].label.push(formData.playlist)
-                    data_source.data[rowSelectedInfo.data.selectedRowKeys[i]].label = data.label
-                    console.log('it is dtata', data)
-                    TESTJYLAPI.put('com/test/resourses/?test', data)
-                }
+                        //rowSelectedInfo.data.selectedRows[i].label.push(formData.playlist)
+                        data_source.data[rowSelectedInfo.data.selectedRowKeys[i]].label = data.label
+                        console.log('it is dtata', data)
+                        TESTJYLAPI.put('com/test/resourses/?test', data)
+                    }
 
                 }
                 this.props.setAlitaState({
@@ -88,16 +86,16 @@ class AddPlayList extends React.Component {
         // console.log(disable())
         const formItemLayout = {
             labelCol: {
-                xs: {span: 12},
-                sm: {span: 5},
+                xs: { span: 12 },
+                sm: { span: 5 },
             },
             wrapperCol: {
-                xs: {span: 24},
-                sm: {span: 11},
+                xs: { span: 24 },
+                sm: { span: 11 },
             },
         };
-        const {getFieldDecorator} = this.props.form;
-        const {video_setting = {}} = this.props.alitaState;
+        const { getFieldDecorator } = this.props.form;
+        const { video_setting = {} } = this.props.alitaState;
         console.log('video_setting', video_setting)
 
         return (
@@ -121,8 +119,8 @@ class AddPlayList extends React.Component {
                                     <Form.Item label="播放列表">
                                         {getFieldDecorator('playlist', {
                                             initialValue: "默认列表",
-                                            rules: [{message: '请输入播放列表标题'}],
-                                        })(<Input/>)}
+                                            rules: [{ message: '请输入播放列表标题' }],
+                                        })(<Input />)}
                                     </Form.Item>
                                 </Form>
                             </Modal>
