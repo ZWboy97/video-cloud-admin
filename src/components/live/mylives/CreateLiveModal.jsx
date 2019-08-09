@@ -56,6 +56,7 @@ class CreateLiveModal extends Component {
             }).then(response => {
                 if (response.status === 200) {
                     const { code = 0, data = {}, msg = {} } = response.data || {};
+                    console.log(data);
                     if (code === 200) {
                         message.success('创建成功!');
                         this.props.form.resetFields();

@@ -24,9 +24,8 @@ class LiveRightPage extends React.Component {
 
         const { getFieldDecorator } = this.props.form;
         const { TextArea } = Input;
-        const { white_black_set = {} } = this.props.alitaState;
-        const { data } = white_black_set;
-        const { white = '', black = '' } = data || {};
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
         return (
             <div>
                 <Row type="flex" justify="space-around" align="middle">
@@ -56,10 +55,9 @@ class LiveRightPage extends React.Component {
                         <Form className="content-padding" labelCol={{ span: 5 }} wrapperCol={{ span: 12 }} onSubmit={this.handleOk}>
                             <Form.Item label="黑名单">
                                 {getFieldDecorator('black', {
-                                    initialValue: black
                                 })(
                                     <div className="input-area">
-                                        <TextArea disabled={true} value={black} className="text-area" rows={5} />
+                                        <TextArea value={liveConfig.black_site_list} className="text-area" rows={5} />
                                     </div>
                                 )}
                             </Form.Item>
@@ -68,7 +66,7 @@ class LiveRightPage extends React.Component {
                                 {getFieldDecorator('white', {
                                 })(
                                     <div className="input-area">
-                                        <TextArea disabled={true} value={white} className="text-area" rows={5} />
+                                        <TextArea value={liveConfig.white_site_list} className="text-area" rows={5} />
                                     </div>
                                 )}
                             </Form.Item>

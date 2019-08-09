@@ -1,4 +1,4 @@
-import { Row, Col, Form, Input, Button} from 'antd';
+import { Form, Input} from 'antd';
 import React from 'react';
 import './style.less';
 import { connectAlita } from 'redux-alita';
@@ -12,37 +12,32 @@ class AdSetting extends React.Component {
     render() {
 
         const { getFieldDecorator } = this.props.form;
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
 
         return (
             <div>
                 <Form labelCol={{ span: 5 }} wrapperCol={{ span: 14 }} onSubmit={this.handleOk}>
                     <Form.Item label="跳转URL">
-                        {getFieldDecorator('jump', {
-
+                        {getFieldDecorator('ad_jump_url', {
+                            initialValue:liveConfig.ad_jump_url
                         })(
                             <Input />
                         )}
                     </Form.Item>
                     <Form.Item label="图片URL">
-                        {getFieldDecorator('picture', {
-
+                        {getFieldDecorator('ad_pic_url', {
+                            initialValue:liveConfig.ad_pic_url
                         })(
                             <Input />
                         )}
                     </Form.Item>
                     <Form.Item label="文本">
-                        {getFieldDecorator('text', {
-
+                        {getFieldDecorator('ad_text', {
+                              initialValue:liveConfig.ad_text
                         })(
                             <Input />
                         )}
-                    </Form.Item>
-                    <Form.Item>
-                        <Row>
-                            <Col offset={18}>
-                                <Button type="primary" >保存</Button>
-                            </Col>
-                        </Row>
                     </Form.Item>
 
                 </Form>
@@ -52,4 +47,15 @@ class AdSetting extends React.Component {
     }
 
 }
-export default connectAlita()(Form.create()(AdSetting))
+export default connectAlita()(Form.create({
+    onValuesChange(props, changedValues, allValues) {
+        console.log(allValues);
+        const { my_live_config = {} } = props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        const data={...liveConfig,...changedValues}
+        props.setAlitaState({
+            stateName: 'my_live_config',
+            data: data
+        });
+    }
+})(AdSetting))
