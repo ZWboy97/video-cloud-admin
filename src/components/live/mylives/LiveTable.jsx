@@ -153,39 +153,6 @@ class LiveTable extends React.Component {
             })
         })
     }
-    handleLink(e, record) {
-        e.preventDefault();
-        this.props.setAlitaState({
-            stateName: 'live_url_modal',
-            data: {
-                visible: true,
-                liveData: record
-            }
-        })
-    }
-    handleSetting(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/lives/mylives/setting/');
-        this.props.setAlitaState({
-            stateName: 'live_setting_page',
-            data: {
-                liveData: record
-            }
-        })
-    }
-
-    handleControl(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/lives/mylives/controlpanel/');
-        this.props.setAlitaState({
-            stateName: 'live_setting_page',
-            data: {
-                liveData: record
-            }
-        })
-    }
-
-
 
     compare = (property) => {
         return function (obj1, obj2) {
