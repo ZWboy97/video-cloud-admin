@@ -23,12 +23,12 @@ class LiveShowPage extends React.Component {
     handleSave() {
         const { my_live_config = {} } = this.props.alitaState || {};
         const liveConfig = my_live_config.data || {}
-        const lid =liveConfig.live_room_info.lid;
+        const lid = liveConfig.live_room_info.lid;
 
-        const data = (({live_pic,ad_jump_url,ad_pic_url,ad_text,advertisement,chat,danmu,share,share_text}) => 
-        ({live_pic,ad_jump_url,ad_pic_url,ad_text,advertisement,chat,danmu,share,share_text}))(liveConfig)
-        const config={
-            "lid":lid,
+        const data = (({ live_pic, ad_jump_url, ad_pic_url, ad_text, advertisement, chat, danmu, share, share_text }) =>
+            ({ live_pic, ad_jump_url, ad_pic_url, ad_text, advertisement, chat, danmu, share, share_text }))(liveConfig)
+        const config = {
+            "lid": lid,
             ...data
         }
         console.log(config)
@@ -117,9 +117,9 @@ class LiveShowPage extends React.Component {
 
     handleSwitchShare(switchValueShare) {
         this.handleSwitch(switchValueShare, "share");
-       
+
         console.log(switchValueShare)
-        
+
     }
     handleSwitchAd(switchValueAd) {
         this.handleSwitch(switchValueAd, "advertisement")
@@ -189,7 +189,7 @@ class LiveShowPage extends React.Component {
 
                         })(
                             <Row>
-                                <Col span={6}>
+                                <Col span={5}>
                                     <Upload
                                         showUploadList={false}
                                         beforeUpload={this.beforeUpload}
@@ -250,7 +250,7 @@ class LiveShowPage extends React.Component {
                                 </Col>
                             </Row>
                             <Row>&nbsp;</Row>
-                        </div>:[]}
+                        </div> : []}
                     </div>
 
                     <Form.Item label="广告开关">
@@ -274,7 +274,11 @@ class LiveShowPage extends React.Component {
                             </Col>
                         </Row> : []}
                     </div>
-                    <Button type="primary" onClick={this.handleSave}>保存</Button>
+                    <Row>
+                        <Col span={2} offset={9}>
+                            <Button type="primary" onClick={this.handleSave}>保存</Button>
+                        </Col>
+                    </Row>
                 </Form>
             </div>
         );

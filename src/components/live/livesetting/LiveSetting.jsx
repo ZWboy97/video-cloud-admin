@@ -24,7 +24,7 @@ class LiveSetting extends React.Component {
         const lid = this.props.match.params.lid;
         const user = getLocalStorage('user');
         console.log(lid)
-        VCloudAPI.get("/com/" + user.cid + '/liveroom/all_config?aid='+user.aid+"&lid="+lid, {
+        VCloudAPI.get("/com/" + user.cid + '/liveroom/all_config/?aid='+user.aid+"&lid="+lid, {
 
         }).then(response => {
             if (response.status === 200) {
