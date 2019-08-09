@@ -8,7 +8,7 @@ const props = {
 class DeleteList extends Component {
     constructor(props) {
         super(props)
-        console.log('props',props)
+        // console.log('props',props)
     }
 
     handleClick =()=> {

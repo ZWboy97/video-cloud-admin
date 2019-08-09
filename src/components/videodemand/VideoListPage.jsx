@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Row, Col, Card, Tabs, Icon, Select, Upload} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import ShowVideoList from './VideoListInfo/ShowVideoList'
+import ShowVideoList from './VideoListInfo/ShowVideoList';
+import PlayList from './PlayListInfo/PlayList'
 
 const {TabPane} = Tabs;
 
@@ -20,7 +21,7 @@ class VideoListPage extends Component {
                         <ShowVideoList/>
                     </TabPane>
                     <TabPane tab="播放列表 " key="2">
-                        Content of Tab Pane 2
+                        <PlayList/>
                     </TabPane>
                     <TabPane tab="视频回收站" key="3">
                         Content of Tab Pane 3

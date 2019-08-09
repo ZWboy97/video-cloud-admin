@@ -118,6 +118,12 @@ class VideoTable extends Component {
                 title:'所属列表',
                 dataIndex:'label',
                 ...this.getColumnSearchProps('label'),
+                render:label=>(
+                    //console.log(label)
+                        label.map(item => (
+                            <li key={item}>{item}</li>
+                        ))
+                )
 
             },
             {
