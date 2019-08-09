@@ -8,73 +8,87 @@ import { connectAlita } from 'redux-alita';
 
 class LampSetting extends React.Component {
 
-    onChange = e => {
-        if (e.target.value === 1) {
-            const fixContent = (
-                <div >
-                    <Row>
-                        <Col span={9} offset={5}>
-                            <Input placeholder="请输入跑马灯内容" />
-                        </Col>
-                    </Row>
-                    <Row >&nbsp;</Row>
-                </div>
-            );
-            this.props.setAlitaState({
-                stateName: 'lamp_type',
-                data: {
-                    content: fixContent,
-                }
-            })
-        }
-        else if (e.target.value === 2) {
-            const userContent = (
-                <div>
-                    <Row>
-                        <Col span={12} offset={5}>
-                            <div className="text-style">
-                                按登录用户名进行跑马灯显示，设置白名单/自定义授权后则显示进入用户名，无设置则显示系统默认用户名。
-                    </div>
-                        </Col>
-                    </Row>
-                    <Row >&nbsp;</Row>
-                </div>
-
-            );
-            this.props.setAlitaState({
-                stateName: 'lamp_type',
-                data: {
-                    content: userContent,
-                }
-            })
-        }
-        console.log('radio checked', e.target.value);
-    };
+   constructor(props){
+       super(props)
+       this.handleRadio=this.handleRadio.bind(this)
+       this.handleLamp=this.handleLamp.bind(this)
+       this.handleFont=this.handleFont.bind(this)
+       this.handleSlider=this.handleSlider.bind(this)
+   }
+   handleSlider(value){
+    const { my_live_config = {} } = this.props.alitaState || {};
+    const liveConfig = my_live_config.data || {}
+    const data={...liveConfig,"lamp_transparency":value}
+    this.props.setAlitaState({
+        stateName: 'my_live_config',
+        data: data
+    });
+   }
+   handleFont(e){
+    const { my_live_config = {} } = this.props.alitaState || {};
+    const liveConfig = my_live_config.data || {}
+    const data={...liveConfig,"lamp_font_size":e.target.value}
+    this.props.setAlitaState({
+        stateName: 'my_live_config',
+        data: data
+    });
+   }
+   handleLamp(e){
+    const { my_live_config = {} } = this.props.alitaState || {};
+    const liveConfig = my_live_config.data || {}
+    const data={...liveConfig,"lamp_text":e.target.value}
+    this.props.setAlitaState({
+        stateName: 'my_live_config',
+        data: data
+    });
+   }
+   handleRadio(e){
+    const { my_live_config = {} } = this.props.alitaState || {};
+    const liveConfig = my_live_config.data || {}
+    const data={...liveConfig,"lamp_type":e.target.value}
+    this.props.setAlitaState({
+        stateName: 'my_live_config',
+        data: data
+    });
+   }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const fixContent = (
-            <div >
+        let fixContent = [];
+
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+
+        if (liveConfig.lamp_type === 1) {
+            fixContent = (<div >
                 <Row>
                     <Col span={9} offset={5}>
-                        <Input placeholder="请输入跑马灯内容" />
+                        <Input onChange={this.handleLamp} defaultValue={liveConfig.lamp_text} placeholder="请输入跑马灯内容" />
+                    </Col>
+                </Row>
+                <Row >&nbsp;</Row>
+            </div>)
+        } else if (liveConfig.lamp_type === 2) {
+            fixContent = (<div>
+                <Row>
+                    <Col span={12} offset={5}>
+                        <div className="text-style">
+                            按登录用户名进行跑马灯显示，设置白名单/自定义授权后则显示进入用户名，无设置则显示系统默认用户名。
+                </div>
                     </Col>
                 </Row>
                 <Row >&nbsp;</Row>
             </div>
-        );
-
-        const { lamp_type = {} } = this.props.alitaState;
-        const { data } = lamp_type;
-        const { content = fixContent } = data || {};
+            )
+        }else{fixContent=[]}
 
         return (
             <div>
                 <Form labelCol={{ span: 5 }} wrapperCol={{ span: 9 }}>
                     <Form.Item label="跑马灯类型">
                         {getFieldDecorator('type', {
-                            initialValue: 1
+                            initialValue: liveConfig.lamp_type
                         })(
-                            <Radio.Group onChange={this.onChange}>
+                            <Radio.Group onChange={this.handleRadio}>
                                 <Radio value={1}>固定值</Radio>
                                 <Radio value={2}>登陆用户名</Radio>
                             </Radio.Group>
@@ -82,29 +96,23 @@ class LampSetting extends React.Component {
                     </Form.Item>
 
                     <div>
-                        {content}
+                        {fixContent}
                     </div>
                     <Form.Item label="字体">
                         {getFieldDecorator('textType', {
-                            initialValue: 20
+                            initialValue: liveConfig.lamp_font_size
                         })(
-                            <Input />
+                            <Input onChange={this.handleFont} />
                         )}
                     </Form.Item>
                     <Form.Item label="透明度">
                         {getFieldDecorator('transparency', {
-                            initialValue: 30
+                            initialValue: liveConfig.lamp_transparency
                         })(
-                            <Slider />
+                            <Slider onChange={this.handleSlider} />
                         )}
                     </Form.Item>
-                    <Form.Item >
-                        <Row>
-                            <Col span={2} offset={22}>
-                                <Button type="primary">保存</Button>
-                            </Col>
-                        </Row>
-                    </Form.Item>
+                    
 
 
                 </Form>

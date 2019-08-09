@@ -1,5 +1,10 @@
-import { Tabs } from 'antd';
+import { Tabs,message } from 'antd';
 import React from 'react';
+import { connectAlita } from 'redux-alita';
+import {withRouter} from 'react-router-dom';
+import { VCloudAPI } from '../../../axios/api';
+import { getLocalStorage } from '../../../utils/index';
+import { checkUserInfo } from '../../../utils/UserUtils';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import LiveBasicPage from './livebasicinfo/LiveBasicPage'
 import LiveConditionPage from './livecondition/LiveConditionPage'
@@ -11,9 +16,47 @@ import LiveShowPage from './liveshow/LiveShowPage'
 const { TabPane } = Tabs;
 
 class LiveSetting extends React.Component {
+    
+    componentDidMount() {
+        if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+            return;
+        }
+        const lid = this.props.match.params.lid;
+        const user = getLocalStorage('user');
+        console.log(lid)
+        VCloudAPI.get("/com/" + user.cid + '/liveroom/all_config/?aid='+user.aid+"&lid="+lid, {
+
+        }).then(response => {
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                console.log(data)
+                if (code === 200) {
+                    // 向用户直播列表中添加一个记录
+                    message.success('获取配置成功')
+                    this.props.setAlitaState({
+                        stateName: 'my_live_config',
+                        data: data
+                    });
+                    const {live_room_info} =data
+                    const liveInfo = { liveData: { ...live_room_info } }
+                    this.props.setAlitaState({
+                        stateName: 'live_setting_page',
+                        data: liveInfo
+                    });
+                } else {
+                    message.error('获取配置失败!')
+                }
+            } else {
+                message.error('网络请求失败！')
+            }
+        }).catch(r => {
+        })
+
+    }
     callback(key) {
         console.log(key);
     }
+
     render() {
         return (
             <div>
@@ -45,5 +88,5 @@ class LiveSetting extends React.Component {
         );
     }
 }
-export default LiveSetting
+export default withRouter(connectAlita()(LiveSetting));
 
