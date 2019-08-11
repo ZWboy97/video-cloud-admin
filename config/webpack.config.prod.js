@@ -216,7 +216,9 @@ module.exports = {
 			'react-native': 'react-native-web',
 			// 全局相对路径别名，处理相对路径过长和繁琐问题
 			'@': paths.appSrc,
-			utils: path.resolve(__dirname, 'src/utils'),
+			myutils: paths.appSrc + '/utils',
+			myaxios: paths.appSrc + "/axios",
+			mycomponents: paths.appSrc + "/components"
 		},
 		plugins: [
 			// Adds support for installing with Plug'n'Play, leading to faster installs and adding

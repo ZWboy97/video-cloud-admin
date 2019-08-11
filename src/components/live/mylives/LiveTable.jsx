@@ -78,47 +78,14 @@ class LiveTable extends React.Component {
                 align: 'center',
                 render: (text, record) =>
                     <div>
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleLink(e, record)}>链接</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleLink(e, record)}>链接</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleSetting(e, record)}>设置</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleControl(e, record)}>控制台</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleControl(e, record)}>控制台</a>
                     </div>
             },
         ]
-    }
-    handleLink(e, record) {
-        e.preventDefault();
-        this.props.setAlitaState({
-            stateName: 'live_url_modal',
-            data: {
-                visible: true,
-                liveData: record
-            }
-        })
-    }
-    handleSetting(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/lives/mylives/setting/' + record.lid);
-        this.props.setAlitaState({
-            stateName: 'live_setting_page',
-            data: {
-                liveData: record
-            }
-        })
-
-
-    }
-
-    handleControl(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/lives/mylives/controlpanel/');
-        this.props.setAlitaState({
-            stateName: 'live_control_page',
-            data: {
-                liveData: record
-            }
-        })
     }
 
     componentDidMount() {
@@ -151,6 +118,40 @@ class LiveTable extends React.Component {
             this.setState({
                 isLoading: false
             })
+        })
+    }
+
+    handleLink(e, record) {
+        e.preventDefault();
+        this.props.setAlitaState({
+            stateName: 'live_url_modal',
+            data: {
+                visible: true,
+                liveData: record
+            }
+        })
+    }
+    handleSetting(e, record) {
+        e.preventDefault();
+        this.props.history.push('/app/lives/mylives/setting/' + record.lid);
+        this.props.setAlitaState({
+            stateName: 'live_setting_page',
+            data: {
+                liveData: record
+            }
+        })
+
+
+    }
+
+    handleControl(e, record) {
+        e.preventDefault();
+        this.props.history.push('/app/lives/mylives/controlpanel/' + record.lid);
+        this.props.setAlitaState({
+            stateName: 'live_control_page',
+            data: {
+                liveData: record
+            }
         })
     }
 
