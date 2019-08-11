@@ -1,7 +1,7 @@
-import { Tabs,message } from 'antd';
+import { Tabs, message } from 'antd';
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { VCloudAPI } from '../../../axios/api';
 import { getLocalStorage } from '../../../utils/index';
 import { checkUserInfo } from '../../../utils/UserUtils';
@@ -16,15 +16,15 @@ import LiveShowPage from './liveshow/LiveShowPage'
 const { TabPane } = Tabs;
 
 class LiveSetting extends React.Component {
-    
+
     componentDidMount() {
-        if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+        if (!checkUserInfo(this.props.history)) {//检查用户信息是否完整
             return;
         }
         const lid = this.props.match.params.lid;
         const user = getLocalStorage('user');
         console.log(lid)
-        VCloudAPI.get("/com/" + user.cid + '/liveroom/all_config/?aid='+user.aid+"&lid="+lid, {
+        VCloudAPI.get("/com/" + user.cid + '/liveroom/all_config/?aid=' + user.aid + "&lid=" + lid, {
 
         }).then(response => {
             if (response.status === 200) {
@@ -37,7 +37,7 @@ class LiveSetting extends React.Component {
                         stateName: 'my_live_config',
                         data: data
                     });
-                    const {live_room_info} =data
+                    const { live_room_info } = data
                     const liveInfo = { liveData: { ...live_room_info } }
                     this.props.setAlitaState({
                         stateName: 'live_setting_page',
