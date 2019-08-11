@@ -42,25 +42,17 @@ class LiveControlPanel extends React.Component {
 
     render() {
         const { live_setting_page = {} } = this.props.alitaState || {};
-        const { liveData = {} } = live_setting_page.data || {}
+        const { liveData } = live_setting_page.data || {}
+        if (!liveData) {
+            return (<div>加载中,请稍后</div>);
+        }
         return (
             <div>
                 <BreadcrumbCustom first="我的直播" second="直播控制台" />
-                <Row>
-                    <Col span={3}>
-                        <div className="live-name">{liveData.name}</div>
-                    </Col>
-                    <Col span={15}>
-                        <Row className="pull-address">
-                            <Col span={3}>
-                                <div>&nbsp;&nbsp;直播页面:</div>
-                            </Col>
-                            <Col span={20}>
-                                <a href={liveData.display_url} target="_blank" rel="noopener noreferrer">{liveData.display_url}</a>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
+                <div className="live-info-panel">
+                    <div className="live-name">{liveData.name}</div>
+                    <a href={liveData.display_url} target="_blank" rel="noopener noreferrer">进入直播</a>
+                </div>
                 <div className="video-box">
                     <Row>
                         <Col span={15}>
@@ -78,13 +70,14 @@ class LiveControlPanel extends React.Component {
                                             <p>在线人数：5</p>
                                             <p>&nbsp;</p>
                                             <p>&nbsp;</p>
+                                            <p>&nbsp;</p>
                                         </Card>
                                     </div>
                                 </Col>
                             </Row>
                             <MeansPanel />
                         </Col>
-                        <Col span={8} >
+                        <Col span={9} >
                             <ChattingPanel />
                         </Col>
                     </Row>

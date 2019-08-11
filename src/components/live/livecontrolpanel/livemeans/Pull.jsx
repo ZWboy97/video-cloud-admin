@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Input, Icon,Button } from 'antd';
+import { Row, Col, Input, Icon, Button } from 'antd';
 
 
 class Pull extends React.Component {
@@ -19,11 +19,11 @@ class Pull extends React.Component {
 
                     </Row>
                     <div className="warnning-text">
-                    <Icon type="info-circle"/>
-                    &nbsp;&nbsp;拉流地址支持：直播流：rtmp、rtsp、hls等，点播流：hls、mp4等
+                        <Icon type="info-circle" />
+                        &nbsp;&nbsp;拉流地址支持：直播流：rtmp、rtsp、hls等，点播流：hls、mp4等
                     </div>
                     <div className="start-button">
-                    <Button type="primary">开始直播</Button>
+                        <Button type="primary">开始直播</Button>
                     </div>
                 </Col>
             </Row>
