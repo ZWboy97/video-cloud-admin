@@ -6,8 +6,8 @@ import ChattingPanel from './livechatting/ChattingPanel'
 import MeansPanel from './livemeans/MeansPanel'
 import { connectAlita } from 'redux-alita';
 import { withRouter } from 'react-router-dom';
-import { getLocalStorage } from '../../../utils/index';
-import { VCloudAPI } from '../../../axios/api';
+import { getLocalStorage } from 'myutils/index';//alias,缩写，通过myutils直接访问utils目录
+import { VCloudAPI } from 'myaxios/api';//不需要频繁回退，修改文件目录也不会需要频繁修改import中的路径
 
 class LiveControlPanel extends React.Component {
 
@@ -18,7 +18,7 @@ class LiveControlPanel extends React.Component {
         VCloudAPI.get("/com/" + user.cid + '/liveroom/all_config/?aid=' + user.aid + "&lid=" + lid, {
         }).then(response => {
             if (response.status === 200) {
-                const { code = 0, data = {}, msg = {} } = response.data || {};
+                const { code = 0, data = {} } = response.data || {};
                 console.log(data)
                 if (code === 200) {
                     message.success('获取配置成功')
