@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Modal, Form, Input, Row, Col } from 'antd';
+import { Modal, Form, Input, Row, Col, message } from 'antd';
 import './style.less'
 import { connectAlita } from 'redux-alita';
-
-
+import copyToBoard from 'copy-to-clipboard';
 
 class LiveUrlModal extends Component {
 
@@ -34,7 +33,6 @@ class LiveUrlModal extends Component {
                     footer={null}
                     width={600}
                 >
-
                     <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} onSubmit={this.handleOk}>
 
                         <Form.Item label="推流地址">
@@ -43,9 +41,12 @@ class LiveUrlModal extends Component {
                                     <Input placeholder="推流地址" value={liveData.push_url} />
                                 </Col>
                                 <Col span={8}>
-                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                    <a className="live-link" href="http://" onClick={(e) => {
                                         e.preventDefault();
-                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
+                                        copyToBoard(liveData.push_url);
+                                        message.success("复制成功");
+                                    }}
+                                    >&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -56,9 +57,12 @@ class LiveUrlModal extends Component {
                                     <Input placeholder="HLS协议直播拉流地址" value={liveData.pull_hls_url} />
                                 </Col>
                                 <Col span={8}>
-                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                    <a className="live-link" href="http://" onClick={(e) => {
                                         e.preventDefault();
-                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
+                                        copyToBoard(liveData.pull_hls_url);
+                                        message.success("复制成功");
+                                    }}
+                                    >&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -66,12 +70,15 @@ class LiveUrlModal extends Component {
                         <Form.Item label="FLV拉流地址">
                             <Row >
                                 <Col span={16}>
-                                    <Input placeholder="HTTP-FLV直播拉流地址" value={liveData.pull_rtmp_url} />
+                                    <Input placeholder="HTTP-FLV直播拉流地址" value={liveData.pull_http_flv_url} />
                                 </Col>
                                 <Col span={8}>
-                                    <a className="live-link" href="javascript:;" onClick={(e) => {
+                                    <a className="live-link" href="http:" onClick={(e) => {
                                         e.preventDefault();
-                                    }}>&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
+                                        copyToBoard(liveData.pull_http_flv_url);
+                                        message.success("复制成功");
+                                    }}
+                                    >&nbsp;&nbsp;&nbsp;&nbsp;复制链接</a>
                                 </Col>
                             </Row>
                         </Form.Item>
