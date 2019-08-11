@@ -67,18 +67,6 @@ class FlvPlayer extends Component {
         config: PropTypes.object,
     }
 
-    initFlv = ($video) => {
-        if ($video) {
-            if (flvjs.isSupported()) {
-                let flvPlayer = flvjs.createPlayer({ ...this.props }, this.props.config);
-                flvPlayer.attachMediaElement($video);
-                flvPlayer.load();
-                flvPlayer.play();
-                this.flvPlayer = flvPlayer;
-            }
-        }
-    }
-
     componentWillUnmount() {
         if (this.flvPlayer) {
             this.flvPlayer.unload();
@@ -86,13 +74,27 @@ class FlvPlayer extends Component {
         }
     }
 
+    initFlv = ($video) => {
+        if ($video) {
+            if (flvjs.isSupported()) {
+                let flvPlayer = flvjs.createPlayer({ ...this.props }, this.props.config);
+                flvPlayer.attachMediaElement($video);
+                flvPlayer.load();
+                flvPlayer.volume = 0.5;
+                flvPlayer.play();
+                this.flvPlayer = flvPlayer;
+            }
+        }
+    }
+
     render() {
-        const { className, style } = this.props;
+        const { className, style, poster } = this.props;
         return (
             <video
                 className={className}
-                controls={true}
+                controls
                 style={style}
+                poster={poster}
                 ref={this.initFlv}
             />
         )

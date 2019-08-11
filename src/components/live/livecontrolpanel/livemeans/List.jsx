@@ -37,12 +37,12 @@ class List extends React.Component {
         return (
             <Row>
                 <Col span={5} offset={10}>
-                <div className="start-button">
-                        
+                    <div className="start-button">
+
                         <Button type="primary"> 开始直播
                         </Button>
-                  
-                </div>
+
+                    </div>
                     <div className="start-button">
                         <Upload {...props} fileList={this.state.fileList}>
                             <Button>
@@ -50,8 +50,8 @@ class List extends React.Component {
                             </Button>
                         </Upload>
                     </div>
-                    
-                    
+
+
                 </Col>
             </Row>
 

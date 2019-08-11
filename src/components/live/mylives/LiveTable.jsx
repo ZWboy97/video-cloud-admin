@@ -8,13 +8,11 @@ import { checkUserInfo } from '../../../utils/UserUtils';
 
 class LiveTable extends React.Component {
 
-    state = {
-        isLoading: false,
-
-    }
-
     constructor(props) {
         super(props);
+        this.state = {
+            isLoading: false,
+        }
         this.handleLink = this.handleLink.bind(this);
         this.handleSetting = this.handleSetting.bind(this);
         this.handleControl = this.handleControl.bind(this);
@@ -80,47 +78,14 @@ class LiveTable extends React.Component {
                 align: 'center',
                 render: (text, record) =>
                     <div>
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleLink(e, record)}>链接</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleLink(e, record)}>链接</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleSetting(e, record)}>设置</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleControl(e, record)}>控制台</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleControl(e, record)}>控制台</a>
                     </div>
             },
         ]
-    }
-    handleLink(e, record) {
-        e.preventDefault();
-        this.props.setAlitaState({
-            stateName: 'live_url_modal',
-            data: {
-                visible: true,
-                liveData: record
-            }
-        })
-    }
-    handleSetting(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/lives/mylives/setting/' + record.lid);
-        this.props.setAlitaState({
-            stateName: 'live_setting_page',
-            data: {
-                liveData: record
-            }
-        })
-
-        
-    }
-
-    handleControl(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/lives/mylives/controlpanel/');
-        this.props.setAlitaState({
-            stateName: 'live_control_page',
-            data: {
-                liveData: record
-            }
-        })
     }
 
     componentDidMount() {
@@ -156,11 +121,45 @@ class LiveTable extends React.Component {
         })
     }
 
+    handleLink(e, record) {
+        e.preventDefault();
+        this.props.setAlitaState({
+            stateName: 'live_url_modal',
+            data: {
+                visible: true,
+                liveData: record
+            }
+        })
+    }
+    handleSetting(e, record) {
+        e.preventDefault();
+        this.props.history.push('/app/lives/mylives/setting/' + record.lid);
+        this.props.setAlitaState({
+            stateName: 'live_setting_page',
+            data: {
+                liveData: record
+            }
+        })
+
+
+    }
+
+    handleControl(e, record) {
+        e.preventDefault();
+        this.props.history.push('/app/lives/mylives/controlpanel/' + record.lid);
+        this.props.setAlitaState({
+            stateName: 'live_control_page',
+            data: {
+                liveData: record
+            }
+        })
+    }
+
     compare = (property) => {
         return function (obj1, obj2) {
             var value1 = Date.parse(obj1[property]);
             var value2 = Date.parse(obj2[property]);
-            return value2 - value1;     // 升序
+            return value2 - value1;// 升序
         }
     }
 
@@ -175,9 +174,9 @@ class LiveTable extends React.Component {
                     loading={this.state.isLoading}
                     dataSource={data}
                     columns={this.columns}
-                    bordered={true}
-                    size='large'
-                    rowKey='lid'
+                    bordered
+                    size="large"
+                    rowKey="lid"
                 />
             </div>
         );
