@@ -13,7 +13,7 @@ class MeansPanel extends React.Component {
     render() {
         return (
             <div>
-               
+
                 <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'top'}>
                     <TabPane tab="专业设备直播" key="1">
                         <Professional />
@@ -27,7 +27,7 @@ class MeansPanel extends React.Component {
                     <TabPane tab="导播台直播" key="4">
                         <Lead />
                     </TabPane>
-                    
+
                 </Tabs>
             </div>
         );

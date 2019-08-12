@@ -92,7 +92,9 @@ module.exports = {
 		alias: {	/**配置别名，配置之后需要重启服务 */
 			'react-native': 'react-native-web',
 			'@': paths.appSrc,	// 全局相对路径别名，处理相对路径过长和繁琐问题
-			utils: path.resolve(__dirname, 'src/utils'),
+			myutils: paths.appSrc + '/utils',
+			myaxios: paths.appSrc + "/axios",
+			mycomponents: paths.appSrc + "/components"
 		},
 		plugins: [
 			PnpWebpackPlugin,

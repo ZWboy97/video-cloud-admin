@@ -22,12 +22,7 @@ const formItemLayout = {
 
 
 class LiveInfo extends React.Component {
-    constructor(props) {
-        super(props)
-        //this.onValuesChange=this.onValuesChange.bind(this);
-    }
 
-    
     beforeUpload = file => {
         // 配置STS Token， 之后需要从STS服务器去取
         const options = {
@@ -56,11 +51,11 @@ class LiveInfo extends React.Component {
                     const url = res.res.requestUrls[0];
                     const { live_setting_page = {} } = this.props.alitaState || {};
                     const { liveData = {} } = live_setting_page.data || {}
-                    const data = { liveData: { ...liveData, "picture_url" :url} }
+                    const data = { liveData: { ...liveData, "picture_url": url } }
                     this.props.setAlitaState({
                         stateName: 'live_setting_page',
                         data: data
-                });
+                    });
                     console.log('上传文件的返回URL为', url);
                 } else {
                     message.error('文件上传失败');
@@ -75,7 +70,7 @@ class LiveInfo extends React.Component {
     progress = (percent) => {
         console.log('上传进度:', parseInt(percent * 100));
     }
-   
+
 
     render() {
         //从alitastate中解析数据
@@ -99,7 +94,7 @@ class LiveInfo extends React.Component {
                                                 beforeUpload={this.beforeUpload}
                                                 showUploadList={false}
                                             >
-                                                <img src={liveData.picture_url} alt="avatar" style={{ width: '100%' }} /> 
+                                                <img src={liveData.picture_url} alt="avatar" style={{ width: '100%' }} />
                                             </Upload>
                                         </Col>
                                         <Col span={15}>
@@ -110,8 +105,8 @@ class LiveInfo extends React.Component {
                                 )}
                             </Form.Item>
                             <Form.Item label="频道号">
-                               
-                            <Input value={liveData.lid} />
+
+                                <Input value={liveData.lid} />
                             </Form.Item>
                             <Form.Item label="直播名称">
                                 {getFieldDecorator('name', {
@@ -199,7 +194,7 @@ export default connectAlita()(Form.create(
             const { live_setting_page = {} } = props.alitaState || {};
             const { liveData = {} } = live_setting_page.data || {}
             console.log(changedValues)
-            if(changedValues.hasOwnProperty('range_time')){
+            if (changedValues.hasOwnProperty('range_time')) {
                 const changedRange = {
                     'start_time': changedValues.range_time[0].format('YYYY-MM-DD HH:mm:ss'),
                     'end_time': changedValues.range_time[1].format('YYYY-MM-DD HH:mm:ss')
@@ -208,19 +203,19 @@ export default connectAlita()(Form.create(
                 const data = { liveData: { ...liveData, ...changedRange } }
                 console.log(data)
                 props.setAlitaState({
-                        stateName: 'live_setting_page',
-                        data: data
+                    stateName: 'live_setting_page',
+                    data: data
                 });
             }
-            else if(changedValues.hasOwnProperty('cover')){}
-            else{
+            else if (changedValues.hasOwnProperty('cover')) { }
+            else {
                 const data = { liveData: { ...liveData, ...changedValues } }
-                    console.log(data)
-                    props.setAlitaState({
-                        stateName: 'live_setting_page',
-                        data: data
-                    });
+                console.log(data)
+                props.setAlitaState({
+                    stateName: 'live_setting_page',
+                    data: data
+                });
             }
-            
+
         }
     })(LiveInfo));
