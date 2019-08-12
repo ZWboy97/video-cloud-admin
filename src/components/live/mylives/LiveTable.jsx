@@ -2,7 +2,7 @@ import { Table, Divider, message } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../../axios/api';
-import { withRouter } from 'react-router-dom';
+import { withRouter ,Link} from 'react-router-dom';
 import { getLocalStorage } from '../../../utils/index';
 import { checkUserInfo } from '../../../utils/UserUtils';
 
@@ -84,7 +84,7 @@ class LiveTable extends React.Component {
                         <Divider type="vertical" />
                         <a className="live-link" href="javascript:;" onClick={(e) => this.handleControl(e, record)}>控制台</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleDirector(e, record)}>导播台</a>
+                        <Link className="live-link" to="/director/?did=1244" target="_blank">导播台</Link>
 
                     </div>
             },
