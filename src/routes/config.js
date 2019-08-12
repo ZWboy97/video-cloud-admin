@@ -37,7 +37,7 @@ export default {
         {
             key: '/app/transform', title: '账户管理', icon: 'area-chart',
             subs: [
-                { key: '/app/ui/exampleAnimations', title: '账户总览', component: 'Dashboard' },
+                { key: '/app/ui/exampleAnimations', title: '账户总览', component: 'AccountCenter' },
             ]
         },
 
