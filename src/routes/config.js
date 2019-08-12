@@ -28,13 +28,6 @@ export default {
             ]
         },
         {
-            key: '/app/dvr', title: '用户画像', icon: 'edit',
-            subs: [
-                { key: '/app/ui/exampleAnimations', title: '直播用户', component: 'Dashboard' },
-                { key: '/app/ui/advancedTable', title: '点播用户', component: 'Dashboard' },
-            ]
-        },
-        {
             key: '/app/transform', title: '账户管理', icon: 'area-chart',
             subs: [
                 { key: '/app/ui/exampleAnimations', title: '账户总览', component: 'AccountCenter' },
