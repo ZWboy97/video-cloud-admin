@@ -85,13 +85,21 @@ class VideoUpload extends Component {
                 <BreadcrumbCustom first="我的点播" />
                 <div className="gutter-box">
                     <Card title="上传视频" bordered={false}>
-                        <Upload
+                        <Dragger
                             beforeUpload={this.beforeUpload}
                         >
-                            <Button>
-                                <Icon type="upload" /> 点击上传视频
-                            </Button>
-                        </Upload>
+                            <p className="ant-upload-drag-icon">
+                                <Icon type="inbox" />
+                            </p>
+                            <p className="ant-upload-text">点击或拖拽至此上传</p>
+                            {/*<p className="ant-upload-hint">*/}
+                            {/*Support for a single or bulk upload. Strictly prohibit from uploading company data or other*/}
+                            {/*band files*/}
+                            {/*</p>*/}
+                            {/*<Button>*/}
+                            {/*<Icon type="upload" /> 点击上传视频*/}
+                            {/*</Button>*/}
+                        </Dragger>
                     </Card>
                 </div>
             </div>
