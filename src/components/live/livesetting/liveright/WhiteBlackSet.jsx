@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Button, Modal,Input, Form, Row, Col } from 'antd';
+import { Button, Modal,Input, Form, Row, Col,message } from 'antd';
 import './style.less'
 import { connectAlita } from 'redux-alita';
-// import { VCloudAPI, YMOCKAPI } from '../../../axios/api';
-// import { getObjFromLocalStorage } from '../../../utils/index';
-// import { checkUserInfo } from '../../../utils/UserUtils';
+import { VCloudAPI, YMOCKAPI } from '../../../../axios/api';
+import { getLocalStorage } from '../../../../utils/index';
+import { checkUserInfo } from '../../../../utils/UserUtils';
 import { withRouter } from 'react-router-dom';
 
 
@@ -29,26 +29,63 @@ class WhiteBlackSet extends Component {
     }
 
     handleOk() {
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                this.props.setAlitaState({
-                    stateName: 'white_black_set',
-                    data: {
-                        visible: false,
-                        white: values.white_name,
-                        black: values.black_name
-                    }
-                });
-            }
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
 
+        const data = {
+            ...liveConfig, 
+            "black_site_list": this.props.form.getFieldValue("black_site_list"),
+            "white_site_list": this.props.form.getFieldValue("white_site_list")
+        };
+        this.props.setAlitaState({
+            stateName: 'my_live_config',
+            data: data
+        });
+
+        this.props.setAlitaState({
+            stateName: 'white_black_set',
+            data: {
+                visible: false,
+            }
         })
+        const lid =liveConfig.live_room_info.lid;
+
+        const config={
+            "lid":lid,
+            "black_site_list": data.black_site_list,
+            "white_site_list": data.white_site_list
+        }
+        console.log(config)
+        if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+            return;
+        }
+        const user = getLocalStorage('user');
+        VCloudAPI.put("/com/" + user.cid + '/liveroom/auth_safe/?aid=' + user.aid, {
+            ...config
+        }).then(response => {
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                if (code === 200) {
+                    message.success('修改成功!');
+
+                } else {
+                    message.error('修改失败!')
+                }
+            } else {
+                message.error('网络请求失败！')
+            }
+        }).catch(r => {
+        });
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { white_black_set = {} } = this.props.alitaState;
         const { data } = white_black_set;
-        const { visible = false, white = '', black = '' } = data || {};
+        const { visible = false} = data || {};
+
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
 
         console.log(visible)
 
@@ -68,14 +105,14 @@ class WhiteBlackSet extends Component {
 
                     <Form labelCol={{ span: 8 }} wrapperCol={{ span: 14 }} onSubmit={this.handleOk}>
                         <Form.Item label="播放网站黑名单">
-                            {getFieldDecorator('black_name', {
-                                initialValue: black
+                            {getFieldDecorator('black_site_list', {
+                                initialValue: liveConfig.black_site_list
                             })(<Input />)}
                         </Form.Item>
 
                         <Form.Item label="播放网站白名单">
-                            {getFieldDecorator('white_name', {
-                                initialValue: white
+                            {getFieldDecorator('white_site_list', {
+                                initialValue: liveConfig.white_site_list
                             })(
                                 <Input />
                             )}

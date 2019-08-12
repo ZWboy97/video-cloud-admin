@@ -215,7 +215,8 @@ module.exports = {
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
 			// 全局相对路径别名，处理相对路径过长和繁琐问题
-			'@': paths.appSrc
+			'@': paths.appSrc,
+			utils: path.resolve(__dirname, 'src/utils'),
 		},
 		plugins: [
 			// Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -400,7 +401,7 @@ module.exports = {
 					{
 						test: lessRegex,
 						exclude: lessModuleRegex,
-						loader: getStyleLoaders({ 
+						loader: getStyleLoaders({
 							importLoaders: 2,
 							sourceMap: shouldUseSourceMap,
 						}, 'less-loader'),

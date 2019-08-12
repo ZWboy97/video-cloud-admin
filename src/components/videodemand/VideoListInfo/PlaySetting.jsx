@@ -1,8 +1,8 @@
 import {
-    Form, Input, Select, Row, Col, message, DatePicker, Icon, Upload, Button, Modal
+    Form, Select, Row, Col, Button, Modal
 } from 'antd';
 import React from 'react';
-import {connectAlita} from 'redux-alita';
+import { connectAlita } from 'redux-alita';
 
 
 class PlaySetting extends React.Component {
@@ -15,20 +15,14 @@ class PlaySetting extends React.Component {
     }
 
     render() {
-        const {Option} = Select;
-
-
-        const {getFieldDecorator} = this.props.form;
-        const {edit_info = {}} = this.props.alitaState;
-        const {data} = edit_info;
-        const {disable = true} = data || {};
-
+        const { Option } = Select;
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <Row type="flex" justify="space-around" align="middle">
                     <Col span="20">
                         <div>
-                            <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "form">
+                            <Button type="primary" onClick={() => this.setModalVisible(true)} size="large" icon="form">
                                 播放设置
                             </Button>
                             <Modal
@@ -53,7 +47,7 @@ class PlaySetting extends React.Component {
                                         {getFieldDecorator('size', {
                                             initialValue: "600",
                                         })(
-                                            <Select  placeholder="请选择播放器大小">
+                                            <Select placeholder="请选择播放器大小">
                                                 <Option value="300">300</Option>
                                                 <Option value="600">600</Option>
                                                 <Option value="970">970</Option>
@@ -64,7 +58,7 @@ class PlaySetting extends React.Component {
                                         {getFieldDecorator('resolving', {
                                             initialValue: '720p'
                                         })(
-                                            <Select  placeholder="请选择默认画质">
+                                            <Select placeholder="请选择默认画质">
                                                 <Option value="360p">流畅</Option>
                                                 <Option value="720p">高清</Option>
                                                 <Option value="1080p">超清</Option>

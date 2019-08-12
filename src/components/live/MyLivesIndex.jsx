@@ -12,7 +12,7 @@ export default () => (
 
     <Switch>
         <Route exact path="/app/lives/mylives/" component={MyLivesPage} />
-        <Route path="/app/lives/mylives/setting/" component={LiveSetting} />
+        <Route path="/app/lives/mylives/setting/:lid" component={LiveSetting} />
         <Route path='/app/lives/mylives/controlpanel' component={LiveControlPanel} />
     </Switch>
 

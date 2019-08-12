@@ -1,129 +1,152 @@
-import { Row, Col, Checkbox, Select, Form, Input, message, Icon, Switch } from 'antd';
+import { Row, Col, Checkbox, Select, Form, Button, message, Icon, Switch } from 'antd';
 import React from 'react';
 import './style.less';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI, YMOCKAPI } from '../../../../axios/api';
+import { getLocalStorage } from '../../../../utils/index';
+import { checkUserInfo } from '../../../../utils/UserUtils';
 //import { VCloudAPI } from '../../../axios/api';
 
 const { Option } = Select;
 class LiveServePage extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.handleSwitchTran=this.handleSwitchTran.bind(this);
-        this.handleSwitchRecord=this.handleSwitchRecord.bind(this);
+        this.handleSwitchTran = this.handleSwitchTran.bind(this);
+        this.handleSwitchRecord = this.handleSwitchRecord.bind(this);
+        this.handleSwitchDelay = this.handleSwitchDelay.bind(this);
+        this.handleSwitch = this.handleSwitch.bind(this);
+        this.handleCheck=this.handleCheck.bind(this);
+        this.handleSelect=this.handleSelect.bind(this)
+        this.handleSave=this.handleSave.bind(this);
+
+    }
+    handleSave(){
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        const lid =liveConfig.live_room_info.lid;
+
+        const data = (({delay,transcode,transcode_type,record,record_type}) => 
+        ({delay,transcode,transcode_type,record,record_type}))(liveConfig)
+        const config={
+            "lid":lid,
+            ...data
+        }
+        console.log(config)
+        if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
+            return;
+        }
+        const user = getLocalStorage('user');
+        VCloudAPI.put("/com/" + user.cid + '/liveroom/quality/?aid=' + user.aid, {
+            ...config
+        }).then(response => {
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                if (code === 200) {
+                    message.success('修改成功!');
+
+                } else {
+                    message.error('修改失败!')
+                }
+            } else {
+                message.error('网络请求失败！')
+            }
+        }).catch(r => {
+        });
+
+    }
+    handleSelect(optionValue){
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        const data={...liveConfig,"record_type":optionValue}
+        this.props.setAlitaState({
+            stateName: 'my_live_config',
+            data: data
+        });
+
+    }
+    handleCheck(checkedList){
+
+        console.log(checkedList)
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        const data={...liveConfig,"transcode_type":checkedList}
+        this.props.setAlitaState({
+            stateName: 'my_live_config',
+            data: data
+        });
     }
 
+    handleSwitch(switchValue, title) {
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
 
+        console.log(switchValue)
+        if (switchValue === false) {
+
+            let data = {};
+            if (title === "delay") {
+                data = { ...liveConfig, "delay": 0 };
+            } else if (title === "transcode") {
+                data = { ...liveConfig, "transcode": 0 }
+            } else if (title === "record") {
+                data = { ...liveConfig, "record": 0 }
+            }
+
+            this.props.setAlitaState({
+                stateName: 'my_live_config',
+                data: data
+            });
+
+        }
+        else {
+            let data = {};
+            if (title === "delay") {
+                data = { ...liveConfig, "delay": 1 };
+            } else if (title === "transcode") {
+                data = { ...liveConfig, "transcode": 1 }
+            } else if (title === "record") {
+                data = { ...liveConfig, "record": 1}
+            }
+
+            this.props.setAlitaState({
+                stateName: 'my_live_config',
+                data: data
+            });
+
+        }
+
+    }
+
+    handleSwitchDelay(switchValueDelay) {
+        this.handleSwitch(switchValueDelay, "delay")
+    }
     handleSwitchTran(switchValueTran) {
-        const { intro_serve_set = {} } = this.props.alitaState;
-        const { data } = intro_serve_set;
-        
-
-        console.log(switchValueTran)
-        if (switchValueTran === false) {
-            const transSelect = [];
-            this.props.setAlitaState({
-                stateName: 'intro_serve_set',
-                data: {
-                    ...data,
-                    transSelect: transSelect
-                }
-
-            });
-
-        }
-        else {
-            const transSelect = (
-                <div>
-                    <Row>
-                        <Col span={10} offset={4}>
-                            <Checkbox.Group >
-                                <Checkbox value="A">1080p</Checkbox>
-                                <Checkbox value="B">720p</Checkbox>
-                                <Checkbox value="C">480p</Checkbox>
-                                <Checkbox value="D">120p</Checkbox>
-                            </Checkbox.Group>
-                        </Col>
-                    </Row>
-                    <Row >&nbsp;</Row>
-                </div>
-            );
-            this.props.setAlitaState({
-                stateName: 'intro_serve_set',
-                data: {
-                    ...data,
-                    transSelect: transSelect
-                }
-
-            });
-        }
-
+        this.handleSwitch(switchValueTran, "transcode")
     }
-    handleSwitchRecord(switchValueRecord){
-        const { intro_serve_set = {} } = this.props.alitaState;
-        const { data } = intro_serve_set;
-
-        console.log(switchValueRecord)
-        if (switchValueRecord === false) {
-            const recordSelect = [];
-            this.props.setAlitaState({
-                stateName: 'intro_serve_set',
-                data: {
-                    ...data,
-                    recordSelect: recordSelect
-                }
-
-            });
-
-        }
-        else {
-            const recordSelect = (
-                <div>
-                    <Row>
-                        <Col span={6} offset={4}>
-                            <Select defaultValue="lucy" >
-                                <Option value="jack">Jack</Option>
-                                <Option value="lucy">Lucy</Option>
-                                <Option value="Yiminghe">yiminghe</Option>
-                            </Select>
-                        </Col>
-                    </Row>
-                    <Row >&nbsp;</Row>
-
-                </div>
-            )
-            this.props.setAlitaState({
-                stateName: 'intro_serve_set',
-                data: {
-                    ...data,
-                    recordSelect: recordSelect
-                }
-
-            });
-        }
-
+    handleSwitchRecord(switchValueRecord) {
+        this.handleSwitch(switchValueRecord, "record")
     }
+   
     render() {
 
         const { getFieldDecorator } = this.props.form;
-        const { intro_serve_set = {} } = this.props.alitaState;
-        const { data } = intro_serve_set;
-        const { transSelect = [], recordSelect = [] } = data || {};
+
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+        console.log(liveConfig.transcode_type)
 
         return (
             <div>
 
-                <Form labelCol={{ span: 2 }} wrapperCol={{ span: 15 }} onSubmit={this.handleOk}>
-
-
-
+                <Form labelCol={{ span: 2 }} wrapperCol={{ span: 15 }}>
                     <Form.Item label="低时延">
                         {getFieldDecorator('delay', {
 
                         })(
                             <div >
                                 <Switch
-                                    defaultChecked={false}
-                                    //onClick={this.handleSwitch}
+                                    defaultChecked={liveConfig.delay}
+                                    onClick={this.handleSwitchDelay}
                                     checkedChildren={"开启"}
                                     unCheckedChildren={"关闭"}
                                 />
@@ -131,13 +154,13 @@ class LiveServePage extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item label="转码">
-                        {getFieldDecorator('transCode', {
+                        {getFieldDecorator('transcode', {
 
                         })(
                             <div>
                                 <Switch
 
-                                    defaultChecked={false}
+                                    defaultChecked={liveConfig.transcode}
                                     onClick={this.handleSwitchTran}
                                     checkedChildren={"开启"}
                                     unCheckedChildren={"关闭"}
@@ -147,7 +170,19 @@ class LiveServePage extends React.Component {
                     </Form.Item>
 
                     <div>
-                        {transSelect}
+                        {liveConfig.transcode ? <div>
+                            <Row>
+                                <Col span={10} offset={4}>
+                                    <Checkbox.Group defaultValue={liveConfig.transcode_type} onChange={this.handleCheck}>
+                                        <Checkbox value={1}>1080p</Checkbox>
+                                        <Checkbox value={2}>720p</Checkbox>
+                                        <Checkbox value={3}>480p</Checkbox>
+                                        <Checkbox value={4}>120p</Checkbox>
+                                    </Checkbox.Group>
+                                </Col>
+                            </Row>
+                            <Row >&nbsp;</Row>
+                        </div> : []}
                     </div>
 
                     <Form.Item label="录制">
@@ -157,7 +192,7 @@ class LiveServePage extends React.Component {
                             <div>
                                 <Switch
 
-                                    defaultChecked={false}
+                                    defaultChecked={liveConfig.record}
                                     onClick={this.handleSwitchRecord}
                                     checkedChildren={"开启"}
                                     unCheckedChildren={"关闭"}
@@ -167,8 +202,25 @@ class LiveServePage extends React.Component {
                     </Form.Item>
 
                     <div>
-                        {recordSelect}
+                        {liveConfig.record?<div>
+                    <Row>
+                        <Col span={6} offset={4}>
+                            <Select defaultValue={liveConfig.record_type} onChange={this.handleSelect}>
+                                <Option value={1}>Jack</Option>
+                                <Option value={2}>Lucy</Option>
+                                <Option value={3}>yiminghe</Option>
+                            </Select>
+                        </Col>
+                    </Row>
+                    <Row >&nbsp;</Row>
+
+                </div>:[]}
                     </div>
+                    <Row>
+                        <Col span={2} offset={6}>
+                            <Button type="primary" onClick={this.handleSave}>保存</Button>
+                        </Col>
+                    </Row>
 
                     <Form.Item label="导播">
                         {getFieldDecorator('lead', {

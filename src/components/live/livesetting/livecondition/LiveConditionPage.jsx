@@ -13,41 +13,31 @@ class LiveConditionPage extends React.Component {
     }
     handleSwitch(switchValue) {
         console.log(switchValue)
-        if (switchValue === false) {
-            const closeContent = (
-                <div className="switch-content"><ConditionSelect /></div>
-            );
-            this.props.setAlitaState({
-                stateName: 'conditionSwitch_content',
-                data: {
-                    content: closeContent
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
 
-                }
-            })
+        if (switchValue === false) {
+           const data={...liveConfig, "condition": 0}
+
+            this.props.setAlitaState({
+                stateName: 'my_live_config',
+                data: data
+            });
 
         }
         else {
-            const openContent = (
-                <div />
-            );
+            const data={...liveConfig, "condition": 1}
+
             this.props.setAlitaState({
-                stateName: 'conditionSwitch_content',
-                data: {
-                    content: openContent
+                stateName: 'my_live_config',
+                data: data
+            });
 
-                }
-            })
         }
-
     }
     render() {
-        const swiContent = (
-            <div />
-        );
-        const { conditionSwitch_content = {} } = this.props.alitaState;
-        const { data } = conditionSwitch_content;
-        const { content = swiContent } = data || {};
-        console.log(content);
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
         return (
             <div >
                 <Row>
@@ -56,14 +46,14 @@ class LiveConditionPage extends React.Component {
                     </Col>
                     <Col span={2}>
                         <Switch
-                            defaultChecked
+                            defaultChecked={liveConfig.condition}
                             onClick={this.handleSwitch}
                             checkedChildren={<Icon type="check" />}
                             unCheckedChildren={<Icon type="close" />}
                         />
                     </Col>
                 </Row>
-                <div>{content}</div>
+                <div>{liveConfig.condition?[]:<div className="switch-content"><ConditionSelect /></div>}</div>
 
             </div>
         );

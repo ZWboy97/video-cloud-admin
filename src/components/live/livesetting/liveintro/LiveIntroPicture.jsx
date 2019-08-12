@@ -10,16 +10,16 @@ class LiveIntroPicture extends React.Component {
 
     render() {
 
-        const { intro_picture_set = {} } = this.props.alitaState;
-        const { data } = intro_picture_set;
-        const { orderButton = true, introPicture = require('../../../../style/imgs/intro_content.png') } = data || {};
+        const { my_live_config = {} } = this.props.alitaState || {};
+        const liveConfig = my_live_config.data || {}
+
         return (
 
             <div>
                 <img src={require('../../../../style/imgs/intro_head.png')} alt="avatar" style={{ width: '100%' }} />
-                <img src={introPicture} alt="avatar" style={{ width: '100%' }} />
+                <img src={liveConfig.pre_pic} alt="avatar" style={{ width: '100%' }} />
                 <img src={require('../../../../style/imgs/intro_time.png')} alt="avatar" style={{ width: '100%' }} />
-                {orderButton ? <img src={require('../../../../style/imgs/intro_order.png')} alt="avatar" style={{ width: '100%' }} />
+                {liveConfig.qorder ? <img src={require('../../../../style/imgs/intro_order.png')} alt="avatar" style={{ width: '100%' }} />
                     : <img src={require('../../../../style/imgs/intro_no_order.png')} alt="avatar" style={{ width: '100%' }} />}
             </div>
         );
