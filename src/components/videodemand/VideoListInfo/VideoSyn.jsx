@@ -47,42 +47,21 @@ class VideoSetting extends React.Component {
             }
             //读取表单数据
             let formData = {
-                name:fieldsValue['name']
+                name:fieldsValue['name'],
+                url:fieldsValue['url']
             }
             console.log(formData)
-            this.props.setAlitaState({
-                stateName:'video_setting',
-                data:{name:formData.name,isClicked:true},
-
-            })
-            const {rowSelectedInfo = {}} = this.props.alitaState
-            console.log('rowSel',rowSelectedInfo)
-            const {data_source = {}} = this.props.alitaState;
-            console.log('data_src',data_source)
-            const data_send = []
-            if (typeof (rowSelectedInfo) !== 'undefined'&&typeof (rowSelectedInfo.data) !== 'undefined'&&typeof (rowSelectedInfo.data.selectedRows) !== 'undefined') {
-
-                for (var i = 0;i < rowSelectedInfo.data.selectedRowKeys.length;i++) {
-
-
-                    let data  = {
-                        name:fieldsValue['name'],
-                        rid:rowSelectedInfo.data.selectedRows[i].rid,
-                        label:rowSelectedInfo.data.selectedRows[i].label,
-                        pic_url: rowSelectedInfo.data.selectedRows[i].pic_url,
-                    }
-
-                    data_source.data[rowSelectedInfo.data.selectedRowKeys[i]].name = fieldsValue['name']
-                    data_send.push(data)
-                    TESTJYLAPI.put('com/'+JSON.parse(localStorage.user).cid+'/resourses/?test',data)
-                }
-                this.props.setAlitaState({
-                    stateName: 'data_source',
-                    data:data_source.data
-                })
-
-
+            let data = {
+                aid:JSON.parse(localStorage.user).aid,
+                name:formData.name,
+                rtype:'video',
+                size:3.0,
+                label:['默认列表'],
+                res_url:formData.url,
+                pic_url:formData.url+'&x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast',
             }
+            TESTJYLAPI.post('com/'+JSON.parse(localStorage.user).cid+'/resourses/',data).then(res=>{
+                console.log('res=>',res)})
         })
         this.setModalVisible(false)
     }
@@ -110,9 +89,6 @@ class VideoSetting extends React.Component {
             },
         };
         const {getFieldDecorator} = this.props.form;
-        const {video_setting = {}} = this.props.alitaState;
-        console.log('video_setting',video_setting)
-
         return (
             <div>
 
@@ -120,10 +96,10 @@ class VideoSetting extends React.Component {
                     <Col span="20">
                         <div>
                             <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "edit" >
-                                视频设置
+                                视频同步
                             </Button>
                             <Modal
-                                title="视频设置"
+                                title="视频同步"
                                 visible={this.state.modalVisible}
                                 onOk={() => this.handleOk()}
                                 okText="确认"
@@ -137,25 +113,11 @@ class VideoSetting extends React.Component {
                                             rules: [{message: '请输入视频标题'}],
                                         })(<Input/>)}
                                     </Form.Item>
-                                    {/*<Form.Item label="简介">*/}
-                                        {/*{getFieldDecorator('introduction', {*/}
-                                            {/*initialValue:""*/}
-                                        {/*})(<Input/>)}*/}
-                                    {/*</Form.Item>*/}
-                                    {/*<Form.Item label="封面">*/}
-                                        {/*<div className="dropbox">*/}
-                                            {/*{getFieldDecorator('dragger', {*/}
-                                                {/*valuePropName: 'fileList',*/}
-                                                {/*getValueFromEvent: this.normFile,*/}
-                                            {/*})(*/}
-                                                {/*<Upload {...props}>*/}
-                                                    {/*<Button>*/}
-                                                        {/*<Icon type="upload" /> 点击上传封面*/}
-                                                    {/*</Button>*/}
-                                                {/*</Upload>,*/}
-                                            {/*)}*/}
-                                        {/*</div>*/}
-                                    {/*</Form.Item>*/}
+                                    <Form.Item label="url">
+                                        {getFieldDecorator('introduction', {
+                                            initialValue:""
+                                        })(<Input/>)}
+                                    </Form.Item>
                                 </Form>
                             </Modal>
 
