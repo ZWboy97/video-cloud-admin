@@ -60,13 +60,14 @@ class LiveTable extends React.Component {
                 dataIndex: 'permission',
                 align: 'center',
                 render: (value) => {
-                    if (value === 'none') {
+                    console.log('permission', value)
+                    if (value === 1) {
                         return '公开';
-                    } else if (value === 'code') {
+                    } else if (value === 2) {
                         return '验证码';
-                    } else if (value === 'pay') {
+                    } else if (value === 3) {
                         return '支付';
-                    } else if (value === 'login') {
+                    } else if (value === 4) {
                         return '登录';
                     } else {
                         return '未知';
@@ -82,7 +83,7 @@ class LiveTable extends React.Component {
                         <Divider type="vertical" />
                         <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                         <Divider type="vertical" />
-                        <a className="live-link" href="javascript:;" onClick={(e) => this.handleControl(e, record)}>控制台</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleControl(e, record)}>控制台</a>
                         <Divider type="vertical" />
                         <Link className="live-link" to="/director/?did=1244" target="_blank">导播台</Link>
 
