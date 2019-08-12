@@ -83,6 +83,9 @@ class LiveTable extends React.Component {
                         <a className="live-link" href="javascript:;" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                         <Divider type="vertical" />
                         <a className="live-link" href="javascript:;" onClick={(e) => this.handleControl(e, record)}>控制台</a>
+                        <Divider type="vertical" />
+                        <a className="live-link" href="/director" onClick={(e) => this.handleDirector(e, record)}>导播台</a>
+
                     </div>
             },
         ]
@@ -105,14 +108,22 @@ class LiveTable extends React.Component {
             data: {
                 liveData: record
             }
-        })
-
-
+        }) 
     }
 
     handleControl(e, record) {
         e.preventDefault();
         this.props.history.push('/app/lives/mylives/controlpanel/');
+        this.props.setAlitaState({
+            stateName: 'live_control_page',
+            data: {
+                liveData: record
+            }
+        })
+    }
+    handleDirector(e, record) {
+        e.preventDefault();
+     //   this.props.history.push('/director');
         this.props.setAlitaState({
             stateName: 'live_control_page',
             data: {
