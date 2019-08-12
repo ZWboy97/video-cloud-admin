@@ -6,6 +6,7 @@ import Register from './components/pages/Register';
 import App from './App';
 import ForgetPsd from './components/pages/ForgetPsd';
 import history from './routes/history';
+import DirectorPage from './components/pages/livedirector/DirectorPage'
 
 /**
  * Page 页面， 由Router包裹
@@ -19,6 +20,7 @@ export default () => (
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/forget" component={ForgetPsd} />
+            <Route path="/director" component={DirectorPage} />
             <Route component={NotFound} />
         </Switch>
     </Router>
