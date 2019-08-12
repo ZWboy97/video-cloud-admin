@@ -2,11 +2,7 @@ import { Table, Divider, message } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../../axios/api';
-<<<<<<< HEAD
 import { withRouter, Link } from 'react-router-dom';
-=======
-import { withRouter ,Link} from 'react-router-dom';
->>>>>>> 09aa5d9f5a99a8c73579a9fdafda1df28d29693b
 import { getLocalStorage } from '../../../utils/index';
 import { checkUserInfo } from '../../../utils/UserUtils';
 
