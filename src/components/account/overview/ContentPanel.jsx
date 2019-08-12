@@ -1,5 +1,7 @@
 import React from 'react';
-import { Row, Col, Card, Button } from 'antd';
+import { Row, Col, Card, Button, Table } from 'antd';
+import BillTable from './BillTable';
+import ServesTable from './ServesTable';
 
 class ContentPanel extends React.Component {
     render() {
@@ -17,6 +19,7 @@ class ContentPanel extends React.Component {
                                     </div>
                                     <div className="balance-operation-container">
                                         <Button type="primary">充值</Button>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <Button type="primary">提现</Button>
                                     </div>
                                 </div>
@@ -25,16 +28,13 @@ class ContentPanel extends React.Component {
                     </Col>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Card title="服务总览" bordered={false}>
-                                <div className="clear y-center">
-
-                                </div>
+                            <Card title="账单总览" bordered={false}>
+                                <BillTable />
                             </Card>
                         </div>
                         <div className="gutter-box">
-                            <Card title="账单总览" bordered={false}>
-                                <div className="clear y-center">
-                                </div>
+                            <Card title="服务总览" bordered={false}>
+                                <ServesTable />
                             </Card>
                         </div>
                     </Col>
