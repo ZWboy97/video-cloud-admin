@@ -27,7 +27,7 @@ export default {
                 { key: '/app/ui/echarts', title: '点播统计', component: 'Dashboard' },
                 { key: '/app/videodemand/VideoUpload', title: '上传视频', component: 'VideoUpload' },
                 { key: '/app/videodemand/VideoListPage', title: '视频列表', component: 'VideoListPage' },
-                { key: '/app/ui/gallery', title: '通用设置', component: 'Dashboard' },
+                { key: '/app/videodemand/PlayListInfo/PlayList', title: '播放列表', component: 'PlayList' },
                 { key: '/app/ui/map', title: '广告管理', component: 'Dashboard' },
             ]
         },

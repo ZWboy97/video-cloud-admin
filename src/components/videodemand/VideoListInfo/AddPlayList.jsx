@@ -58,7 +58,7 @@ class AddPlayList extends React.Component {
                     //rowSelectedInfo.data.selectedRows[i].label.push(formData.playlist)
                     data_source.data[rowSelectedInfo.data.selectedRowKeys[i]].label = data.label
                     console.log('it is dtata', data)
-                    TESTJYLAPI.put('com/test/resourses/?test', data)
+                    TESTJYLAPI.put('com/'+JSON.parse(localStorage.user).cid+'/resourses/?test', data)
                 }
 
                 }
@@ -76,16 +76,6 @@ class AddPlayList extends React.Component {
     render() {
 
 
-        // const disable = () =>{
-        //     if (typeof(rowSelect) !== 'undefined' && typeof(rowSelect.selectedRows) !== 'undefined') {
-        //         if (rowSelect.selectedRows.length() === 1){
-        //             return true
-        //         }
-        //     }
-        //     return false
-        // }
-
-        // console.log(disable())
         const formItemLayout = {
             labelCol: {
                 xs: {span: 12},

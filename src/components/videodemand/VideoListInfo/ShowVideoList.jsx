@@ -32,11 +32,6 @@ class ShowVideoList extends Component {
                     <Col span={3}>
                         <AddPlayList/>
                     </Col>
-                    <Col span={3}>
-                        <Button type="primary"  size='large' icon = "scissor">
-                            视频剪辑
-                        </Button>
-                    </Col>
                 </Row>
                 </Card>
                 <Card>

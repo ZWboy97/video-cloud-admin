@@ -26,7 +26,7 @@ class DeleteList extends Component {
                 }
                 console.log('data-to-send',data)
                 console.log('com/test/resourses/?aid='+data.aid+'rid='+data.rid)
-                TESTJYLAPI.delete('com/test/resourses/?aid='+data.aid+'&rid='+data.rid)
+                TESTJYLAPI.delete('com/'+JSON.parse(localStorage.user).cid+'/resourses/?aid='+data.aid+'&rid='+data.rid)
             }
             this.props.setAlitaState({
                 stateName: 'data_source',

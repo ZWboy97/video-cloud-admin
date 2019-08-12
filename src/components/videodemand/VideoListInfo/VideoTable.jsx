@@ -1,4 +1,4 @@
-import {Button, Card, Input,Icon,Table} from 'antd';
+import {Button, Card, Input, Icon, Table, Modal} from 'antd';
 import React, {Component} from "react";
 import {connectAlita} from 'redux-alita';
 import Highlighter from 'react-highlight-words';
@@ -10,10 +10,14 @@ import {TESTJYLAPI} from'../../../axios/api'
 class VideoTable extends Component {
     state = {
         searchText: '',
-        data:[]
+        data:[],
+        modalVisible: false
     };
+    setModalVisible(modalVisible) {
+        this.setState({ modalVisible });
+    }
     componentWillMount(){
-        TESTJYLAPI.get('com/test/resourses/').then(res=>{
+        TESTJYLAPI.get('com/'+JSON.parse(localStorage.user).cid+'/resourses/').then(res=>{
             console.log('res',res)
             this.setState({data:res.data.data})
             this.props.setAlitaState({
@@ -99,18 +103,30 @@ class VideoTable extends Component {
 
         };
         const columns = [
-            {
-                title:'预览',
-                dataIndex:'res_url',
-                width:600,
-                render:res_url=>(
-                    <video  src={res_url} width="320" height='240'  controls="controls" />
-                )
-            },
+            // {
+            //     title:'预览',
+            //     dataIndex:'res_url',
+            //     width:600,
+            //     render:res_url=>(
+            //         <div>
+            //             <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "edit" >
+            //                 点击播放
+            //             </Button>
+            //             <Modal
+            //                 visible={this.state.modalVisible}
+            //                 onOk={this.setModalVisible(false)}
+            //                 okText="确认"
+            //                 cancelText="取消"
+            //                 onCancel={this.setModalVisible(false)}
+            //             >
+            //                 <video  src={res_url} width="320" height='240'  controls="controls" />
+            //             </Modal>
+            //         </div>
+            //     )
+            // },
             {
                 title:'标题',
                 dataIndex:'name',
-                width:150,
                 ...this.getColumnSearchProps('name'),
 
             },
@@ -129,10 +145,10 @@ class VideoTable extends Component {
             {
                 title:'链接',
                 dataIndex:'res_url',
-                width:150,
+                //width:200,
                 render:res_url=>(
                     <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
-                        <a href={res_url}>
+                        <a href={res_url} target='_blank'>
                             {res_url}
                         </a>
                     </div>
@@ -144,6 +160,7 @@ class VideoTable extends Component {
         const {data =[]} = data_source || {};
         console.log('src',data)
         console.log('source',data_source)
+        console.log('cid',JSON.parse(localStorage.user).cid)
         return (
             <div>
                 <Card>
