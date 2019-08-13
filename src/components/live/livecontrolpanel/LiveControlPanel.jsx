@@ -37,7 +37,13 @@ class LiveControlPanel extends React.Component {
                 }
             }
         })
+    }
 
+    componentWillUnmount() {
+        this.props.setAlitaState({
+            stateName: "live_setting_page",
+            data: {}
+        })
     }
 
     render() {
@@ -57,16 +63,15 @@ class LiveControlPanel extends React.Component {
                     <Row>
                         <Col span={15}>
                             <Row>
-                                <Col span={17}>
+                                <div className="monitor-container">
                                     <FlvPlayer
+                                        className="video-player"
                                         url={liveData.pull_http_flv_url}
                                         poster={liveData.pre_pic}
                                         type="flv"
                                         width="100%"
-                                        height="300"
+                                        height="300px"
                                     />
-                                </Col>
-                                <Col span={6} >
                                     <div className="data-show">
                                         <Card title="实时监控数据">
                                             <p>观看量：5</p>
@@ -76,7 +81,7 @@ class LiveControlPanel extends React.Component {
                                             <p>&nbsp;</p>
                                         </Card>
                                     </div>
-                                </Col>
+                                </div>
                             </Row>
                             <MeansPanel />
                         </Col>

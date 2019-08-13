@@ -91,7 +91,8 @@ class FlvPlayer extends Component {
     }
 
     render() {
-        const { className, style, poster, height, width } = this.props;
+        const { className, style, poster, height, width
+        } = this.props;
         return (
             <video
                 className={className}
