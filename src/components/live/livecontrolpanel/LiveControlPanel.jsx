@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, message } from 'antd';
-import VideoPlayer from '../../videoplayer/FlvVideoPlayer/VideoPanel';
+import FlvPlayer from 'mycomponents/videoplayer/FlvVideoPlayer/FlvPlayer';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import ChattingPanel from './livechatting/ChattingPanel'
 import MeansPanel from './livemeans/MeansPanel'
@@ -58,9 +58,12 @@ class LiveControlPanel extends React.Component {
                         <Col span={15}>
                             <Row>
                                 <Col span={17}>
-                                    <VideoPlayer
+                                    <FlvPlayer
                                         url={liveData.pull_http_flv_url}
                                         poster={liveData.pre_pic}
+                                        type="flv"
+                                        width="100%"
+                                        height="300"
                                     />
                                 </Col>
                                 <Col span={6} >

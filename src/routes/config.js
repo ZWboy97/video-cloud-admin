@@ -21,23 +21,23 @@ export default {
         {
             key: '/app/vod', title: '点播服务', icon: 'copy',
             subs: [
-                { key: '/app/videodemand/VideoUpload', title: '上传视频', component: 'VideoUpload' },
-                { key: '/app/videodemand/VideoListPage', title: '视频列表', component: 'VideoListPage' },
-                { key: '/app/videodemand/PlayListInfo/PlayList', title: '播放列表', component: 'PlayList' },
+                { key: '/app/vod/upload', title: '上传视频', component: 'VideoUpload' },
+                { key: '/app/vod/videolist', title: '视频列表', component: 'VideoListPage' },
+                { key: '/app/vod/playlist', title: '播放列表', component: 'PlayList' },
 
             ]
         },
         {
-            key: '/app/transform', title: '账户管理', icon: 'area-chart',
+            key: '/app/account', title: '账户管理', icon: 'area-chart',
             subs: [
-                { key: '/app/ui/exampleAnimations', title: '账户总览', component: 'AccountCenter' },
+                { key: '/app/account/overview', title: '账户总览', component: 'AccountCenter' },
             ]
         },
 
         {
-            key: '/app/cssModule', title: '用户中心', icon: 'star',
+            key: '/app/user', title: '用户中心', icon: 'star',
             subs: [
-                { key: '/app/usercenter/UserCenter', title: '个人中心', component: 'UserCenter' },
+                { key: '/app/user/usercenter', title: '个人中心', component: 'UserCenter' },
             ]
         },
     ],
