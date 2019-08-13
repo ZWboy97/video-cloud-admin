@@ -5,6 +5,8 @@ import { connectAlita } from 'redux-alita';
 import OssUploader from '../../utils/OssUploader';
 import { VCloudAPI, TESTJYLAPI } from "../../axios/api";
 
+;
+const {Dragger} = Upload
 
 class VideoUpload extends Component {
 
@@ -51,17 +53,16 @@ class VideoUpload extends Component {
                     const url = res.res.requestUrls[0].substring(0, res.res.requestUrls[0].indexOf('?'));
                     console.log('上传文件的返回URL为', url);
                     let data = {
-                        aid: 'test',
-                        name: res.name,
-                        rtype: 'video',
-                        size: 3.0,
-                        label: ['默认列表', 'dsfsdf', 'fsdfdsfd'],
-                        res_url: url,
-                        pic_url: url + '&x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast',
+                        aid:JSON.parse(localStorage.user).aid,
+                        name:res.name,
+                        rtype:'video',
+                        size:3.0,
+                        label:['默认列表'],
+                        res_url:url,
+                        pic_url:url+'?x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast',
                     }
-                    TESTJYLAPI.post('com/test/resourses/', data).then(res => {
-                        console.log('res=>', res)
-                    })
+                    TESTJYLAPI.post('com/'+JSON.parse(localStorage.user).cid+'/resourses/',data).then(res=>{
+                        console.log('res=>',res)})
 
                 } else {
                     message.error('文件上传失败');
@@ -84,13 +85,21 @@ class VideoUpload extends Component {
                 <BreadcrumbCustom first="我的点播" />
                 <div className="gutter-box">
                     <Card title="上传视频" bordered={false}>
-                        <Upload
+                        <Dragger
                             beforeUpload={this.beforeUpload}
                         >
-                            <Button>
-                                <Icon type="upload" /> 点击上传视频
-                            </Button>
-                        </Upload>
+                            <p className="ant-upload-drag-icon">
+                                <Icon type="inbox" />
+                            </p>
+                            <p className="ant-upload-text">点击或拖拽至此上传</p>
+                            {/*<p className="ant-upload-hint">*/}
+                            {/*Support for a single or bulk upload. Strictly prohibit from uploading company data or other*/}
+                            {/*band files*/}
+                            {/*</p>*/}
+                            {/*<Button>*/}
+                            {/*<Icon type="upload" /> 点击上传视频*/}
+                            {/*</Button>*/}
+                        </Dragger>
                     </Card>
                 </div>
             </div>

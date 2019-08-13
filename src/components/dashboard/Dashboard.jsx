@@ -13,30 +13,34 @@ class Dashboard extends React.Component {
                 <Row gutter={10}>
                     <Col className="gutter-row" md={4}>
                         <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="heart" className="text-2x text-danger" />
+                            <Link to="/app/lives/mylives/">
+                                <Card bordered={false}>
+                                    <div className="clear y-center">
+                                        <div className="pull-left mr-m">
+                                            <Icon type="cloud" className="text-2x text-danger" />
+                                        </div>
+                                        <div className="clear">
+                                            <div className="text-muted">直播套餐</div>
+                                            <h2>已用3/20</h2>
+                                        </div>
                                     </div>
-                                    <div className="clear">
-                                        <div className="text-muted">直播</div>
-                                        <h2>3</h2>
-                                    </div>
-                                </div>
-                            </Card>
+                                </Card>
+                            </Link>
                         </div>
                         <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="cloud" className="text-2x" />
+                            <Link to="/app/vod/videolist">
+                                <Card bordered={false}>
+                                    <div className="clear y-center">
+                                        <div className="pull-left mr-m">
+                                            <Icon type="cloud" className="text-2x" />
+                                        </div>
+                                        <div className="clear">
+                                            <div className="text-muted">存储资源</div>
+                                            <h2>67MB/40GB</h2>
+                                        </div>
                                     </div>
-                                    <div className="clear">
-                                        <div className="text-muted">云数据</div>
-                                        <h2>30122</h2>
-                                    </div>
-                                </div>
-                            </Card>
+                                </Card>
+                            </Link>
                         </div>
                         <div className="gutter-box">
                             <Link to="/app/lives/mylives/">
@@ -55,17 +59,19 @@ class Dashboard extends React.Component {
                     </Col>
                     <Col className="gutter-row" md={4}>
                         <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="camera" className="text-2x text-info" />
+                            <Link to="/app/account/overview">
+                                <Card bordered={false}>
+                                    <div className="clear y-center ">
+                                        <div className="pull-left mr-m">
+                                            <Icon type="money-collect" theme="twoTone" className="text-2x text-info" />
+                                        </div>
+                                        <div className="clear">
+                                            <div className="text-muted">账户余额</div>
+                                            <h2>2000￥</h2>
+                                        </div>
                                     </div>
-                                    <div className="clear">
-                                        <div className="text-muted">照片</div>
-                                        <h2>802</h2>
-                                    </div>
-                                </div>
-                            </Card>
+                                </Card>
+                            </Link>
                         </div>
                         <div className="gutter-box">
                             <Card bordered={false}>
@@ -74,7 +80,7 @@ class Dashboard extends React.Component {
                                         <Icon type="mail" className="text-2x text-success" />
                                     </div>
                                     <div className="clear">
-                                        <div className="text-muted">邮件</div>
+                                        <div className="text-muted">消息中心</div>
                                         <h2>102</h2>
                                     </div>
                                 </div>
@@ -109,55 +115,55 @@ class Dashboard extends React.Component {
                     <Col className="gutter-row" md={8}>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片内容
+                                敬请期待
                             </Card>
                         </div>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片
+                                敬请期待
                             </Card>
                         </div>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片内容
+                                敬请期待
                             </Card>
                         </div>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片
+                                敬请期待
                             </Card>
                         </div>
                     </Col>
-                </Row>
+                </Row >
 
                 <Row gutter={10}>
 
                     <Col className="gutter-row" md={8}>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片内容
+                                敬请期待
                             </Card>
                         </div>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片
+                                敬请期待
                             </Card>
                         </div>
                     </Col>
                     <Col className="gutter-row" md={8}>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片
+                                敬请期待
                             </Card>
                         </div>
                         <div className="gutter-box">
                             <Card bordered={false}>
-                                卡片
+                                敬请期待
                             </Card>
                         </div>
                     </Col>
                 </Row>
-            </div>
+            </div >
         )
     }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row, Col } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import LiveTable from './LiveTable';
 import HeaderPanel from './HeaderPanel';
@@ -24,9 +23,9 @@ class MyLivesPage extends React.Component {
                     <HeaderPanel />
                 </div>
                 <div className="live-table-panel">
-                    <CreateLiveModal></CreateLiveModal>
-                    <CreateLinkModal></CreateLinkModal>
-                    <LiveTable></LiveTable>
+                    <CreateLiveModal />
+                    <CreateLinkModal />
+                    <LiveTable />
                 </div>
             </div>
         )
