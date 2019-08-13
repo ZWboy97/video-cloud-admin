@@ -1,116 +1,120 @@
 import React from 'react';
-import reqwest from 'reqwest';
+import { connectAlita } from 'redux-alita';
 import InfiniteScroll from 'react-infinite-scroller';
-import { List, Spin, message, Avatar, Input, Button, Icon } from 'antd';
+import { List, Tooltip, Avatar, Row, Col, Icon, Divider } from 'antd';
 import '../style.less';
 
 //测试的数据
-const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
-const demo_loading_container = {
-    position: "absolute",
-    bottom: "40px",
-    width: "100%",
-    textAlign: "center",
-}
-
 class MessageList extends React.Component {
+    constructor(props) {
+        super(props)
+        this.handlePass = this.handlePass.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
+        this.textInput = null;
 
-    state = { logining: false };
-    state = { visible: false };
-    state = {
-        data: [],
-        loading: false,
-        hasMore: true,
-        comments: [],
-        submitting: false,
-        value: '',
-        barrList: [],
-        onBarrage: true,
+        this.setTextInputRef = element => {
+            console.log(element)
+            this.textInput = element;
+        };
+
+        this.focusTextInput = () => {
+            console.log(this.textInput)
+            // Focus the text input using the raw DOM API
+            if (this.textInput) this.textInput.focus();
+        };
     }
+    
+      componentDidMount() {
+        this.scrollToBottom();
+      }
+      
+      componentDidUpdate() {
+        this.scrollToBottom();
+      }
+      scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+      }
+      
+    handleDelete(item) {
+        console.log(item)
+        const { message_list_content = {} } = this.props.alitaState || {};
+        const { data = {} } = message_list_content || {}
+        const { messageInfo = [], count = 0 } = data || {}
 
-    componentDidMount() {
-        this.fetchData(res => {
-            this.setState({
-                data: res.results,
-            });
-        });
+        const messageContent = messageInfo.filter(message => message !== item)
+        this.props.setAlitaState({
+            stateName: 'message_list_content',
+            data: {
+                count: count,
+                messageInfo: messageContent
+            }
+        })
     }
+    handlePass(key) {
 
-    handleInfiniteOnLoad = () => {
-        let { data } = this.state;
-        this.setState({
-            loading: true,
-        });
-        if (data.length > 14) {
-            message.warning('Infinite List loaded all');
-            this.setState({
-                hasMore: false,
-                loading: false,
-            });
-            return;
-        }
-        this.fetchData(res => {
-            data = data.concat(res.results);
-
-            this.setState({
-                data,
-                loading: false,
-            });
-        });
-
-    };
-    fetchData = callback => {
-        reqwest({
-            url: fakeDataUrl,
-            type: 'json',
-            method: 'get',
-            contentType: 'application/json',
-            success: res => {
-                callback(res);
-            },
-        });
-    };
+    }
 
 
 
     render() {
+
+        const { message_list_content = {} } = this.props.alitaState || {};
+        const { data = {} } = message_list_content || {}
+        const { messageInfo = [] } = data || {}
+        console.log(messageInfo)
+
         return (
-            <div style={{ width: '100%', height: '100%', overflow: 'auto' }}>
+            <div className="infinite-container">
                 <InfiniteScroll
                     initialLoad={false}
                     pageStart={0}
-                    loadMore={this.handleInfiniteOnLoad}
-                    hasMore={!this.state.loading && this.state.hasMore}
                     useWindow={false}
                 >
                     <List
-                        className='list-box'
-                        bordered
-                        dataSource={this.state.data}
+                        className="list-box"
+                        dataSource={messageInfo}
                         renderItem={item => (
-                            <List.Item
-                                key={item.id}
-                            >
-                                <Avatar style={{ verticalAlign: 'middle' }} size="large">
-                                    {'hah'}
-                                </Avatar>
-                                <span>北京市网友</span>
-                                <div>
-                                    <span>发了一个消息</span>
-                                </div>
+                            <List.Item ref={this.setTextInputRef} key={item.id}>
+                                <Row>
+                                    <Col span={19}>
+                                        <List.Item.Meta
+                                            avatar={
+                                                <Avatar src="http://pic-cloud-bupt.oss-cn-beijing.aliyuncs.com/3QbpEyjbGT.png" />
+                                            }
+                                            title={<a href="https://ant.design">{item.name}</a>}
+                                            description={<div className="item-content">{item.content}</div>}
+                                        />
+                                    </Col>
+                                    <Col span={5}>
+                                        <a href="javascript:;" onClick={() => this.handlePass(item)}>
+                                            <Tooltip placement="top" title="通过审核">
+                                                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+                                            </Tooltip>
+                                        </a>
+                                        <Divider type="vertical" />
+                                        <a href="javascript:;" onClick={() => this.handleDelete(item)}>
+                                            <Tooltip placement="top" title="删除弹幕">
+                                                <Icon type="close-circle" theme="twoTone" twoToneColor="red" />
+                                            </Tooltip>
+                                        </a>
+                                    </Col>
+                                </Row>
+
                             </List.Item>
                         )}
                     >
-                        {this.state.loading && this.state.hasMore && (
+                        {/* {this.state.loading && this.state.hasMore && (
                             <div className="loading-container">
                                 <Spin />
                             </div>
-                        )}
+                        )} */}
                     </List>
+                    <div style={{ float: "left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }} />
+                    
                 </InfiniteScroll>
             </div >
         );
     }
 }
 
-export default MessageList;
+export default connectAlita()(MessageList);

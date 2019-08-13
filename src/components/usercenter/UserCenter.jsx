@@ -6,7 +6,6 @@ import { VCloudAPI } from '../../axios/api';
 import { getLocalStorage } from '../../utils/index';
 import { checkUserInfo } from '../../utils/UserUtils';
 import OssUploader from '../../utils/OssUploader';
-const { TextArea } = Input;
 
 class UserCenter extends Component {
     constructor(props) {
@@ -21,7 +20,11 @@ class UserCenter extends Component {
             return;
         }
         const user = getLocalStorage('user');
-        VCloudAPI.get("/user/" + user.aid + '/info/?is_com=' + true, {
+        let is_com = 0;
+        if (user.aid === user.cid) {
+            is_com = 1;
+        }
+        VCloudAPI.get("/user/" + user.aid + '/info/?is_com=' + is_com, {
 
         }).then(response => {
             if (response.status === 200) {
@@ -45,22 +48,27 @@ class UserCenter extends Component {
         })
     }
     handleClick() {
-        
+
         this.props.form.getFieldValue('email')
         if (!checkUserInfo(this.props.history)) {//检查用户信息是否完整
             return;
         }
         const user = getLocalStorage('user');
+        let is_com = 0;
+        if (user.aid === user.cid) {
+            is_com = 1;
+        }
         const { user_info = {} } = this.props.alitaState || {};
         const userInfo = user_info.data || {}
-        const data = { 
+        const data = {
             "name": this.props.form.getFieldValue('name'),
-            "email": this.props.form.getFieldValue('email') ,
+            "email": this.props.form.getFieldValue('email'),
             "avtar_url": userInfo.avtar_url,
-            "desc": userInfo.desc 
+            "desc": userInfo.desc
 
         }
-        VCloudAPI.put("/user/" + user.aid + '/info/?is_com=' + true, {
+        console.log(data)
+        VCloudAPI.put("/user/" + user.aid + '/info/?is_com=' + is_com, {
             ...data
         }).then(response => {
             if (response.status === 200) {
@@ -68,14 +76,16 @@ class UserCenter extends Component {
                 console.log(data)
                 if (code === 200) {
                     // 向用户直播列表中添加一个记录
-                    message.success('成功获取用户信息')
+                    message.success('修改成功')
                     this.props.setAlitaState({
                         stateName: 'user_info',
                         data: data
                     });
 
-                } else {
-                    message.error('获取配置失败!')
+                } else if(code===400){
+                    message.error('您输入邮箱已被注册')
+                }else{
+                    message.error('修改失败')
                 }
             } else {
                 message.error('网络请求失败！')
@@ -147,9 +157,10 @@ class UserCenter extends Component {
 
         const { user_info = {} } = this.props.alitaState || {};
         const userInfo = user_info.data || {}
-       
+        console.log(userInfo.desc)
+        const { TextArea } = Input;
 
-        const tagsFromServer = userInfo.auth||['Movies', 'Books', 'Music', 'Sports'];
+        const tagsFromServer = userInfo.auth || ['Movies', 'Books', 'Music', 'Sports'];
 
         return (
             <div className="gutter-example button-demo">
@@ -187,7 +198,7 @@ class UserCenter extends Component {
                                 <Form.Item label="邮箱">
                                     {getFieldDecorator('email', {
                                         initialValue: userInfo.email || {},
-                                        rules: [{ required: true, message: '请输入直播频道名称' }],
+                                        rules: [{ required: true, message: '请输入邮箱' }],
                                     })(
                                         <Input />
                                     )}
@@ -204,12 +215,7 @@ class UserCenter extends Component {
                                 </Form.Item>
 
                                 <Form.Item label="备注">
-
-                                    {getFieldDecorator('desc', {
-
-                                    })(
                                         <TextArea value={userInfo.desc} rows={3} onChange={this.handleDesc} />
-                                    )}
                                 </Form.Item>
                                 <Row>
                                     <Col span={2} offset={10}>
