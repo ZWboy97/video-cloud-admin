@@ -65,6 +65,9 @@ class FlvPlayer extends Component {
             url: PropTypes.string.isRequired,
         })),
         config: PropTypes.object,
+        poster: PropTypes.string,
+        height: PropTypes.string,
+        width: PropTypes.string,
     }
 
     componentWillUnmount() {
@@ -88,7 +91,7 @@ class FlvPlayer extends Component {
     }
 
     render() {
-        const { className, style, poster } = this.props;
+        const { className, style, poster, height, width } = this.props;
         return (
             <video
                 className={className}
@@ -96,6 +99,8 @@ class FlvPlayer extends Component {
                 style={style}
                 poster={poster}
                 ref={this.initFlv}
+                height={height}
+                width={width}
             />
         )
     }
