@@ -70,14 +70,13 @@ class LiveControlPanel extends React.Component {
                                             <p>在线人数：5</p>
                                             <p>&nbsp;</p>
                                             <p>&nbsp;</p>
-                                            <p>&nbsp;</p>
                                         </Card>
                                     </div>
                                 </Col>
                             </Row>
                             <MeansPanel />
                         </Col>
-                        <Col span={9} >
+                        <Col span={8} >
                             <ChattingPanel />
                         </Col>
                     </Row>
