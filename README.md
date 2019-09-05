@@ -1,6 +1,6 @@
 - 视频云平台的Web管理平台 
 - [项目地址](http://www.jackchance.cn/video-cloud/react-admin.git)
-- [部署预览地址](http://www.baidu.com)(目前还未部署)
+- [部署预览地址](http://114.116.180.115:8081)
 
 ### 一、安装脚本
 ##### 1. 安装依赖
