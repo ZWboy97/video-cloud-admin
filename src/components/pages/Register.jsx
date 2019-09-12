@@ -73,36 +73,14 @@ class Register extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 12 },
-                sm: { span: 5 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
         return (
-            <div className="login-container">
-                <Row className="register-row" type="flex" justify="space-around" align="middle">
-                    <Col className="register-colum" span={5}>
+            <div className="register-row">
+                <Row type="flex" justify="space-around" align="middle">
+                    <Col className="register-colum" span={10}>
                         <div className="register-form">
                             <div className="register-text">欢迎注册</div>
-                            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                                <Form.Item label="邮箱">
+                            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }} onSubmit={this.handleSubmit}>
+                                <Form.Item label="邮箱/手机号">
                                     {getFieldDecorator('email', {
                                         rules: [
                                             {
@@ -157,14 +135,42 @@ class Register extends React.Component {
                                         ],
                                     })(<Input.Password onBlur={this.handleConfirmBlur} />)}
                                 </Form.Item>
-                                <Form.Item {...tailFormItemLayout}>
+                                <Form.Item label="验证码" >
+                                    {getFieldDecorator('confirm', {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: '请确认您的密码',
+                                            },
+                                            {
+                                                validator: this.compareToFirstPassword,
+                                            },
+                                        ],
+                                    })(<div>
+                                        <Row>
+                                            <Col span={15}>
+                                        <Input />
+                                        </Col>
+                                        <Col span={6} offset={3}>
+                                          <a href="javascript:;"><u>获取验证码</u></a>
+                                          </Col>
+                                          </Row>
+                                       </div>)}
+                                </Form.Item>
+                                
+                                    
+                                        <div className="button-layout">
                                     <Button className="register-button" type="primary" htmlType="submit">
                                         注册 </Button>
+                                    
+                                        </div>
+                                        <div className="button-layout">
                                     <Link
                                         to='/login'>
-                                        &nbsp;&nbsp;&nbsp;?&nbsp;已有账号，去登陆
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<u>?已有账号，去登陆</u>
                                         </Link>
-                                </Form.Item>
+                                        </div>
+                                
                             </Form>
                         </div>
                     </Col>
