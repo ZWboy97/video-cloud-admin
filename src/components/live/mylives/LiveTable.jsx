@@ -169,7 +169,7 @@ class LiveTable extends React.Component {
     }
     handleSetting(e, record) {
         e.preventDefault();
-        this.props.history.push('/app/lives/mylives/setting/' + record.lid);
+        this.props.history.push('/app/live/livesetting/' + record.lid);
         this.props.setAlitaState({
             stateName: 'live_setting_page',
             data: {
@@ -182,7 +182,7 @@ class LiveTable extends React.Component {
 
     handleControl(e, record) {
         e.preventDefault();
-        this.props.history.push('/app/lives/mylives/controlpanel/' + record.lid);
+        this.props.history.push('/app/live/controlpanel/' + record.lid);
         this.props.setAlitaState({
             stateName: 'live_control_page',
             data: {
