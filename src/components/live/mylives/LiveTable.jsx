@@ -1,10 +1,10 @@
-import { Table, Divider, message } from 'antd'
+import { Table, Divider, message, Dropdown, Menu, Icon, Popconfirm } from 'antd'
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI } from '../../../axios/api';
+import { VCloudAPI } from 'myaxios/api';
 import { withRouter, Link } from 'react-router-dom';
-import { getLocalStorage } from '../../../utils/index';
-import { checkUserInfo } from '../../../utils/UserUtils';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 
 class LiveTable extends React.Component {
 
@@ -78,18 +78,50 @@ class LiveTable extends React.Component {
                 dataIndex: 'operation',
                 align: 'center',
                 render: (text, record) =>
-                    <div>
+                    <div className="operation-item">
                         <a className="live-link" href="http://" onClick={(e) => this.handleLink(e, record)}>链接</a>
-                        <Divider type="vertical" />
-                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                         <Divider type="vertical" />
                         <a className="live-link" href="http://" onClick={(e) => this.handleControl(e, record)}>控制台</a>
                         <Divider type="vertical" />
-                        <Link className="live-link" to="/director/?did=1244" target="_blank">导播台</Link>
-
+                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
+                        <Divider type="vertical" />
+                        <Dropdown className="live-link" overlay={this.menu(record)} trigger={['click']}>
+                            <a className="ant-dropdown-link" href="#">
+                                更多<Icon type="down" />
+                            </a>
+                        </Dropdown>
                     </div>
             },
         ]
+
+        this.menu = (record) => (
+            <Menu className="live-link" >
+                <Menu.Item>
+                    <Link to="/director/?did=1244" target="_blank">导播台直播</Link>
+                </Menu.Item>
+                <Menu.Item>
+                    <Popconfirm
+                        title="确认关闭该直播间?"
+                        onConfirm={(e, record) => this.handleChangeState(e, record)}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <a className="live-link" href="http://" >
+                            {record.status === 3 ? '开启直播间' : '关闭直播间'}</a>
+                    </Popconfirm>
+                </Menu.Item>
+                <Menu.Item>
+                    <Popconfirm
+                        title="删除后将无法恢复，确认删除该直播间?"
+                        onConfirm={(e, record) => this.handleDelete(e, record)}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <a className="live-link" href="http://">删除直播间</a>
+                    </Popconfirm>
+                </Menu.Item>
+            </Menu>
+        );
     }
 
     componentDidMount() {
@@ -137,7 +169,7 @@ class LiveTable extends React.Component {
     }
     handleSetting(e, record) {
         e.preventDefault();
-        this.props.history.push('/app/lives/mylives/setting/' + record.lid);
+        this.props.history.push('/app/live/livesetting/' + record.lid);
         this.props.setAlitaState({
             stateName: 'live_setting_page',
             data: {
@@ -150,13 +182,23 @@ class LiveTable extends React.Component {
 
     handleControl(e, record) {
         e.preventDefault();
-        this.props.history.push('/app/lives/mylives/controlpanel/' + record.lid);
+        this.props.history.push('/app/live/controlpanel/' + record.lid);
         this.props.setAlitaState({
             stateName: 'live_control_page',
             data: {
                 liveData: record
             }
         })
+    }
+
+    handleDelete = (e, record) => {
+        e.preventDefault();
+        message.success('删除成功');
+    }
+
+    handleChangeState = (e, record) => {
+        e.preventDefault();
+        message.success('变更状态成功');
     }
 
     compare = (property) => {

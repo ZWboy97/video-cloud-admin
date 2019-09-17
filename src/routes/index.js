@@ -38,7 +38,7 @@ class CRouter extends Component {
                 // 登录之后，查看用户是否具有访问该组件的权限
                 return permissions ? this.requireAuth(permissions, component) : component;
             }
-        } else {    //不需要登录的组件
+        } else { //不需要登录的组件
             return component;
         }
 
