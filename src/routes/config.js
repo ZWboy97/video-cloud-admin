@@ -11,7 +11,7 @@
  */
 export default {
     menus: [
-        { key: '/app/dashboard/index', title: '首页概览', icon: 'dashboard', component: 'Dashboard' },
+        // { key: '/app/dashboard/index', title: '首页概览', icon: 'dashboard', component: 'Dashboard' },
         {
             key: '/app/lives', title: '直播服务', icon: 'rocket',
             subs: [
