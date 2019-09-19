@@ -10,10 +10,10 @@ import LiveControlPanel from './livecontrolpanel/LiveControlPanel';
 export default () => (
 
     <Switch>
-        <Route exact path="/app/live/" render={() => (<Redirect to="/app/live/mylives" />)} />
-        <Route exact path="/app/live/mylives/" component={MyLivesPage} />
-        <Route exact path="/app/live/livesetting/:lid" component={LiveSetting} />
-        <Route exact path="/app/live/controlpanel/:lid" component={LiveControlPanel} />
+        <Route exact path="/app/mylive/" render={() => (<Redirect to="/app/mylive/livelist" />)} />
+        <Route exact path="/app/mylive/livelist/" component={MyLivesPage} />
+        <Route exact path="/app/mylive/livesetting/:lid" component={LiveSetting} />
+        <Route exact path="/app/mylive/controlpanel/:lid" component={LiveControlPanel} />
     </Switch>
 
 )

@@ -8,8 +8,8 @@ import VodList from './vodlist/VodList';
 export default () => (
 
     <Switch>
-        <Route exact path="/app/vod/" render={() => (<Redirect to="/app/vod/vodlist" />)} />
-        <Route exact path="/app/vod/vodlist/" component={VodList} />
+        <Route exact path="/app/myvod/" render={() => (<Redirect to="/app/myvod/vodlist" />)} />
+        <Route exact path="/app/myvod/vodlist/" component={VodList} />
     </Switch>
 
 )

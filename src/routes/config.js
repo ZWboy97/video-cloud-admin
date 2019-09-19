@@ -15,13 +15,13 @@ export default {
         {
             key: '/app/live', title: '直播服务', icon: 'rocket',
             subs: [
-                { key: '/app/live/', title: '我的直播', component: 'MyLivesIndex' },
+                { key: '/app/mylive/', title: '我的直播', component: 'MyLivesIndex' },
             ]
         },
         {
             key: '/app/vod', title: '点播服务', icon: 'copy',
             subs: [
-                { key: '/app/vod/', title: '我的点播', component: 'MyVodIndex' },
+                { key: '/app/myvod/', title: '我的点播', component: 'MyVodIndex' },
                 { key: '/app/vod/upload', title: '上传视频', component: 'VideoUpload' },
                 { key: '/app/vod/videolist', title: '视频列表', component: 'VideoListPage' },
                 { key: '/app/vod/playlist', title: '播放列表', component: 'PlayList' },
