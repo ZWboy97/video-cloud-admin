@@ -7,8 +7,9 @@ export const VCloudAPI = createVCloudAPI();
 
 function createVCloudAPI() {
     var Axios = axios.create({
-       // baseURL: "http://114.116.180.115:9000/",
-       baseURL: 'http://192.168.137.140:9000/',
+        baseURL: "http://114.116.180.115:9000/",
+        // baseURL: "http://10.128.231.75:9000/",
+
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -65,7 +66,14 @@ export const YMOCKAPI = axios.create({
 
 export const TESTJYLAPI = axios.create({
     baseURL: 'http://114.116.180.115:9000/',
-   // baseURL: 'http://192.168.137.140:9000/',
+    // baseURL: 'http://192.168.137.140:9000/',
+    headers: {
+        'Content-Type': 'application/json',
+    }
+})
+
+export const MediaAPI = axios.create({
+    baseURL: 'http://localhost:3000/',
     headers: {
         'Content-Type': 'application/json',
     }
