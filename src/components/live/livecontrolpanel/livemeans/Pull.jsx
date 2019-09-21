@@ -29,7 +29,6 @@ class Pull extends React.Component {
         })
     }
 
-
     render() {
         return (
             <Row>
