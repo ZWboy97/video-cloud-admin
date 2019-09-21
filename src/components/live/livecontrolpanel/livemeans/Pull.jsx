@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Input, Icon, Button } from 'antd';
 import { MediaAPI } from 'myaxios/api';
+import { connectAlita } from 'redux-alita';
 
 
 class Pull extends React.Component {
@@ -10,10 +11,19 @@ class Pull extends React.Component {
         pullUrl: ""
     }
 
+    inPutChangeHandler = (e) => {
+        this.setState({
+            pullUrl: e.target.value
+        })
+    }
+
     streamPushHandler = () => {
+        const { live_setting_page = {} } = this.props.alitaState || {};
+        const { liveData } = live_setting_page.data || {}
+        var push_url = liveData.push_url;
         MediaAPI.post('/api/ffmpeg/stream-push-start', {
-            "pull_stream_url": "http://39.106.194.43:8090/live/sq3oOJjN6s.flv",
-            "push_stream_url": "rtmp://39.106.194.43:1935/live/i2yTkvYgLQ?auth_key=9487f14f4544ee2ae2d995ec4de2172d&vhost=default"
+            "pull_stream_url": this.state.pullUrl,
+            "push_stream_url": push_url
         }).then(response => {
             console.log('response', response);
         })
@@ -29,7 +39,7 @@ class Pull extends React.Component {
                             请输入拉流地址：
                 </Col>
                         <Col span={16} >
-                            <Input value={this.state.pullUrl} />
+                            <Input value={this.state.pullUrl} onChange={this.inPutChangeHandler} />
                         </Col>
                     </Row>
                     <div className="warnning-text">
@@ -48,4 +58,4 @@ class Pull extends React.Component {
 
 }
 
-export default Pull;
+export default connectAlita()(Pull);

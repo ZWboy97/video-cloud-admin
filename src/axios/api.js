@@ -73,7 +73,7 @@ export const TESTJYLAPI = axios.create({
 })
 
 export const MediaAPI = axios.create({
-    baseURL: 'http://localhost:3000/',
+    baseURL: 'http://39.106.194.43:3000/',
     headers: {
         'Content-Type': 'application/json',
     }
