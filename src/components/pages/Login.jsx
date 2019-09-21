@@ -2,7 +2,7 @@
  *  用户登录页面
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox, Spin, message, Layout } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Spin, message, Row,Col } from 'antd';
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from '../../axios/api';
 import { Link, withRouter } from 'react-router-dom';
@@ -35,9 +35,9 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                VCloudAPI.post('/user/login',
+                VCloudAPI.post('/user/login/',
                     {
-                        email: values.email,
+                        method: values.user_name,
                         passWord: values.password
                     })
                     .then(response => {
@@ -78,36 +78,49 @@ class Login extends React.Component {
                             <div className="login-form" >
                                 <div className="login-logo">视频云直播管理后台</div>
                                 <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
-                                    <FormItem>
-                                        {getFieldDecorator('email', {
-                                            rules: [{ required: true, message: '请输入邮箱!' }],
-                                        })(
-                                            <Input prefix={<Icon type="mail" style={{ fontSize: 13 }} />} type="mail" placeholder="登录邮箱" />
-                                        )}
-                                    </FormItem>
-                                    <FormItem>
-                                        {getFieldDecorator('password', {
-                                            rules: [{ required: true, message: '请输入密码!' }],
-                                        })(
-                                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
-                                        )}
-                                    </FormItem>
-                                    <FormItem>
-                                        <div className="password-container">
-                                            {
-                                                getFieldDecorator('remember', { valuePropName: 'checked', initialValue: true, })(
-                                                    <Checkbox className="login-form-remember">记住密码</Checkbox>)
-                                            }
-                                            <Link to='/forget' className="login-form-forgot">忘记密码</Link>
-                                        </div>
-                                        <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                                        <Link
-                                            to='/register'
-                                            style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <span >现在注册</span>
-                                        </Link>
-                                    </FormItem>
-                                </Form>
+                    <FormItem>
+                        {getFieldDecorator('user_name', {
+                            rules: [{ required: true, message: '请输入手机号码/邮箱!' }],
+                        })(
+                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} type="mobile" placeholder="登录手机号/邮箱" />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {getFieldDecorator('password', {
+                            rules: [{ required: true, message: '请输入密码!' }],
+                        })(
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
+                        )}
+                    </FormItem>
+                    <div className="verify-code">
+                    <Row>
+                    <Col span={6}>
+                    <img src={require("./../../style/imgs/verifyCode.png")} alt="avatar" style={{ width: '100%', }} />
+                            </Col>
+                            <Col span={5} offset={1}>
+                            <div className="text-bottom"><a href="javascript:;"><u >换一张</u></a></div>
+                            </Col>
+                        <Col span={11} offset={1}>
+                        <Input prefix={<Icon type="key" style={{ fontSize: 13 }} />} placeholder="验证码" />
+                            </Col>   
+                        </Row>
+                        </div>
+                    <FormItem>
+                        <div className="password-container">
+                            {
+                                getFieldDecorator('remember', { valuePropName: 'checked', initialValue: true, })(
+                                    <Checkbox className="login-form-remember">记住密码</Checkbox>)
+                            }
+                            <Link to='/forget' className="login-form-forgot"><u>忘记密码</u></Link>
+                        </div>
+                        <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                        <Link
+                            to='/register'
+                            style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <u >现在注册</u>
+                        </Link>
+                    </FormItem>
+                </Form>
                             </div>
                         </div>
                     </Spin>
