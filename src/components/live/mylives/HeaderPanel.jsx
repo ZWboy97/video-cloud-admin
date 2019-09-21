@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Statistic, } from 'antd';
 import './style.less';
 import { connectAlita } from 'redux-alita';
+import { joinSafe } from 'upath';
 
 class HeaderPanel extends Component {
 
@@ -20,7 +21,10 @@ class HeaderPanel extends Component {
     render() {
         const { my_live_list } = this.props.alitaState;
         var { data = [] } = my_live_list || {};
-        const count = data.length || 0
+        var count = 0;
+        if (data) {
+            count = data.length;
+        }
         console.log('alitastate in panel', this.props.alitaState)
         return (
             <div className="header-panel">
