@@ -14,7 +14,7 @@ import DirectorPage from './components/pages/livedirector/DirectorPage'
 export default () => (
     <Router history={history}>
         <Switch>
-            <Route exact path="/" render={() => <Redirect to="/app/dashboard/index" push />} />
+            <Route exact path="/" render={() => <Redirect to="/app/mylive/livelist/" push />} />
             <Route path="/app" component={App} />
             <Route path="/404" component={NotFound} />
             <Route path="/login" component={Login} />
