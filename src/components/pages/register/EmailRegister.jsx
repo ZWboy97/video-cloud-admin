@@ -1,25 +1,35 @@
 /**
- * 登录界面
+ *  用户登录页面
  */
-
-// todo
-
-import {
-    Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message
-} from 'antd';
 import React from 'react';
+import { Form, Icon, Input, Button, Tooltip, Row, message, Col } from 'antd';
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI } from '../../axios/api'
-import { Link } from 'react-router-dom'
-class ForgetPsd extends React.Component {
-    state = {
-        confirmDirty: false,
-        autoCompleteResult: [],
-    };
+import { VCloudAPI } from './../../../axios/api';
+import { Link, withRouter } from 'react-router-dom';
+import { setLocalStorage, getUrlParams } from './../../../utils/index';
 
+const FormItem = Form.Item;
+
+class EmailRegister extends React.Component {
+
+    //控制的state，不从Redux中读取
+    state = {
+        logining: false,
+        redirect: ''
+    }
+
+    componentWillMount() {
+        document.title = '登录-视频云管理平台';
+        const { redirect } = getUrlParams();
+        if (redirect) {
+            this.setState({
+                redirect: redirect  //从url读取参数，跳转来源（登录成功后要成功回去），为空的话就跳转到根首页
+            });
+        }
+    }
     handleGetCode=e=>{
         e.preventDefault();
-        const email=this.props.form.getFieldValue("email_phone")
+        const email=this.props.form.getFieldValue("email")
            
                 VCloudAPI.post('/user/email/',
                     {
@@ -67,8 +77,8 @@ class ForgetPsd extends React.Component {
                             if (data.code === 200) {
                                 message.info("注册成功");
                                 this.props.history.push('/login');
-                            } else {
-                                message.info('注册失败');
+                            } else if(data.code === 408){
+                                message.info('验证码已失效');
                             }
                         } else {
                             message.warning("注册失败，请重新尝试");
@@ -90,7 +100,7 @@ class ForgetPsd extends React.Component {
     compareToFirstPassword = (rule, value, callback) => {
         const { form } = this.props;
         if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
+            callback('两次输入的密码不一致');
         } else {
             callback();
         }
@@ -104,52 +114,44 @@ class ForgetPsd extends React.Component {
         callback();
     };
 
-
+    /**
+     * 渲染登录界面的布局和组件
+     */
     render() {
-        const { getFieldDecorator } = this.props.form;
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 12 },
-                sm: { span: 5 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
+        const { getFieldDecorator } = this.props.form;      //解析出getFieldDecorator方法
         return (
-            <div className="login-container">
-                <Row className="forget-row" type="flex" justify="space-around" align="middle">
-                    <Col className="forget-colum" span="5">
-                        <div className="forget-form">
-                            <div className="forget-text">忘记密码</div>
-                            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                                <Form.Item label="邮箱/手机号">
-                                    {getFieldDecorator('email_phone', {
+
+            <div>
+                <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }} onSubmit={this.handleSubmit}>
+                                <Form.Item label="邮箱">
+                                    {getFieldDecorator('email', {
                                         rules: [
                                             {
-                                                message: 'The input is not valid E-mail!',
+                                                type: 'email',
+                                                message: '请输入合法的邮箱地址',
                                             },
                                             {
                                                 required: true,
-                                                message: 'Please input your E-mail!',
+                                                message: '请输入您的邮箱地址',
                                             },
                                         ],
                                     })(<Input />)}
                                 </Form.Item>
+                                <Form.Item
+                                    label={
+                                        <span>
+                                            用户名&nbsp;
+                                                <Tooltip title="您的个性化昵称">
+                                                <Icon type="question-circle-o" />
+                                            </Tooltip>
+                                        </span>
+                                    }
+                                >
+                                    {getFieldDecorator('user_name', {
+                                        rules: [{ required: true, message: '请输入您的用户昵称', whitespace: true }],
+                                    })(<Input />)}
+                                </Form.Item>
+
                                 <Form.Item label="密码" hasFeedback>
                                     {getFieldDecorator('password', {
                                         rules: [
@@ -181,10 +183,7 @@ class ForgetPsd extends React.Component {
                                         rules: [
                                             {
                                                 required: true,
-                                                message: '请确认您的密码',
-                                            },
-                                            {
-                                                validator: this.compareToFirstPassword,
+                                                message: '请输入验证码',
                                             },
                                         ],
                                     })(<div>
@@ -199,16 +198,26 @@ class ForgetPsd extends React.Component {
                                        </div>)}
                                 </Form.Item>
                                 
-                                <Form.Item {...tailFormItemLayout}>
-                                    <Button className="forget-button" type="primary" htmlType="submit">
-                                        确定重置 </Button>
-                                </Form.Item>
+                                    
+                                        <div className="button-layout">
+                                    <Button className="register-button" type="primary" htmlType="submit">
+                                        注册 </Button>
+                                    
+                                        </div>
+                                        <div className="button-layout">
+                                    <Link
+                                        to='/login'>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<u>?已有账号，去登陆</u>
+                                        </Link>
+                                        </div>
+                                
                             </Form>
-                        </div>
-                    </Col>
-                </Row>
+
             </div>
+
+
         );
     }
 }
-export default connectAlita(['auth'])(Form.create()(ForgetPsd));;
+
+export default connectAlita()(withRouter(Form.create()(EmailRegister)));

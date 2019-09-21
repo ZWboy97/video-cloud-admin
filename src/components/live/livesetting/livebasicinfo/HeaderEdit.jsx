@@ -15,7 +15,7 @@ class HeaderEdit extends Component {
         console.log(liveData);
 
         const data = (({end_time,kind,lid,name,permission,size,start_time,picture_url}) => ({end_time,kind,lid,name,permission,size,start_time,picture_url}))(liveData)
-        console.log(data)
+        console.log(data);
         if (!checkUserInfo(this.props.history)) {   //检查用户信息是否完整
             return;
         }
