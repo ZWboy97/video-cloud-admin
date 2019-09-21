@@ -12,6 +12,7 @@ class LiveTable extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
+            selectedRecord: {} //操作的record
         }
         this.handleLink = this.handleLink.bind(this);
         this.handleSetting = this.handleSetting.bind(this);
@@ -85,7 +86,7 @@ class LiveTable extends React.Component {
                         <Divider type="vertical" />
                         <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
                         <Divider type="vertical" />
-                        <Dropdown className="live-link" overlay={this.menu(record)} trigger={['click']}>
+                        <Dropdown className="live-link" onClick={(e) => this.handleDropdownClick(e, record)} overlay={this.menu} trigger={['click']}>
                             <a className="ant-dropdown-link" href="#">
                                 更多<Icon type="down" />
                             </a>
@@ -94,7 +95,7 @@ class LiveTable extends React.Component {
             },
         ]
 
-        this.menu = (record) => (
+        this.menu = (
             <Menu className="live-link" >
                 <Menu.Item>
                     <Link to="/director/?did=1244" target="_blank">导播台直播</Link>
@@ -107,13 +108,13 @@ class LiveTable extends React.Component {
                         cancelText="取消"
                     >
                         <a className="live-link" href="http://" >
-                            {record.status === 3 ? '开启直播间' : '关闭直播间'}</a>
+                            {this.state.selectedRecord.status === 3 ? '开启直播间' : '关闭直播间'}</a>
                     </Popconfirm>
                 </Menu.Item>
                 <Menu.Item>
                     <Popconfirm
                         title="删除后将无法恢复，确认删除该直播间?"
-                        onConfirm={(e, record) => this.handleDelete(e, record)}
+                        onConfirm={(e, record) => this.handleDelete(e, this.state.selectedRecord)}
                         okText="确认"
                         cancelText="取消"
                     >
@@ -191,9 +192,37 @@ class LiveTable extends React.Component {
         })
     }
 
+    handleDropdownClick(e, record) {
+        e.preventDefault();
+        this.setState({
+            selectedRecord: record
+        })
+    }
+
     handleDelete = (e, record) => {
         e.preventDefault();
-        message.success('删除成功');
+        console.log('record', record);
+        if (!checkUserInfo(this.props.history)) {
+            return;
+        }
+        var user = getLocalStorage('user');
+        this.setState({
+            isLoading: true
+        });
+        VCloudAPI.delete('/com/' + user.cid + '/liverooms/?aid=' + user.aid
+            + '&lid=' + record.lid
+        ).then(response => {
+            console.log('success：', response.data)
+            if (response.status === 200) {
+                message.success('删除成功');
+            }
+        }).catch((e) => {
+            message.error('获取直播列表失败!');
+        }).finally(() => {
+            this.setState({
+                isLoading: false
+            })
+        })
     }
 
     handleChangeState = (e, record) => {

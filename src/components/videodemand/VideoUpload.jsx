@@ -6,7 +6,7 @@ import OssUploader from '../../utils/OssUploader';
 import { VCloudAPI, TESTJYLAPI } from "../../axios/api";
 
 ;
-const {Dragger} = Upload
+const { Dragger } = Upload
 
 class VideoUpload extends Component {
 
@@ -53,16 +53,17 @@ class VideoUpload extends Component {
                     const url = res.res.requestUrls[0].substring(0, res.res.requestUrls[0].indexOf('?'));
                     console.log('上传文件的返回URL为', url);
                     let data = {
-                        aid:JSON.parse(localStorage.user).aid,
-                        name:res.name,
-                        rtype:'video',
-                        size:3.0,
-                        label:['默认列表'],
-                        res_url:url,
-                        pic_url:url+'?x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast',
+                        aid: JSON.parse(localStorage.user).aid,
+                        name: res.name,
+                        rtype: 'video',
+                        size: 3.0,
+                        label: ['默认列表'],
+                        res_url: url,
+                        pic_url: url + '?x-oss-process=video/snapshot,t_1000,f_jpg,w_800,h_600,m_fast',
                     }
-                    TESTJYLAPI.post('com/'+JSON.parse(localStorage.user).cid+'/resourses/',data).then(res=>{
-                        console.log('res=>',res)})
+                    TESTJYLAPI.post('com/' + JSON.parse(localStorage.user).cid + '/resourses/', data).then(res => {
+                        console.log('res=>', res)
+                    })
 
                 } else {
                     message.error('文件上传失败');
