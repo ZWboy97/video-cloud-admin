@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Input, Icon, Button } from 'antd';
+import { Row, Col, Input, Icon, Button, message } from 'antd';
 import { MediaAPI } from 'myaxios/api';
 import { connectAlita } from 'redux-alita';
 
@@ -21,11 +21,32 @@ class Pull extends React.Component {
         const { live_setting_page = {} } = this.props.alitaState || {};
         const { liveData } = live_setting_page.data || {}
         var push_url = liveData.push_url;
+
+        if (this.state.isPushing) {
+            MediaAPI.post('/api/ffmpeg/stream-push-stop', {
+                "pull_stream_url": this.state.pullUrl,
+                "push_stream_url": push_url
+            }).then(response => {
+                if (response.status === 200) {
+                    message.success("拉流直播停止成功！");
+                    this.setState({
+                        isPushing: false
+                    })
+                }
+            })
+            return;
+        }
         MediaAPI.post('/api/ffmpeg/stream-push-start', {
             "pull_stream_url": this.state.pullUrl,
             "push_stream_url": push_url
         }).then(response => {
-            console.log('response', response);
+            console.log('response', response)
+            if (response.status === 200) {
+                message.success("拉流直播启动成功！");
+                this.setState({
+                    isPushing: true
+                })
+            }
         })
     }
 
