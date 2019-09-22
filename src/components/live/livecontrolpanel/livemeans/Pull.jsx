@@ -8,7 +8,7 @@ class Pull extends React.Component {
 
     state = {
         isPushing: false,
-        pullUrl: ""
+        pullUrl: "..."
     }
 
     inPutChangeHandler = (e) => {
@@ -28,10 +28,15 @@ class Pull extends React.Component {
                 "push_stream_url": push_url
             }).then(response => {
                 if (response.status === 200) {
-                    message.success("拉流直播停止成功！");
-                    this.setState({
-                        isPushing: false
-                    })
+                    const { data } = response;
+                    if (data.result === "success") {
+                        message.success("拉流直播停止成功！");
+                        this.setState({
+                            isPushing: false
+                        })
+                    } else if (data.result === "error") {
+                        message.success("拉流直播不存在！");
+                    }
                 }
             })
             return;
@@ -42,10 +47,40 @@ class Pull extends React.Component {
         }).then(response => {
             console.log('response', response)
             if (response.status === 200) {
-                message.success("拉流直播启动成功！");
-                this.setState({
-                    isPushing: true
-                })
+                const { data } = response;
+                if (data.result === "success") {
+                    message.success("拉流直播启动成功！");
+                    this.setState({
+                        isPushing: true
+                    })
+                } else if (data.result === "error") {
+                    message.success("拉流直播启动失败！");
+                } else if (data.result === "conflict") {
+                    message.success("拉流直播与已有直播冲突！");
+                }
+            }
+        })
+    }
+
+    componentDidMount() {
+        const { live_setting_page = {} } = this.props.alitaState || {};
+        const { liveData } = live_setting_page.data || {}
+        var push_url = liveData.push_url;
+        MediaAPI.post('/api/ffmpeg/stream-push-status', {
+            "pull_stream_url": this.state.pullUrl,
+            "push_stream_url": push_url
+        }).then(response => {
+            if (response.status === 200) {
+                const { data } = response;
+                if (data.result === "active") {
+                    this.setState({
+                        isPushing: true
+                    })
+                } else if (data.result === "inactive") {
+                    this.setState({
+                        isPushing: false
+                    })
+                }
             }
         })
     }
