@@ -103,12 +103,11 @@ class LiveTable extends React.Component {
                 <Menu.Item>
                     <Popconfirm
                         title="确认关闭该直播间?"
-                        onConfirm={(e, record) => this.handleChangeState(e, record)}
+                        onConfirm={(e, record) => this.handleChangeState(e, this.state.selectedRecord)}
                         okText="确认"
                         cancelText="取消"
                     >
-                        <a className="live-link" href="http://" >
-                            {this.state.selectedRecord.status === 3 ? '开启直播间' : '关闭直播间'}</a>
+                        {this.state.selectedRecord.status === 3 ? '开启直播间' : '关闭直播间'}
                     </Popconfirm>
                 </Menu.Item>
                 <Menu.Item>
@@ -194,6 +193,7 @@ class LiveTable extends React.Component {
 
     handleDropdownClick(e, record) {
         e.preventDefault();
+        console.log('record', record)
         this.setState({
             selectedRecord: record
         })
@@ -206,28 +206,51 @@ class LiveTable extends React.Component {
             return;
         }
         var user = getLocalStorage('user');
-        this.setState({
-            isLoading: true
-        });
         VCloudAPI.delete('/com/' + user.cid + '/liverooms/?aid=' + user.aid
-            + '&lid=' + record.lid
+            + '&lid=' + record.lid,
         ).then(response => {
-            console.log('success：', response.data)
-            if (response.status === 200) {
+            if (response.status === 200 && response.data.code === 200) {
                 message.success('删除成功');
+            } else {
+                message.error('删除直播间失败!');
             }
         }).catch((e) => {
-            message.error('获取直播列表失败!');
-        }).finally(() => {
-            this.setState({
-                isLoading: false
-            })
+            message.error('删除直播间失败!');
         })
     }
 
     handleChangeState = (e, record) => {
         e.preventDefault();
-        message.success('变更状态成功');
+        if (!checkUserInfo(this.props.history)) {
+            return;
+        }
+        var nextStatus = 2;
+        switch (record.status) {
+            case 1:
+                message.error('无法关闭正在进行的直播');
+                return;
+            case 2:
+                nextStatus = 3;
+                break;
+            case 3:
+                nextStatus = 2;
+                break;
+            default:
+        }
+        var user = getLocalStorage('user');
+        VCloudAPI.put('/com/' + user.cid + '/room_status/?aid=' + user.aid
+            + '&lid=' + record.lid, {
+            status: nextStatus
+        }
+        ).then(response => {
+            if (response.status === 200 && response.data.code === 200) {
+                message.success('变更状态成功');
+            } else {
+                message.error('变更状态失败!');
+            }
+        }).catch((e) => {
+            message.error('变更状态失败!');
+        })
     }
 
     compare = (property) => {
