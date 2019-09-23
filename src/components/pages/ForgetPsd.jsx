@@ -19,11 +19,11 @@ class ForgetPsd extends React.Component {
 
     handleGetCode=e=>{
         e.preventDefault();
-        const email=this.props.form.getFieldValue("email_phone")
+        const email_phone=this.props.form.getFieldValue("email_phone")
            
-                VCloudAPI.post('/user/email/',
+                VCloudAPI.post('/user/update/vcode/',
                     {
-                        email: email,
+                        method: email_phone,
                     })
                     .then(response => {
                         console.log('register response:', response)
@@ -41,7 +41,7 @@ class ForgetPsd extends React.Component {
                         message.warning("网络错误，注册失败");
                     }).finally(() => {
                         this.setState({ logining: false })
-                    });
+        });
         
 
     }
@@ -53,10 +53,9 @@ class ForgetPsd extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                VCloudAPI.post('/user/register/email/?cvcode='+values.cvcode,
+                VCloudAPI.post('/user/update/password/?cvcode='+values.cvcode,
                     {
-                        email: values.email,
-                        user_name: values.user_name,
+                        method: values.email_phone,
                         password: values.password
 
                     })
@@ -65,16 +64,16 @@ class ForgetPsd extends React.Component {
                         if (response.status === 200) {
                             const { data } = response;
                             if (data.code === 200) {
-                                message.info("注册成功");
+                                message.info("修改成功");
                                 this.props.history.push('/login');
                             } else {
-                                message.info('注册失败');
+                                message.info('修改失败');
                             }
                         } else {
-                            message.warning("注册失败，请重新尝试");
+                            message.warning("修改失败，请重新尝试");
                         }
                     }).catch(r => {
-                        message.warning("网络错误，注册失败");
+                        message.warning("网络错误，修改失败");
                     }).finally(() => {
                         this.setState({ logining: false })
                     });
@@ -181,11 +180,8 @@ class ForgetPsd extends React.Component {
                                         rules: [
                                             {
                                                 required: true,
-                                                message: '请确认您的密码',
-                                            },
-                                            {
-                                                validator: this.compareToFirstPassword,
-                                            },
+                                                message: '请输入验证码',
+                                            } 
                                         ],
                                     })(<div>
                                         <Row>
