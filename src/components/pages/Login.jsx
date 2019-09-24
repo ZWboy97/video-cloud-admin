@@ -42,6 +42,7 @@ class Login extends React.Component {
                     })
                     .then(response => {
                         const { code = 0, data = {}, msg = {} } = response.data || {};
+                        console.log(code);
                         if (code === 201) {
                             message.success('登录成功！')
                             setLocalStorage('session_id', data.session_id);
