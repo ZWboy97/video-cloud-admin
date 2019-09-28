@@ -27,7 +27,7 @@ class HeaderPanel extends Component {
                 <Statistic className="current-number" title="当前数目" value={count} />
                 <Button className="create-button" type="primary"
                     onClick={(e) => this.handleCreateLive(this)}
-                >创建直播</Button>
+                >创建点播</Button>
             </div>
         )
     }
