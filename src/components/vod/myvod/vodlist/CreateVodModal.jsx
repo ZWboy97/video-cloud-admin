@@ -10,9 +10,9 @@ import { withRouter } from 'react-router-dom';
 import { TweenOneGroup } from 'rc-tween-one';
 
 
-const {TextArea} =Input;
-const { Dragger } = Upload
-
+const { TextArea } = Input;
+const { Dragger } = Upload;
+var rtype,size;
 
 class CreateVodModal extends Component {
 
@@ -23,12 +23,12 @@ class CreateVodModal extends Component {
     }
 
     state = {
-        tags: ['Tag 1', 'Tag 2', 'Tag 3'],
+        label: [],
         inputVisible: false,
         inputValue: '',
-        cover_url:'',
-        video_url:'',
-        video_intro:''
+        pic_url: '',
+        res_url: '',
+        intro: ''
     };
 
     componentDidMount() {
@@ -57,8 +57,11 @@ class CreateVodModal extends Component {
 
 
     beforeUploadCover = file => {
-        console.log('beforeuploas')
+        console.log('beforeuploascover');
 
+        console.log('上传文件名',file.name);
+        console.log(file.size);
+        //const video_type=file.name.substring(file.name.indexOf('.'),file.name.length);
         // 创建Uploader
         const upload = new OssUploader({
             ...this.options,//与文件无关的一些配置
@@ -73,7 +76,7 @@ class CreateVodModal extends Component {
                     message.success('文件上传成功');
                     const url = res.res.requestUrls[0].substring(0, res.res.requestUrls[0].indexOf('?'));
                     console.log('上传文件的返回URL为', url);
-                    this.setState({ cover_url: url });
+                    this.setState({ pic_url: url });
 
                 } else {
                     message.error('文件上传失败');
@@ -87,8 +90,9 @@ class CreateVodModal extends Component {
     }
 
     beforeUploadVideo = file => {
-        console.log('beforeuploas')
-
+        console.log('beforeuploasvideo')
+        size=file.size/1024/1024;
+        rtype=file.name.substring(file.name.indexOf('.')+1,file.name.length);
         // 创建Uploader
         const upload = new OssUploader({
             ...this.options,//与文件无关的一些配置
@@ -103,7 +107,7 @@ class CreateVodModal extends Component {
                     message.success('文件上传成功');
                     const url = res.res.requestUrls[0].substring(0, res.res.requestUrls[0].indexOf('?'));
                     console.log('上传文件的返回URL为', url);
-                    this.setState({ video_url: url });
+                    this.setState({ res_url: url });
 
                 } else {
                     message.error('文件上传失败');
@@ -126,67 +130,60 @@ class CreateVodModal extends Component {
     }
 
     handleOk() {
-       const video_name=this.props.form.getFieldValue("name");
-       const { video_intro }=this.state;
-       const { cover_url } = this.state;
-       const { video_url } = this.state;
-       const { tags } = this.state;
+        const name = this.props.form.getFieldValue("name");
+        const { intro } = this.state;
+        const { pic_url } = this.state;
+        const { res_url } = this.state;
+        const { label } = this.state;
 
-       console.log(video_intro);
+        console.log(intro);
 
-       const { vod_list_content = {} } = this.props.alitaState || {};
-       const { data={} } = vod_list_content || {}
-       const { videoInfo = [], count = 0 } = data||{}
+        const { vod_list_content = {} } = this.props.alitaState || {};
+        const { data = {} } = vod_list_content || {}
+        const { videoInfo = [], count = 0 } = data || {}
 
-       console.log(videoInfo)
-       const inputContent = {
-           'id':count, 
-           'video_name': video_name, 
-           'cover_url':  cover_url,
-           'video_url':video_url, 
-           'tags': tags, 
-           'video_intro': video_intro
+        console.log(videoInfo)
+        if (!checkUserInfo(this.props.history)) {//检查用户信息是否完整
+            return;
         }
-       const newData = [...videoInfo, inputContent]
-       console.log(newData);
-       this.props.setAlitaState({
-           stateName: 'vod_list_content',
-           data: {
-               count: count + 1,
-               videoInfo: newData
-           }
-       })
-       this.setModalState(false, false);
-            // const user = getLocalStorage('user');
-            // VCloudAPI.post("/com/" + user.aid + '/liverooms/', {
-            //     aid: user.aid,
-            //     ...data
-            // }).then(response => {
-            //     if (response.status === 200) {
-            //         const { code = 0, data = {}, msg = {} } = response.data || {};
-            //         console.log(data);
-            //         if (code === 200) {
-            //             message.success('创建成功!');
-            //             this.props.form.resetFields();
-            //             this.setModalState(false, false);
-            //             var { my_live_list } = this.props.alitaState;
-            //             const { liveList } = my_live_list || {};
-            //             const { live_room } = data;
-            //             liveList.unshift(live_room);
-            //             // 向用户直播列表中添加一个记录
-            //             this.props.setAlitaState({
-            //                 stateName: 'my_live_list',
-            //                 data: liveList
-            //             });
-            //         } else {
-            //             message.error('创建失败!')
-            //         }
-            //     } else {
-            //         message.error('网络请求失败！')
-            //     }
-            // }).catch(r => {
-            // })
+        const user = getLocalStorage('user');
+        VCloudAPI.post("/com/" + user.cid + '/resourses/', {
+            "aid":user.aid,
+            "name":name,
+            "rtype":rtype,
+            "size":size,
+            "label":label,
+            "res_url":res_url,
+            "pic_url":pic_url,
+            "intro":intro
+        }).then(response => {
+            if (response.status === 200) {
+                const { code = 0, data = {}, msg = {} } = response.data || {};
+                const resourse=data.resourse;
+                const newData=[...videoInfo,...resourse];
+                console.log(data.resourse);
+                console.log(newData);
+                if (code === 200) {
+                    // 向用户直播列表中添加一个记录
+                    message.success('成功获取点播列表')
+                    this.props.setAlitaState({
+                        stateName: 'vod_list_content',
+                        data: {
+                            videoInfo:newData
+                        }
+                    });
+                    
+
+                } else {
+                    message.error('获取列表失败!')
+                }
+            } else {
+                message.error('网络请求失败！')
+            }
+        }).catch(r => {
+        })
         
+        this.setModalState(false, false);
     }
 
     setModalState(visible, loading) {
@@ -202,9 +199,9 @@ class CreateVodModal extends Component {
     //tag标签添加删除所需函数
 
     handleClose = removedTag => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
-        this.setState({ tags });
+        const label = this.state.label.filter(tag => tag !== removedTag);
+        console.log(label);
+        this.setState({ label });
     };
 
     showInput = () => {
@@ -215,19 +212,19 @@ class CreateVodModal extends Component {
         this.setState({ inputValue: e.target.value });
     };
     handleIntroChange = e => {
-console.log(e.target.value);
-        this.setState({ video_intro: e.target.value });
+        console.log(e.target.value);
+        this.setState({ intro: e.target.value });
     };
 
     handleInputConfirm = () => {
         const { inputValue } = this.state;
-        let { tags } = this.state;
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
+        let { label } = this.state;
+        if (inputValue && label.indexOf(inputValue) === -1) {
+            label = [...label, inputValue];
         }
-        console.log(tags);
+        console.log(label);
         this.setState({
-            tags,
+            label,
             inputVisible: false,
             inputValue: '',
         });
@@ -262,8 +259,8 @@ console.log(e.target.value);
         const { data } = create_vod_modal;
         const { visible = false, loading = false } = data || {};
 
-        const { tags, inputVisible, inputValue } = this.state;
-        const tagChild = tags.map(this.forMap);
+        const { label, inputVisible, inputValue } = this.state;
+        const tagChild = label.map(this.forMap);
         return (
             <div>
                 <Modal
@@ -311,7 +308,7 @@ console.log(e.target.value);
                                 </Col>
                             </Row>
                         </div>
-                       
+
                         <div className="upload-style">
                             <Row>
                                 <Col span={5}>
@@ -360,7 +357,7 @@ console.log(e.target.value);
 
                         <Form.Item label="简介">
                             {getFieldDecorator('intro', {
-                              
+
                             })(<TextArea onChange={this.handleIntroChange} rows={3} placeholder='请输入视频简介' />)}
                         </Form.Item>
                     </Form>
