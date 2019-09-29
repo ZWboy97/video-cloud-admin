@@ -138,7 +138,7 @@ class LiveServePage extends React.Component {
         return (
             <div>
 
-                <Form labelCol={{ span: 2 }} wrapperCol={{ span: 15 }}>
+                <Form labelCol={{ span: 10}} wrapperCol={{ span: 14 }}>
                     <Form.Item label="低时延">
                         {getFieldDecorator('delay', {
 
@@ -172,7 +172,7 @@ class LiveServePage extends React.Component {
                     <div>
                         {liveConfig.transcode ? <div>
                             <Row>
-                                <Col span={10} offset={4}>
+                                <Col span={10} offset={6}>
                                     <Checkbox.Group defaultValue={liveConfig.transcode_type} onChange={this.handleCheck}>
                                         <Checkbox value={1}>1080p</Checkbox>
                                         <Checkbox value={2}>720p</Checkbox>
@@ -204,7 +204,7 @@ class LiveServePage extends React.Component {
                     <div>
                         {liveConfig.record?<div>
                     <Row>
-                        <Col span={6} offset={4}>
+                        <Col span={6} offset={7}>
                             <Select defaultValue={liveConfig.record_type} onChange={this.handleSelect}>
                                 <Option value={1}>Jack</Option>
                                 <Option value={2}>Lucy</Option>
@@ -217,20 +217,18 @@ class LiveServePage extends React.Component {
                 </div>:[]}
                     </div>
                     <Row>
-                        <Col span={2} offset={6}>
+                        <Col span={2} offset={9}>
                             <Button type="primary" onClick={this.handleSave}>保存</Button>
-                        </Col>
+                            </Col>
                     </Row>
-
-                    <Form.Item label="导播">
-                        {getFieldDecorator('lead', {
-
-                        })(
+                    <span>&nbsp;</span>
+                    <Row>
+                        <Col span={2} offset={9}>
                             <div >
-                                <a href="javascript:;" >进入导播台</a>
+                                <a href="javascript:;" ><u>进入导播台</u></a>
                             </div>
-                        )}
-                    </Form.Item>
+                            </Col>
+                    </Row> 
 
                 </Form>
 
