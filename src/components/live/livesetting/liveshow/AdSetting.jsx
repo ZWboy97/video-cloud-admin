@@ -17,7 +17,7 @@ class AdSetting extends React.Component {
 
         return (
             <div>
-                <Form labelCol={{ span: 5 }} wrapperCol={{ span: 14 }} onSubmit={this.handleOk}>
+                <Form labelCol={{ span: 9}} wrapperCol={{ span: 14 }} onSubmit={this.handleOk}>
                     <Form.Item label="跳转URL">
                         {getFieldDecorator('ad_jump_url', {
                             initialValue:liveConfig.ad_jump_url
