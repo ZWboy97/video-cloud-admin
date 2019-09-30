@@ -20,7 +20,8 @@ class HeaderPanel extends Component {
     render() {
         const { vod_list_content = {} } = this.props.alitaState || {};
         const { data = {} } = vod_list_content || {}
-        const { count=0} = data || {}
+        const { videoInfo } = data;
+        const count = videoInfo ? videoInfo.length : 0;
         return (
             <div className="header-panel">
                 <Statistic className="total-number" title="总频道数" value={20} />

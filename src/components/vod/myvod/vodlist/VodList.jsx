@@ -34,7 +34,7 @@ class VodList extends React.Component {
                     this.props.setAlitaState({
                         stateName: 'vod_list_content',
                         data: {
-                            "videoInfo": data
+                            "videoInfo": data ? data : []
                         }
                     });
                     console.log(data);
@@ -53,10 +53,11 @@ class VodList extends React.Component {
 
         const { vod_list_content = {} } = this.props.alitaState || {};
         const { data = {} } = vod_list_content || {}
+        console.log('data', data)
         const { videoInfo = [] } = data || {}
 
 
-        console.log(videoInfo)
+        console.log('videoinfo', videoInfo)
 
         return (
             <Row>
@@ -98,9 +99,9 @@ class VodList extends React.Component {
                                             <div className="action">
                                                 <a href="javascript:;">删除</a>
                                                 <Divider type="vertical" />
-                                                <a  href="javascript:;">设置</a>
+                                                <a href="javascript:;">设置</a>
                                                 <Divider type="vertical" />
-                                                <a  href="javascript:;">预览</a>
+                                                <a href="javascript:;">预览</a>
                                             </div>
                                         </Col>
                                     </Row>
