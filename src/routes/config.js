@@ -29,13 +29,13 @@ export default {
             ]
         },
         {
-            key: '/app/portal', title: '视频门户', icon: 'star',
+            key: '', title: '视频门户', icon: 'star',
             subs: [
-                { key: '/app/portal/index', title: '门户配置', component: 'PortalIndex' },
+                { key: '/app/portal/', title: '门户配置', component: 'PortalIndex' },
             ]
         },
         {
-            key: '/app/enterprise', title: '企业管理', icon: 'star',
+            key: '', title: '企业管理', icon: 'star',
             subs: [
                 { key: '/app/enterprise/account', title: '子账号管理', component: 'UserCenter' },
             ]

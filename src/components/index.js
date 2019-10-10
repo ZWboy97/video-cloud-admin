@@ -10,7 +10,7 @@ import PlayList from './videodemand/PlayListInfo/PlayList'
 import VideoListPage from './videodemand/VideoListPage';
 import AccountCenter from './account/overview/index';
 import MyVodIndex from './vod/myvod/MyVodIndex';
-import PortalIndex from './portal/index/PortalIndex';
+import PortalIndex from './portal/configure/PortalIndex';
 export default {
     Dashboard, MyLivesIndex, UserCenter, VideoUpload, LiveDetailPage, VideoListPage, AccountCenter, PlayList,
     MyVodIndex, PortalIndex
