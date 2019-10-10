@@ -8,7 +8,7 @@ class IndexPage extends React.Component {
 
 
     entryPortalEditPage = (e) => {
-        this.props.history.push('/app/portal/edit/');
+        this.props.history.push('/app/portal/configure/edit/');
     }
 
 

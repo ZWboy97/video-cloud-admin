@@ -1,13 +1,12 @@
 import React from 'react';
-import BreadcrumbCustom from 'mycomponents/BreadcrumbCustom';
-import { message } from 'antd';
-class Accountindex extends React.Component {
-    render() {
-        return (
-            <div>
-                <BreadcrumbCustom first="子账号管理" />
-            </div>)
-    }
-}
+import { Route, Switch, Redirect } from 'react-router-dom';
+import AccountDetailIndex from './AccountDetail/AccountDetailIndex';
+import AccountListIndex from './AccountList/AccountListIndex';
 
-export default Accountindex;
+export default () => (
+    <Switch>
+        <Route exact path="/app/enterprise/account" render={() => (<Redirect to="/app/enterprise/account/list/" />)} />
+        <Route exact path="/app/enterprise/account/list/" component={AccountListIndex} />
+        <Route exact path="/app/enterprise/account/detail/" component={AccountDetailIndex} />
+    </Switch>
+)
