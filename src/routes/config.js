@@ -29,6 +29,18 @@ export default {
             ]
         },
         {
+            key: '/app/portal/', title: '视频门户', icon: 'star',
+            subs: [
+                { key: '/app/portal/configure', title: '门户配置', component: 'PortalIndex' },
+            ]
+        },
+        {
+            key: '/app/enterprise/', title: '企业管理', icon: 'star',
+            subs: [
+                { key: '/app/enterprise/account', title: '子账号管理', component: 'AccountIndex' },
+            ]
+        },
+        {
             key: '/app/account', title: '账户管理', icon: 'area-chart',
             subs: [
                 { key: '/app/account/overview', title: '账户总览', component: 'AccountCenter' },
