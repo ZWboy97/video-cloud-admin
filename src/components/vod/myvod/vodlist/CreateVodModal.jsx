@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Button, Modal, Form, Select, Input, DatePicker, message, Icon, Upload, Row, Col, Tag } from 'antd';
+import { Button, Modal, Form, Input, message, Icon, Upload, Row, Col, Tag } from 'antd';
 import './style.less'
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI, TESTJYLAPI } from './../../../../axios/api';
+import { VCloudAPI } from './../../../../axios/api';
 import OssUploader from '../../../../utils/OssUploader';
 import { getLocalStorage } from './../../../../utils/index';
 import { checkUserInfo } from './../../../../utils/UserUtils';
@@ -12,7 +12,7 @@ import { TweenOneGroup } from 'rc-tween-one';
 
 const { TextArea } = Input;
 const { Dragger } = Upload;
-var rtype,size;
+var rtype, size;
 
 class CreateVodModal extends Component {
 
@@ -59,7 +59,7 @@ class CreateVodModal extends Component {
     beforeUploadCover = file => {
         console.log('beforeuploascover');
 
-        console.log('上传文件名',file.name);
+        console.log('上传文件名', file.name);
         console.log(file.size);
         //const video_type=file.name.substring(file.name.indexOf('.'),file.name.length);
         // 创建Uploader
@@ -91,8 +91,8 @@ class CreateVodModal extends Component {
 
     beforeUploadVideo = file => {
         console.log('beforeuploasvideo')
-        size=file.size/1024/1024;
-        rtype=file.name.substring(file.name.indexOf('.')+1,file.name.length);
+        size = file.size / 1024 / 1024;
+        rtype = file.name.substring(file.name.indexOf('.') + 1, file.name.length);
         // 创建Uploader
         const upload = new OssUploader({
             ...this.options,//与文件无关的一些配置
@@ -148,19 +148,19 @@ class CreateVodModal extends Component {
         }
         const user = getLocalStorage('user');
         VCloudAPI.post("/com/" + user.cid + '/resourses/', {
-            "aid":user.aid,
-            "name":name,
-            "rtype":rtype,
-            "size":size,
-            "label":label,
-            "res_url":res_url,
-            "pic_url":pic_url,
-            "intro":intro
+            "aid": user.aid,
+            "name": name,
+            "rtype": rtype,
+            "size": size,
+            "label": label,
+            "res_url": res_url,
+            "pic_url": pic_url,
+            "intro": intro
         }).then(response => {
             if (response.status === 200) {
                 const { code = 0, data = {}, msg = {} } = response.data || {};
-                const resourse=data.resourse;
-                const newData=[...videoInfo,...resourse];
+                const resourse = data.resourse;
+                const newData = [...videoInfo, ...resourse];
                 console.log(data.resourse);
                 console.log(newData);
                 if (code === 200) {
@@ -169,10 +169,10 @@ class CreateVodModal extends Component {
                     this.props.setAlitaState({
                         stateName: 'vod_list_content',
                         data: {
-                            videoInfo:newData
+                            videoInfo: newData
                         }
                     });
-                    
+
 
                 } else {
                     message.error('获取列表失败!')
@@ -182,7 +182,7 @@ class CreateVodModal extends Component {
             }
         }).catch(r => {
         })
-        
+
         this.setModalState(false, false);
     }
 

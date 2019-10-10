@@ -1,10 +1,10 @@
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-import InfiniteScroll from 'react-infinite-scroller';
 import { List, message, Tag, Row, Col, Icon, Divider } from 'antd';
 import { VCloudAPI } from '../../../../axios/api';
 import { getLocalStorage } from '../../../../utils/index';
 import { checkUserInfo } from '../../../../utils/UserUtils';
+import { withRouter } from 'react-router-dom';
 import './style.less';
 
 
@@ -97,11 +97,20 @@ class VodList extends React.Component {
                                         </Col>
                                         <Col span={6}>
                                             <div className="action">
-                                                <a href="javascript:;">删除</a>
+                                                <a href="http://"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                    }}
+                                                >删除</a>
                                                 <Divider type="vertical" />
-                                                <a href="javascript:;">设置</a>
+                                                <a href="http://"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        this.props.history.push(`/app/myvod/vodsetting/${item.rid}`)
+                                                    }}
+                                                >设置</a>
                                                 <Divider type="vertical" />
-                                                <a href="javascript:;">预览</a>
+                                                <a href="http://">预览</a>
                                             </div>
                                         </Col>
                                     </Row>
@@ -119,4 +128,4 @@ class VodList extends React.Component {
     }
 }
 
-export default connectAlita()(VodList);
+export default withRouter(connectAlita()(VodList));
