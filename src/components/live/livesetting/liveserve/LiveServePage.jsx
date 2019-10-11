@@ -224,7 +224,7 @@ class LiveServePage extends React.Component {
                     <span>&nbsp;</span>
                     <Row>
                         <Col span={2} offset={9}>
-                            <div >
+                            <div>
                                 <a href="javascript:;" ><u>进入导播台</u></a>
                             </div>
                             </Col>

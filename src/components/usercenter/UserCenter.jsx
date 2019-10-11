@@ -172,6 +172,7 @@ class UserCenter extends Component {
         const { TextArea } = Input;
 
         const tagsFromServer = userInfo.auth || [];
+        //测试
 
         return (
             <div className="gutter-example button-demo">
