@@ -28,8 +28,6 @@ class IndexPage extends React.Component {
                         >
                             <div className="statist-number">30</div>
                             <div className="total-number">总访问用户:2</div>
-
-
                         </Card>
                         <Card title="今日访问量(PV)"
                             headStyle={{ textAlign: "center" }}
