@@ -1,8 +1,10 @@
 import React from 'react';
 import BreadcrumbCustom from 'mycomponents/BreadcrumbCustom';
-import { message, Row, Col, Carousel, List } from 'antd';
+import { message, Row, Col, Carousel, List, Switch } from 'antd';
+import BannerEdit from './BannerEdit';
 import './style.less';
-import InfiniteScroll from 'react-infinite-scroller';
+import RecommendEdit from './RecommendEdit';
+import VideoListEdit from './VideoListEdit';
 const preview_top = require('../../../../style/imgs/mobile-preview-top.png')
 
 class PortalEditIndex extends React.Component {
@@ -21,6 +23,7 @@ class PortalEditIndex extends React.Component {
         }, {
             img: "https://sta-op.douyucdn.cn/douyu-vrp-admin/2019/09/02/d14acae92df6113cba98bf1c98be3fbe.jpg?x-oss-process=image/format,webp"
         },],
+        edit_index: 0
     }
 
 
@@ -38,7 +41,7 @@ class PortalEditIndex extends React.Component {
                                     src={preview_top} alt="" />
                                 <div className="banner-group"
                                     onClick={() => {
-                                        message.success('编辑Banner部分')
+                                        this.setState({ edit_index: 0 });
                                     }}>
                                     <Carousel className=".ant-carousel .slick-slide">
                                         {
@@ -57,7 +60,7 @@ class PortalEditIndex extends React.Component {
                                 <div className="divider"></div>
                                 <div className="recommend"
                                     onClick={() => {
-                                        message.success('编辑推荐部分')
+                                        this.setState({ edit_index: 1 });
                                     }}>
                                     <div className="card-title">推荐内容</div>
                                     <div className="recommend-list">
@@ -81,7 +84,7 @@ class PortalEditIndex extends React.Component {
                                 <div className="divider"></div>
                                 <div className="video-list"
                                     onClick={() => {
-                                        message.success('编辑视频列表')
+                                        this.setState({ edit_index: 2 })
                                     }}>
                                     <div className="card-title">视频列表</div>
                                     <div>
@@ -93,9 +96,17 @@ class PortalEditIndex extends React.Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col className="preview-container" span={14}>
+                        <Col className="eidt-container" span={14}>
                             <div className="edit-preview">
-                                设置界面
+                                {
+                                    this.state.edit_index === 0 ? (<BannerEdit></BannerEdit>) : ""
+                                }
+                                {
+                                    this.state.edit_index === 1 ? (<RecommendEdit></RecommendEdit>) : ""
+                                }
+                                {
+                                    this.state.edit_index === 2 ? (<VideoListEdit></VideoListEdit>) : ""
+                                }
                             </div>
                         </Col>
                     </Row>
