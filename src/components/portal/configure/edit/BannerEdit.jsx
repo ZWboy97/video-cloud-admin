@@ -2,29 +2,38 @@ import React from 'react';
 import { Card, Form, Input, Button, message, Table } from 'antd';
 import { connectAlita } from 'redux-alita';
 const { TextArea } = Input;
-const { Column, ColumnGroup } = Table;
+const { Column } = Table;
 
 class BannerEdit extends React.Component {
 
-    state = {
-        banner_list: [
-            {
-                order: '1',
-                title: '第一个直播',
-            },
-            {
-                order: '2',
-                title: '第二个直播',
-            },
-            {
-                order: '3',
-                title: '第三个直播',
-            },
-            {
-                order: '4',
-                title: '第四个直播',
-            },
-        ]
+    //初始化state，之后可以去掉
+    componentWillMount() {
+        const { portal_configure_data } = this.props.alitaState || {}
+        const portalData = portal_configure_data ? portal_configure_data.data : {};
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: {
+                ...portalData,
+                banner_list: [
+                    {
+                        order: '1',
+                        title: '第一个直播',
+                    },
+                    {
+                        order: '2',
+                        title: '第二个直播',
+                    },
+                    {
+                        order: '3',
+                        title: '第三个直播',
+                    },
+                    {
+                        order: '4',
+                        title: '第四个直播',
+                    },
+                ]
+            }
+        })
     }
 
 
@@ -59,6 +68,9 @@ class BannerEdit extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { portal_configure_data } = this.props.alitaState || {};
+        const bannerData = portal_configure_data ? portal_configure_data.data.banner_list : [];
+
         const formItemLayout = {
             labelCol: {
                 xs: { span: 6 },
@@ -115,7 +127,7 @@ class BannerEdit extends React.Component {
                                 size={"middle"}
                                 pagination={{ pageSize: 3 }}
                                 style={{ maxHeight: "300px" }}
-                                dataSource={this.state.banner_list} >
+                                dataSource={bannerData} >
                                 <Column title="序号" dataIndex="order" key="order" />
                                 <Column title="名称" dataIndex="title" key="title" />
                                 <Column title="操作" key="action"

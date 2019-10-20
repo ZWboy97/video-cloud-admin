@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from 'mycomponents/BreadcrumbCustom';
-import { message, Row, Col, Carousel, List, Switch } from 'antd';
+import { Row, Col, Carousel } from 'antd';
 import BannerEdit from './BannerEdit';
 import './style.less';
 import RecommendEdit from './RecommendEdit';
