@@ -62,66 +62,60 @@ class VodList extends React.Component {
         return (
             <Row>
                 <Col span={20} offset={2}>
-                    <div className="infinite-container">
-
-                        <List
-                            itemLayout="vertical"
-                            size="large"
-                            pagination={{
-                                onChange: page => {
-                                    console.log(page);
-                                },
-                                pageSize: 5,
-                            }}
-                            dataSource={videoInfo}
-                            renderItem={item => (
-                                <div>
-                                    <Row>
-                                        <Col span={4}>
-                                            <img src={item.pic_url} alt="avatar" style={{ width: '100%', height: '90px' }} />
-                                        </Col>
-                                        <Col span={13} offset={1}>
-                                            <div className="top-show">
-                                                <span className="video-name">{item.name}</span>
-                                                <span className="video-time">{item.time}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                <span className="video-intro">{item.label.map(tag => (
-                                                    <Tag
-                                                        key={tag}
-                                                        color={"blue"}
-                                                    >
-                                                        {tag}
-                                                    </Tag>
-                                                ))}</span>
-                                            </div>
-                                            <div className="video-intro">{item.intro}</div>
-                                        </Col>
-                                        <Col span={6}>
-                                            <div className="action">
-                                                <a href="http://"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                    }}
-                                                >删除</a>
-                                                <Divider type="vertical" />
-                                                <a href="http://"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        this.props.history.push(`/app/myvod/vodsetting/${item.rid}`)
-                                                    }}
-                                                >设置</a>
-                                                <Divider type="vertical" />
-                                                <a href="http://">预览</a>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Divider />
-                                </div>
-                            )}
-                        />
-
-                        <div style={{ float: "left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }} />
-
-                    </div >
+                    <List
+                        itemLayout="vertical"
+                        size="large"
+                        pagination={{
+                            onChange: page => {
+                                console.log(page);
+                            },
+                            pageSize: 5,
+                        }}
+                        dataSource={videoInfo}
+                        renderItem={item => (
+                            <div>
+                                <Row>
+                                    <Col span={4}>
+                                        <img src={item.pic_url} alt="avatar" style={{ width: '100%', height: '90px' }} />
+                                    </Col>
+                                    <Col span={13} offset={1}>
+                                        <div className="top-show">
+                                            <span className="video-name">{item.name}</span>
+                                            <span className="video-time">{item.time}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <span className="video-intro">{item.label.map(tag => (
+                                                <Tag
+                                                    key={tag}
+                                                    color={"blue"}
+                                                >
+                                                    {tag}
+                                                </Tag>
+                                            ))}</span>
+                                        </div>
+                                        <div className="video-intro">{item.intro}</div>
+                                    </Col>
+                                    <Col span={6}>
+                                        <div className="action">
+                                            <a href="http://"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                }}
+                                            >删除</a>
+                                            <Divider type="vertical" />
+                                            <a href="http://"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    this.props.history.push(`/app/myvod/vodsetting/${item.rid}`)
+                                                }}
+                                            >设置</a>
+                                            <Divider type="vertical" />
+                                            <a href="http://">预览</a>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Divider />
+                            </div>
+                        )}
+                    />
                 </Col>
             </Row>
         );
