@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Form, Input, Button, message, Table } from 'antd';
+import { connectAlita } from 'redux-alita';
 const { TextArea } = Input;
 const { Column, ColumnGroup } = Table;
 
@@ -33,6 +34,7 @@ class BannerEdit extends React.Component {
     }
 
     deleteBannerItem = (e, obj) => {
+        e.preventDefault();
         const data = this.state.banner_list;
         data.splice(obj.order - 1, 1);
         for (var i = 0; i < data.length; i++) {
@@ -40,6 +42,17 @@ class BannerEdit extends React.Component {
         }
         this.setState({
             banner_list: data
+        })
+    }
+
+    addBannerClick = (e) => {
+        e.preventDefault();
+        console.log('banneradd')
+        this.props.setAlitaState({
+            stateName: 'portal_add_modal',
+            data: {
+                visible: true
+            }
         })
     }
 
@@ -89,7 +102,7 @@ class BannerEdit extends React.Component {
                         </Form.Item >
                         <Form.Item label="Banner列表" >
                             {getFieldDecorator('portal_desc')(
-                                <a href={"http://"}>点击添加Banner</ a>,
+                                <a onClick={(e) => this.addBannerClick(e)}>点击添加Banner</ a>,
                             )}
                         </Form.Item>
                         <Form.Item
@@ -133,4 +146,4 @@ class BannerEdit extends React.Component {
 
 }
 
-export default Form.create()(BannerEdit);
+export default Form.create()(connectAlita()(BannerEdit));
