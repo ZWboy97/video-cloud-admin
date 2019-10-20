@@ -5,6 +5,7 @@ import BannerEdit from './BannerEdit';
 import './style.less';
 import RecommendEdit from './RecommendEdit';
 import VideoListEdit from './VideoListEdit';
+import SelectModal from './select/SelectModal';
 const preview_top = require('../../../../style/imgs/mobile-preview-top.png')
 
 class PortalEditIndex extends React.Component {
@@ -112,6 +113,7 @@ class PortalEditIndex extends React.Component {
                     </Row>
 
                 </div>
+                <SelectModal></SelectModal>
             </div>)
     }
 }
