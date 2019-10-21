@@ -2,6 +2,7 @@ import React from 'react';
 import BreadcrumbCustom from 'mycomponents/BreadcrumbCustom';
 import { Row, Col, Carousel } from 'antd';
 import BannerEdit from './BannerEdit';
+import { connectAlita } from 'redux-alita';
 import './style.less';
 import RecommendEdit from './RecommendEdit';
 import VideoListEdit from './VideoListEdit';
@@ -12,11 +13,6 @@ class PortalEditIndex extends React.Component {
 
 
     state = {
-        banner: [{
-            img: "http://10.3.200.202/cache/11/04/video-cloud-bupt.oss-cn-beijing.aliyuncs.com/784c655a133190cc7756cf18c2d35609/bBzmSQakeG.jpg"
-        }, {
-            img: "http://10.3.200.202/cache/11/04/video-cloud-bupt.oss-cn-beijing.aliyuncs.com/784c655a133190cc7756cf18c2d35609/bBzmSQakeG.jpg"
-        }],
         recommend: [{
             img: "https://sta-op.douyucdn.cn/douyu-vrp-admin/2019/09/02/d14acae92df6113cba98bf1c98be3fbe.jpg?x-oss-process=image/format,webp"
         }, {
@@ -27,8 +23,27 @@ class PortalEditIndex extends React.Component {
         edit_index: 0
     }
 
+    componentWillMount() {
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: {
+                title: '视频门户',
+                desc: "无",
+                banner_list: [],
+                recommend_list: [],
+                video_list: []
+            }
+        })
+        // 从服务器读取数据
+    }
+
 
     render() {
+
+        const { portal_configure_data } = this.props.alitaState || {};
+        const portalTitle = portal_configure_data ? portal_configure_data.data.title : "";
+        const portalDesc = portal_configure_data ? portal_configure_data.data.desc : "";
+        const bannerData = portal_configure_data ? portal_configure_data.data.banner_list : [];
 
         return (
             <div className="portal-edit-index-container">
@@ -37,25 +52,32 @@ class PortalEditIndex extends React.Component {
                     <Row className="edit-preview-container match-parent">
                         <Col className="preview-container" span={10}>
                             <div className="preview-panel">
-                                <div className="mobile-top-title">门户名称</div>
+                                <div className="mobile-top-title">{portalTitle}</div>
                                 <img className="mobile-top-image"
                                     src={preview_top} alt="" />
                                 <div className="banner-group"
                                     onClick={() => {
                                         this.setState({ edit_index: 0 });
                                     }}>
-                                    <Carousel className=".ant-carousel .slick-slide">
-                                        {
-                                            this.state.banner.map((item) => {
-                                                return (
-                                                    <div className="match-parent">
-                                                        <img className="banner-image"
-                                                            src={item.img} alt="" />
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </Carousel>
+                                    {
+                                        bannerData.length > 0 ? (
+                                            <Carousel className=".ant-carousel .slick-slide">
+                                                {
+                                                    bannerData.map((item) => {
+                                                        return (
+                                                            <div className="match-parent">
+                                                                <img className="banner-image"
+                                                                    src={item.pic_url} alt="" />
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </Carousel>
+                                        ) : (
+                                                <div className="card-title">Banner区域</div>
+                                            )
+                                    }
+
                                     <div className="divider-white"></div>
                                 </div>
                                 <div className="divider"></div>
@@ -90,7 +112,7 @@ class PortalEditIndex extends React.Component {
                                     <div className="card-title">视频列表</div>
                                     <div>
                                         <div style={{ display: '-webkit-box', display: 'flex' }}>
-                                            <img style={{ width: '100%', height: '200px' }} src={this.state.banner[0].img} alt="" />
+                                            <img style={{ width: '100%', height: '200px' }} src={this.state.recommend[0].img} alt="" />
                                         </div>
                                     </div>
 
@@ -118,4 +140,4 @@ class PortalEditIndex extends React.Component {
     }
 }
 
-export default PortalEditIndex;
+export default connectAlita()(PortalEditIndex);

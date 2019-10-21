@@ -6,61 +6,41 @@ const { Column } = Table;
 
 class BannerEdit extends React.Component {
 
-    //初始化state，之后可以去掉
-    componentWillMount() {
-        const { portal_configure_data } = this.props.alitaState || {}
-        const portalData = portal_configure_data ? portal_configure_data.data : {};
-        this.props.setAlitaState({
-            stateName: 'portal_configure_data',
-            data: {
-                ...portalData,
-                banner_list: [
-                    {
-                        order: '1',
-                        title: '第一个直播',
-                    },
-                    {
-                        order: '2',
-                        title: '第二个直播',
-                    },
-                    {
-                        order: '3',
-                        title: '第三个直播',
-                    },
-                    {
-                        order: '4',
-                        title: '第四个直播',
-                    },
-                ]
-            }
-        })
+    handleSubmit = (e) => {
+        // a
+        message.success('ok')
     }
 
-
-    handleSubmit = (e) => {
-        message.success('ok')
-
+    getPortalConfigureData() {
+        const { portal_configure_data } = this.props.alitaState || {}
+        const portalData = portal_configure_data ? portal_configure_data.data : {};
+        return portalData;
     }
 
     deleteBannerItem = (e, obj) => {
         e.preventDefault();
-        const data = this.state.banner_list;
-        data.splice(obj.order - 1, 1);
-        for (var i = 0; i < data.length; i++) {
-            data[i].order = i + 1;
+        const data = this.getPortalConfigureData();
+        const banner_list = data ? this.getPortalConfigureData().banner_list : [] || [];
+        banner_list.splice(obj.order - 1, 1);
+        for (var i = 0; i < banner_list.length; i++) {
+            banner_list[i].order = i + 1;
         }
-        this.setState({
-            banner_list: data
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: {
+                ...data,
+                banner_list: banner_list
+            }
         })
     }
 
     addBannerClick = (e) => {
         e.preventDefault();
-        console.log('banneradd')
         this.props.setAlitaState({
             stateName: 'portal_add_modal',
             data: {
-                visible: true
+                visible: true,
+                data_desc: 'banner_list'
             }
         })
     }
@@ -69,8 +49,9 @@ class BannerEdit extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { portal_configure_data } = this.props.alitaState || {};
+        const portalTitle = portal_configure_data ? portal_configure_data.data.title : "";
+        const portalDesc = portal_configure_data ? portal_configure_data.data.desc : "";
         const bannerData = portal_configure_data ? portal_configure_data.data.banner_list : [];
-
         const formItemLayout = {
             labelCol: {
                 xs: { span: 6 },
@@ -103,12 +84,15 @@ class BannerEdit extends React.Component {
                         <Form.Item label="门户名称">
                             {getFieldDecorator('portal_name', {
                                 rules: [{ required: true, message: '请输入您的门户名称!' }],
+                                initialValue: portalTitle
                             })(
                                 <Input placeholder="输入门户名称" />,
                             )}
                         </Form.Item>
                         <Form.Item label="门户简介">
-                            {getFieldDecorator('portal_desc')(
+                            {getFieldDecorator('portal_desc', {
+                                initialValue: portalDesc
+                            })(
                                 <TextArea rows={3} />,
                             )}
                         </Form.Item >
