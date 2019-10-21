@@ -5,36 +5,6 @@ const { Column } = Table;
 
 class VideoListEdit extends React.Component {
 
-    //初始化state，之后可以去掉
-    componentWillMount() {
-        const { portal_configure_data } = this.props.alitaState || {}
-        const portalData = portal_configure_data ? portal_configure_data.data : {};
-        this.props.setAlitaState({
-            stateName: 'portal_configure_data',
-            data: {
-                ...portalData,
-                video_list: [
-                    {
-                        order: '1',
-                        title: '第一个直播',
-                    },
-                    {
-                        order: '2',
-                        title: '第二个直播',
-                    },
-                    {
-                        order: '3',
-                        title: '第三个直播',
-                    },
-                    {
-                        order: '4',
-                        title: '第四个直播',
-                    },
-                ]
-            }
-        })
-    }
-
     deleteVideoListItem = (e, obj) => {
         e.preventDefault();
         const data = this.state.video_list;
@@ -53,7 +23,8 @@ class VideoListEdit extends React.Component {
         this.props.setAlitaState({
             stateName: 'portal_add_modal',
             data: {
-                visible: true
+                visible: true,
+                data_desc: 'video_list'
             }
         })
     }
@@ -107,11 +78,12 @@ class VideoListEdit extends React.Component {
                             }}>
                             <Table
                                 size={"middle"}
-                                pagination={{ pageSize: 3 }}
+                                pagination={{ pageSize: 5 }}
                                 style={{ maxHeight: "300px" }}
                                 dataSource={videoListData} >
                                 <Column title="序号" dataIndex="order" key="order" />
                                 <Column title="名称" dataIndex="title" key="title" />
+                                <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
                                     render={(text, record) => {
                                         const obj = record;

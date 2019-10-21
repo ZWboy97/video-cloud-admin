@@ -19,7 +19,6 @@ class SelectFromVod extends React.Component {
                 const { code = 0, data = {}, msg = {} } = response.data || {};
                 console.log(data)
                 if (code === 200) {
-                    // 向用户直播列表中添加一个记录
                     this.props.setAlitaState({
                         stateName: 'vod_list_content',
                         data: {
@@ -34,7 +33,47 @@ class SelectFromVod extends React.Component {
                 message.error('网络请求失败！')
             }
         }).catch(r => {
+            message.error('获取列表失败!')
         })
+    }
+
+    handleSelect = (e, record) => {
+        e.preventDefault();
+        console.log('select vod', record);
+        const newItem = {
+            title: record.name,
+            type: 'vod',
+            pic_url: record.pic_url,
+            link_url: record.display_url,
+            rid: record.rid,
+            intro: record.intro,
+        }
+        const { data } = this.props.alitaState.portal_configure_data || {};
+        const dataDesc = this.getDataDesc();
+        data[dataDesc].unshift(newItem);
+        for (var i = 0; i < data[dataDesc].length; i++) {
+            data[dataDesc][i].order = i + 1;
+        }
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: data,
+        })
+        message.success('选择成功');
+        this.dismissAddModal();
+    }
+
+    dismissAddModal() {
+        this.props.setAlitaState({
+            stateName: 'portal_add_modal',
+            data: {
+                visible: false
+            }
+        })
+    }
+
+    getDataDesc() {
+        const { data } = this.props.alitaState.portal_add_modal || {};
+        return data ? data.data_desc : ''
     }
 
 
@@ -79,9 +118,7 @@ class SelectFromVod extends React.Component {
                                     <Col span={2}>
                                         <div className="action">
                                             <a href="http://"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                }}
+                                                onClick={(e) => this.handleSelect(e, item)}
                                             >选择</a>
                                         </div>
                                     </Col>

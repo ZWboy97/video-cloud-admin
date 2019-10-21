@@ -5,36 +5,6 @@ const { Column } = Table;
 
 class RecommendEdit extends React.Component {
 
-    //初始化state，之后可以去掉
-    componentWillMount() {
-        const { portal_configure_data } = this.props.alitaState || {}
-        const portalData = portal_configure_data ? portal_configure_data.data : {};
-        this.props.setAlitaState({
-            stateName: 'portal_configure_data',
-            data: {
-                ...portalData,
-                recommend_list: [
-                    {
-                        order: '1',
-                        title: '第一个直播',
-                    },
-                    {
-                        order: '2',
-                        title: '第二个直播',
-                    },
-                    {
-                        order: '3',
-                        title: '第三个直播',
-                    },
-                    {
-                        order: '4',
-                        title: '第四个直播',
-                    },
-                ]
-            }
-        })
-    }
-
     deleteRecommedItem = (e, obj) => {
         e.preventDefault();
         const data = this.state.recommend_list;
@@ -53,7 +23,8 @@ class RecommendEdit extends React.Component {
         this.props.setAlitaState({
             stateName: 'portal_add_modal',
             data: {
-                visible: true
+                visible: true,
+                data_desc: 'recommend_list'
             }
         })
     }
@@ -113,6 +84,7 @@ class RecommendEdit extends React.Component {
                                 dataSource={recommendListData} >
                                 <Column title="序号" dataIndex="order" key="order" />
                                 <Column title="名称" dataIndex="title" key="title" />
+                                <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
                                     render={(text, record) => {
                                         const obj = record;

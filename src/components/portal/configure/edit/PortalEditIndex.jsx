@@ -44,6 +44,9 @@ class PortalEditIndex extends React.Component {
         const portalTitle = portal_configure_data ? portal_configure_data.data.title : "";
         const portalDesc = portal_configure_data ? portal_configure_data.data.desc : "";
         const bannerData = portal_configure_data ? portal_configure_data.data.banner_list : [];
+        const recommendData = portal_configure_data ? portal_configure_data.data.recommend_list : [];
+        const videoListData = portal_configure_data ? portal_configure_data.data.video_list : [];
+
 
         return (
             <div className="portal-edit-index-container">
@@ -74,10 +77,14 @@ class PortalEditIndex extends React.Component {
                                                 }
                                             </Carousel>
                                         ) : (
-                                                <div className="card-title">Banner区域</div>
+                                                <Carousel className=".ant-carousel .slick-slide">
+                                                    <div className="match-parent">
+                                                        <img className="banner-image"
+                                                            src="https://sta-op.douyucdn.cn/douyu-vrp-admin/2019/09/02/d14acae92df6113cba98bf1c98be3fbe.jpg?x-oss-process=image/format,webp" alt="" />
+                                                    </div>
+                                                </Carousel>
                                             )
                                     }
-
                                     <div className="divider-white"></div>
                                 </div>
                                 <div className="divider"></div>
@@ -88,18 +95,28 @@ class PortalEditIndex extends React.Component {
                                     <div className="card-title">推荐内容</div>
                                     <div className="recommend-list">
                                         {
-                                            this.state.recommend ?
+                                            recommendData.length > 0 ?
                                                 <div className="recommend-wrapper">
                                                     {
-                                                        this.state.recommend.map(v => (
+                                                        recommendData.map(v => (
                                                             <div className="recommend-item">
-                                                                <img className="recommed-img" src={v.img} alt="" />
+                                                                <img className="recommed-img" src={v.pic_url} alt="" />
                                                             </div>
                                                         ))
                                                     }
                                                 </div>
                                                 :
-                                                ""
+                                                (
+                                                    <div className="recommend-wrapper">
+                                                        {
+                                                            this.state.recommend.map(v => (
+                                                                <div className="recommend-item">
+                                                                    <img className="recommed-img" src={v.img} alt="" />
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                )
                                         }
                                     </div>
                                     <div className="divider-white"></div>
@@ -111,9 +128,18 @@ class PortalEditIndex extends React.Component {
                                     }}>
                                     <div className="card-title">视频列表</div>
                                     <div>
-                                        <div style={{ display: '-webkit-box', display: 'flex' }}>
-                                            <img style={{ width: '100%', height: '200px' }} src={this.state.recommend[0].img} alt="" />
-                                        </div>
+                                        {
+                                            videoListData.length > 0 ? (
+                                                <div style={{ display: '-webkit-box', display: 'flex' }}>
+                                                    <img style={{ width: '100%', height: '200px' }} src={videoListData[0].pic_url} alt="" />
+                                                </div>
+                                            ) : (
+                                                    <div style={{ display: '-webkit-box', display: 'flex' }}>
+                                                        <img style={{ width: '100%', height: '200px' }} src="https://sta-op.douyucdn.cn/douyu-vrp-admin/2019/09/02/d14acae92df6113cba98bf1c98be3fbe.jpg?x-oss-process=image/format,webp" alt="" />
+                                                    </div>
+                                                )
+                                        }
+
                                     </div>
 
                                 </div>
