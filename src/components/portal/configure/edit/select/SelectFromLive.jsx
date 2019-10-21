@@ -3,20 +3,13 @@ import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from 'myaxios/api';
 import { getLocalStorage } from 'myutils/index';
 import { checkUserInfo } from 'myutils/UserUtils';
-import { Table, Divider, message, Dropdown, Menu, Icon, Popconfirm } from 'antd'
+import { Table, message } from 'antd'
 
 class SelectFromLive extends React.Component {
 
 
     constructor(props) {
         super(props);
-        this.state = {
-            isLoading: false,
-            selectedRecord: {} //操作的record
-        }
-        this.handleLink = this.handleLink.bind(this);
-        this.handleSetting = this.handleSetting.bind(this);
-        this.handleControl = this.handleControl.bind(this);
 
         this.columns = [
             {
@@ -80,45 +73,12 @@ class SelectFromLive extends React.Component {
                 align: 'center',
                 render: (text, record) =>
                     <div className="operation-item">
-                        <a className="live-link" href="http://" onClick={(e) => this.handleLink(e, record)}>链接</a>
-                        <Divider type="vertical" />
-                        <a className="live-link" href="http://" onClick={(e) => this.handleControl(e, record)}>控制台</a>
-                        <Divider type="vertical" />
-                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
-                        <Divider type="vertical" />
-                        <Dropdown className="live-link" onClick={(e) => this.handleDropdownClick(e, record)} overlay={this.menu} trigger={['click']}>
-                            <a className="ant-dropdown-link" href="#">
-                                更多<Icon type="down" />
-                            </a>
-                        </Dropdown>
+                        <a className="live-link" href="http://"
+                            onClick={(e) => this.handleSelect(e, record)}>
+                            选择</a>
                     </div>
             },
         ]
-
-        this.menu = (
-            <Menu className="live-link" >
-                <Menu.Item>
-                    <Popconfirm
-                        title="确认关闭该直播间?"
-                        onConfirm={(e, record) => this.handleChangeState(e, this.state.selectedRecord)}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        {this.state.selectedRecord.status === 3 ? '开启直播间' : '关闭直播间'}
-                    </Popconfirm>
-                </Menu.Item>
-                <Menu.Item>
-                    <Popconfirm
-                        title="删除后将无法恢复，确认删除该直播间?"
-                        onConfirm={(e, record) => this.handleDelete(e, this.state.selectedRecord)}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <a className="live-link" href="http://">删除直播间</a>
-                    </Popconfirm>
-                </Menu.Item>
-            </Menu>
-        );
     }
 
     componentDidMount() {
@@ -126,9 +86,6 @@ class SelectFromLive extends React.Component {
             return;
         }
         var user = getLocalStorage('user');
-        this.setState({
-            isLoading: true
-        })
         VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
         ).then(response => {
             console.log('success：', response.data)
@@ -147,107 +104,52 @@ class SelectFromLive extends React.Component {
             }
         }).catch((e) => {
             message.error('获取直播列表失败!');
-        }).finally(() => {
-            this.setState({
-                isLoading: false
-            })
         })
     }
 
-    handleLink(e, record) {
+    handleSelect = (e, record) => {
         e.preventDefault();
+        console.log('select live', record);
+        const newItem = {
+            title: record.name,
+            type: 'live',
+            pic_url: record.picture_url,
+            link_url: record.display_url,
+            lid: record.lid,
+            intro: record.intro,
+            start_time: record.start_time,
+            end_time: record.end_time,
+            permission: record.permission,
+            kind: record.kind,
+            size: record.size,
+            status: record.status
+        }
+        const { data } = this.props.alitaState.portal_configure_data || {};
+        const dataDesc = this.getDataDesc();
+        data[dataDesc].unshift(newItem);
+        for (var i = 0; i < data[dataDesc].length; i++) {
+            data[dataDesc][i].order = i + 1;
+        }
         this.props.setAlitaState({
-            stateName: 'live_url_modal',
-            data: {
-                visible: true,
-                liveData: record
-            }
+            stateName: 'portal_configure_data',
+            data: data,
         })
+        message.success('选择成功');
+        this.dismissAddModal();
     }
-    handleSetting(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/mylive/livesetting/' + record.lid);
+
+    dismissAddModal() {
         this.props.setAlitaState({
-            stateName: 'live_setting_page',
+            stateName: 'portal_add_modal',
             data: {
-                liveData: record
-            }
-        })
-
-
-    }
-
-    handleControl(e, record) {
-        e.preventDefault();
-        this.props.history.push('/app/mylive/controlpanel/' + record.lid);
-        this.props.setAlitaState({
-            stateName: 'live_control_page',
-            data: {
-                liveData: record
+                visible: false
             }
         })
     }
 
-    handleDropdownClick(e, record) {
-        e.preventDefault();
-        console.log('record', record)
-        this.setState({
-            selectedRecord: record
-        })
-    }
-
-    handleDelete = (e, record) => {
-        e.preventDefault();
-        console.log('record', record);
-        if (!checkUserInfo(this.props.history)) {
-            return;
-        }
-        var user = getLocalStorage('user');
-        VCloudAPI.delete('/com/' + user.cid + '/liverooms/?aid=' + user.aid
-            + '&lid=' + record.lid,
-        ).then(response => {
-            if (response.status === 200 && response.data.code === 200) {
-                message.success('删除成功');
-            } else {
-                message.error('删除直播间失败!');
-            }
-        }).catch((e) => {
-            message.error('删除直播间失败!');
-        })
-    }
-
-    handleChangeState = (e, record) => {
-        e.preventDefault();
-        if (!checkUserInfo(this.props.history)) {
-            return;
-        }
-        var nextStatus = 2;
-        switch (record.status) {
-            case 1:
-                message.error('无法关闭正在进行的直播');
-                return;
-            case 2:
-                nextStatus = 3;
-                break;
-            case 3:
-                nextStatus = 2;
-                break;
-            default:
-        }
-        var user = getLocalStorage('user');
-        VCloudAPI.put('/com/' + user.cid + '/room_status/?aid=' + user.aid
-            + '&lid=' + record.lid, {
-            status: nextStatus
-        }
-        ).then(response => {
-            if (response.status === 200 && response.data.code === 200) {
-                message.success('变更状态成功');
-            } else {
-                message.error('变更状态失败!');
-            }
-        }).catch((e) => {
-            message.error('变更状态失败!');
-        })
+    getDataDesc() {
+        const { data } = this.props.alitaState.portal_add_modal || {};
+        return data ? data.data_desc : ''
     }
 
     compare = (property) => {
@@ -266,12 +168,14 @@ class SelectFromLive extends React.Component {
         return (
             <div>
                 <Table
-                    loading={this.state.isLoading}
                     dataSource={data}
                     columns={this.columns}
                     bordered
                     size="large"
                     rowKey="lid"
+                    pagination={{
+                        pageSize: 6,
+                    }}
                 />
             </div>
         );
