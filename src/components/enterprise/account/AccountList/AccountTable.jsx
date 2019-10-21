@@ -5,7 +5,9 @@ import { VCloudAPI } from 'myaxios/api';
 import { withRouter, Link } from 'react-router-dom';
 import { getLocalStorage } from 'myutils/index';
 import { checkUserInfo } from 'myutils/UserUtils';
+
 class AccountTable extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -17,6 +19,12 @@ class AccountTable extends React.Component {
         this.handleControl = this.handleControl.bind(this);
         this.columns = [
             {
+                title: '子账号id',
+                dataIndex: 'aid',
+                align: 'center',
+                render: (text) => { return text }
+            },
+            {
                 title: '子账号名',
                 dataIndex: 'name',
                 align: 'center',
@@ -26,65 +34,62 @@ class AccountTable extends React.Component {
                 dataIndex: 'email',
                 align: 'center',
             }, {
-                title: '用户类型',
-                dataIndex: 'kind',
-                align: 'center',
-                render: (value) => {
-                    switch (value) {
-                        case 1:
-                            return '普通';
-                        case 2:
-                            return '全景';
-                        default: return '普通';
-                    }
-                }
-            }, {
-                title: '状态',
-                dataIndex: 'status',
-                align: 'center',
-                render: (value) => {
-                    switch (value) {
-                        case 1:
-                            return '进行中';
-                        case 2:
-                            return '未进行';
-                        case 3:
-                            return '已关闭';
-                        default: return '未知'
-                    }
-                }
-            }, {
-                title: '主账号',
-                dataIndex: 'main',
-                align: 'center',
-            }, {
-                title: '视频列表',
+                title: '权限管理',
                 dataIndex: 'permission',
                 align: 'center',
-            }, 
+                render: (text, record) =>
+                    <div className="operation-item">
+                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>权限变更</a>
+                    </div>
+            }, {
+                title: '资源管理',
+                dataIndex: 'resource',
+                align: 'center',
+                render: (text, record) =>
+                    <div className="operation-item">
+                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>资源管理</a>
+                    </div>
+            },
             {
                 title: '操作',
                 dataIndex: 'operation',
                 align: 'center',
                 render: (text, record) =>
                     <div className="operation-item">
-                        <a className="live-link" href="http://" onClick={(e) => this.handleLink(e, record)}>链接</a>
-                        <Divider type="vertical" />
-                        <a className="live-link" href="http://" onClick={(e) => this.handleControl(e, record)}>控制台</a>
-                        <Divider type="vertical" />
-                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>设置</a>
-                        <Divider type="vertical" />
                         <Dropdown className="live-link" onClick={(e) => this.handleDropdownClick(e, record)} overlay={this.menu} trigger={['click']}>
                             <a className="ant-dropdown-link" href="#">
                                 更多<Icon type="down" />
                             </a>
                         </Dropdown>
                     </div>
-                
             },
         ]
+        this.menu = (
+            <Menu className="live-link" >
+                <Menu.Item>
+                    <Popconfirm
+                        title="确认重置账户密码?"
+                        onConfirm={(e, record) => this.handleResetPWD(e, this.state.selectedRecord)}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        重置密码
+                    </Popconfirm>
+                </Menu.Item>
+                <Menu.Item>
+                    <Popconfirm
+                        title="删除后将无法恢复，确认删除该账户?"
+                        onConfirm={(e, record) => this.handleDelete(e, this.state.selectedRecord)}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <a className="live-link" href="http://">删除账户</a>
+                    </Popconfirm>
+                </Menu.Item>
+            </Menu>
+        );
     }
-     
+
     componentDidMount() {
         if (!checkUserInfo(this.props.history)) {
             return;
@@ -93,7 +98,7 @@ class AccountTable extends React.Component {
         this.setState({
             isLoading: true
         })
-       VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
+        VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
         ).then(response => {
             console.log('success：', response.data)
             if (response.status === 200) {
@@ -163,55 +168,10 @@ class AccountTable extends React.Component {
     handleDelete = (e, record) => {
         e.preventDefault();
         console.log('record', record);
-        if (!checkUserInfo(this.props.history)) {
-            return;
-        }
-        var user = getLocalStorage('user');
-        VCloudAPI.delete('/com/' + user.cid + '/liverooms/?aid=' + user.aid
-            + '&lid=' + record.lid,
-        ).then(response => {
-            if (response.status === 200 && response.data.code === 200) {
-                message.success('删除成功');
-            } else {
-                message.error('删除直播间失败!');
-            }
-        }).catch((e) => {
-            message.error('删除直播间失败!');
-        })
     }
 
-    handleChangeState = (e, record) => {
+    handleResetPWD = (e, record) => {
         e.preventDefault();
-        if (!checkUserInfo(this.props.history)) {
-            return;
-        }
-        var nextStatus = 2;
-        switch (record.status) {
-            case 1:
-                message.error('无法关闭正在进行的直播');
-                return;
-            case 2:
-                nextStatus = 3;
-                break;
-            case 3:
-                nextStatus = 2;
-                break;
-            default:
-        }
-        var user = getLocalStorage('user');
-        VCloudAPI.put('/com/' + user.cid + '/room_status/?aid=' + user.aid
-            + '&lid=' + record.lid, {
-            status: nextStatus
-        }
-        ).then(response => {
-            if (response.status === 200 && response.data.code === 200) {
-                message.success('变更状态成功');
-            } else {
-                message.error('变更状态失败!');
-            }
-        }).catch((e) => {
-            message.error('变更状态失败!');
-        })
     }
 
     compare = (property) => {
@@ -222,26 +182,26 @@ class AccountTable extends React.Component {
         }
     }
 
-    render() {  
+    render() {
         const { my_account_list } = this.props.alitaState;
         var { data = [] } = my_account_list || {};
-        data && data.sort(this.compare('create_time'));  
+        data && data.sort(this.compare('create_time'));
         return (
-            
+
             <div>
                 <Table
                     loading={this.state.isLoading}
                     dataSource={data}
                     columns={this.columns}
-                    bordered                  
+                    bordered
                     size="large"
                     rowKey="lid"
                 />
             </div>
-            );
+        );
     }
 }
 export default connectAlita()(withRouter(AccountTable));
 
 
-   
+

@@ -3,8 +3,7 @@ import BreadcrumbCustom from 'mycomponents/BreadcrumbCustom';
 import AccountTable from './AccountTable';
 import AccountPanel from './AccountPanel';
 import './style.less';
-import CreateAccountModal from './CreateAccountModal';  
-//import CreateLinkModal from './LiveUrlModal';
+import CreateAccountModal from './CreateAccountModal';
 import { connectAlita } from 'redux-alita';
 class AccountListIndex extends React.Component {
 
@@ -13,11 +12,11 @@ class AccountListIndex extends React.Component {
             <div className="account-page">
                 <BreadcrumbCustom first="子账号列表" />
                 <div className="acount-panel">
-                <AccountPanel />
+                    <AccountPanel />
                 </div>
                 <div className="account-table-panel">
-                <CreateAccountModal />
-                <AccountTable />
+                    <CreateAccountModal />
+                    <AccountTable />
                 </div>
             </div>
         )

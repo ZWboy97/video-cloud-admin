@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import { Button, Modal, Form, Select, Input, DatePicker, message , Radio} from 'antd';
+import { Button, Modal, Form, Select, Input, DatePicker, message, Radio } from 'antd';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import './style.less'
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI, YMOCKAPI } from 'myaxios/api';
+import { VCloudAPI } from 'myaxios/api';
 import { getLocalStorage } from 'myutils/index';
 import { checkUserInfo } from 'myutils/UserUtils';
 import { withRouter } from 'react-router-dom';
@@ -160,8 +159,8 @@ class CreateAccountModal extends Component {
                                 rules: [{ required: true, message: '' }],
                             })(
                                 <Radio.Group name="radiogroup" defaultValue={1}>
-                                <Radio value={1}>只显示本账号</Radio>
-                                <Radio value={2}>全部</Radio>
+                                    <Radio value={1}>只显示本账号</Radio>
+                                    <Radio value={2}>全部</Radio>
                                 </Radio.Group>
                             )}
                         </Form.Item>
