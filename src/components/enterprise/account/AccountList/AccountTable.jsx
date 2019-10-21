@@ -1,34 +1,32 @@
-import { Table, Divider, message, Dropdown, Menu, Icon, Popconfirm } from 'antd'
 import React from 'react';
+import { Table, Divider, message, Dropdown, Menu, Icon, Popconfirm } from 'antd'
 import { connectAlita } from 'redux-alita';
 import { VCloudAPI } from 'myaxios/api';
 import { withRouter, Link } from 'react-router-dom';
 import { getLocalStorage } from 'myutils/index';
 import { checkUserInfo } from 'myutils/UserUtils';
-
-class LiveTable extends React.Component {
+class AccountTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoading: false,
             selectedRecord: {} //操作的record
         }
-       this.handleLink = this.handleLink.bind(this);
+        this.handleLink = this.handleLink.bind(this);
         this.handleSetting = this.handleSetting.bind(this);
         this.handleControl = this.handleControl.bind(this);
-
         this.columns = [
             {
-                title: '频道号',
-                dataIndex: 'lid',
+                title: '子账号名',
+                dataIndex: 'name',
                 align: 'center',
                 render: (text) => { return text }
             }, {
-                title: '直播名称',
-                dataIndex: 'name',
+                title: '子账号Email',
+                dataIndex: 'email',
                 align: 'center',
             }, {
-                title: '分类',
+                title: '用户类型',
                 dataIndex: 'kind',
                 align: 'center',
                 render: (value) => {
@@ -56,24 +54,15 @@ class LiveTable extends React.Component {
                     }
                 }
             }, {
-                title: '观看条件',
+                title: '主账号',
+                dataIndex: 'main',
+                align: 'center',
+            }, {
+                title: '视频列表',
                 dataIndex: 'permission',
                 align: 'center',
-                render: (value) => {
-                    console.log('permission', value)
-                    if (value === 1) {
-                        return '公开';
-                    } else if (value === 2) {
-                        return '验证码';
-                    } else if (value === 3) {
-                        return '支付';
-                    } else if (value === 4) {
-                        return '登录';
-                    } else {
-                        return '未知';
-                    }
-                }
-            }, {
+            }, 
+            {
                 title: '操作',
                 dataIndex: 'operation',
                 align: 'center',
@@ -91,38 +80,11 @@ class LiveTable extends React.Component {
                             </a>
                         </Dropdown>
                     </div>
+                
             },
         ]
-
-        this.menu = (
-            <Menu className="live-link" >
-                <Menu.Item>
-                    <Link to="/director/?did=1244" target="_blank">导播台直播</Link>
-                </Menu.Item>
-                <Menu.Item>
-                    <Popconfirm
-                        title="确认关闭该直播间?"
-                        onConfirm={(e, record) => this.handleChangeState(e, this.state.selectedRecord)}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        {this.state.selectedRecord.status === 3 ? '开启直播间' : '关闭直播间'}
-                    </Popconfirm>
-                </Menu.Item>
-                <Menu.Item>
-                    <Popconfirm
-                        title="删除后将无法恢复，确认删除该直播间?"
-                        onConfirm={(e, record) => this.handleDelete(e, this.state.selectedRecord)}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <a className="live-link" href="http://">删除直播间</a>
-                    </Popconfirm>
-                </Menu.Item>
-            </Menu>
-        );
     }
-
+     
     componentDidMount() {
         if (!checkUserInfo(this.props.history)) {
             return;
@@ -131,14 +93,14 @@ class LiveTable extends React.Component {
         this.setState({
             isLoading: true
         })
-        VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
+       VCloudAPI.get('/com/' + user.cid + '/liverooms/?aid=' + user.aid
         ).then(response => {
             console.log('success：', response.data)
             if (response.status === 200) {
                 const { code = 0, data = {}, msg = {} } = response.data || {};
                 if (code === 200) {
                     this.props.setAlitaState({
-                        stateName: 'my_live_list',
+                        stateName: 'my_account_list',
                         data: data
                     });
                 } else {
@@ -260,24 +222,26 @@ class LiveTable extends React.Component {
         }
     }
 
-
-    render() {
-        const { my_live_list } = this.props.alitaState;
-        var { data = [] } = my_live_list || {};
-        data && data.sort(this.compare('create_time'));
+    render() {  
+        const { my_account_list } = this.props.alitaState;
+        var { data = [] } = my_account_list || {};
+        data && data.sort(this.compare('create_time'));  
         return (
+            
             <div>
                 <Table
                     loading={this.state.isLoading}
                     dataSource={data}
                     columns={this.columns}
-                    bordered
+                    bordered                  
                     size="large"
                     rowKey="lid"
                 />
             </div>
-        );
+            );
     }
 }
+export default connectAlita()(withRouter(AccountTable));
 
-export default connectAlita()(withRouter(LiveTable));
+
+   
