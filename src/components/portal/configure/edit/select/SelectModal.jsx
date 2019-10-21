@@ -3,7 +3,6 @@ import { connectAlita } from 'redux-alita';
 import { Modal, Tabs } from 'antd';
 import SelectFromLive from './SelectFromLive';
 import SelectFromVod from './SelectFromVod';
-import PicTextItem from './PicTextItem';
 const { TabPane } = Tabs;
 
 
@@ -53,9 +52,6 @@ class SelectModal extends React.Component {
                         </TabPane>
                         <TabPane tab="选择已有点播" key="2">
                             <SelectFromVod></SelectFromVod>
-                        </TabPane>
-                        <TabPane tab="文本图片链接" key="3">
-                            <PicTextItem></PicTextItem>
                         </TabPane>
                     </Tabs>
                 </Modal>
