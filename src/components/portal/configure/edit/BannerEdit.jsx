@@ -114,6 +114,7 @@ class BannerEdit extends React.Component {
                                 dataSource={bannerData} >
                                 <Column title="序号" dataIndex="order" key="order" />
                                 <Column title="名称" dataIndex="title" key="title" />
+                                <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
                                     render={(text, record) => {
                                         const obj = record;
