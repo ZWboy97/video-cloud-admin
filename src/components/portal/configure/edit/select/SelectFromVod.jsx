@@ -41,9 +41,9 @@ class SelectFromVod extends React.Component {
         e.preventDefault();
         console.log('select vod', record);
         const newItem = {
-            title: record.name,
+            name: record.name,
             type: 'vod',
-            pic_url: record.pic_url,
+            picture_url: record.pic_url,
             link_url: record.display_url,
             rid: record.rid,
             intro: record.intro,

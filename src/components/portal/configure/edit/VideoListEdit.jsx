@@ -1,20 +1,57 @@
 import React from 'react';
-import { Card, Form, Input, Button, Table } from 'antd';
+import { Card, Form, Input, Button, Table, message } from 'antd';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from 'myaxios/api';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 const { Column } = Table;
 
 class VideoListEdit extends React.Component {
 
-    deleteVideoListItem = (e, obj) => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        const data = this.state.video_list;
-        data.splice(obj.order - 1, 1);
-        for (var i = 0; i < data.length; i++) {
-            data[i].order = i + 1;
+        const data = this.getPortalConfigureData().video_list;
+        const video_list = data.map((item) => {
+            return {
+                id: item.type === "live" ? item.lid : item.rid,
+                type: item.type
+            }
+        });
+        // 提交数据
+        if (!checkUserInfo(this.props.history)) {
+            return;
         }
-        this.setState({
-            video_list: data
+        var user = getLocalStorage('user');
+        VCloudAPI.put(`/mportal/${user.cid}/video_list/`, {
+            id_list: video_list
+        }).then(response => {
+            if (response.data.code === 200) {
+                message.success('保存成功');
+            } else {
+                message.error('网络失败');
+            }
         })
+    }
+
+    getPortalConfigureData() {
+        const { portal_configure_data } = this.props.alitaState || {}
+        const portalData = portal_configure_data ? portal_configure_data.data : {};
+        return portalData;
+    }
+
+    deleteVideoListItem = (e, index) => {
+        e.preventDefault();
+        const { portal_configure_data } = this.props.alitaState || {};
+        const data = portal_configure_data ? portal_configure_data.data.video_list : [];
+        data.splice(index, 1);
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: {
+                ...portal_configure_data.data,
+                video_list: data
+            }
+        });
+        message.success('删除成功');
     }
 
     addVideoListItem = (e) => {
@@ -81,8 +118,11 @@ class VideoListEdit extends React.Component {
                                 pagination={{ pageSize: 5 }}
                                 style={{ maxHeight: "300px" }}
                                 dataSource={videoListData} >
-                                <Column title="序号" dataIndex="order" key="order" />
-                                <Column title="名称" dataIndex="title" key="title" />
+                                <Column
+                                    title="序号"
+                                    align="center"
+                                    render={(text, record, index) => `${index + 1}`} />
+                                <Column title="名称" dataIndex="name" key="name" />
                                 <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
                                     render={(text, record) => {

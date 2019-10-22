@@ -1,12 +1,15 @@
 import React from 'react';
 import BreadcrumbCustom from 'mycomponents/BreadcrumbCustom';
-import { Row, Col, Carousel } from 'antd';
+import { Row, Col, Carousel, message } from 'antd';
 import BannerEdit from './BannerEdit';
 import { connectAlita } from 'redux-alita';
 import './style.less';
 import RecommendEdit from './RecommendEdit';
 import VideoListEdit from './VideoListEdit';
 import SelectModal from './select/SelectModal';
+import { VCloudAPI } from 'myaxios/api';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 const preview_top = require('../../../../style/imgs/mobile-preview-top.png')
 
 class PortalEditIndex extends React.Component {
@@ -35,6 +38,20 @@ class PortalEditIndex extends React.Component {
             }
         })
         // 从服务器读取数据
+        if (!checkUserInfo(this.props.history)) {
+            return;
+        }
+        var user = getLocalStorage('user');
+        VCloudAPI.get(`/mportal/${user.cid}/info/`).then(response => {
+            if (response.data.code === 200 && response.data.data) {
+                this.props.setAlitaState({
+                    stateName: 'portal_configure_data',
+                    data: response.data.data
+                })
+            } else {
+                message.error('请求数据错误');
+            }
+        });
     }
 
 
@@ -70,7 +87,7 @@ class PortalEditIndex extends React.Component {
                                                         return (
                                                             <div className="match-parent">
                                                                 <img className="banner-image"
-                                                                    src={item.pic_url} alt="" />
+                                                                    src={item.picture_url} alt="" />
                                                             </div>
                                                         )
                                                     })
@@ -100,7 +117,7 @@ class PortalEditIndex extends React.Component {
                                                     {
                                                         recommendData.map(v => (
                                                             <div className="recommend-item">
-                                                                <img className="recommed-img" src={v.pic_url} alt="" />
+                                                                <img className="recommed-img" src={v.picture_url} alt="" />
                                                             </div>
                                                         ))
                                                     }
@@ -131,7 +148,7 @@ class PortalEditIndex extends React.Component {
                                         {
                                             videoListData.length > 0 ? (
                                                 <div style={{ display: '-webkit-box', display: 'flex' }}>
-                                                    <img style={{ width: '100%', height: '200px' }} src={videoListData[0].pic_url} alt="" />
+                                                    <img style={{ width: '100%', height: '200px' }} src={videoListData[0].picture_url} alt="" />
                                                 </div>
                                             ) : (
                                                     <div style={{ display: '-webkit-box', display: 'flex' }}>

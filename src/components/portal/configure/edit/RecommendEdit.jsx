@@ -1,20 +1,57 @@
 import React from 'react';
-import { Card, Form, Button, Table } from 'antd';
+import { Card, Form, Button, Table, message } from 'antd';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from 'myaxios/api';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 const { Column } = Table;
 
 class RecommendEdit extends React.Component {
 
-    deleteRecommedItem = (e, obj) => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        const data = this.state.recommend_list;
-        data.splice(obj.order - 1, 1);
-        for (var i = 0; i < data.length; i++) {
-            data[i].order = i + 1;
+        const data = this.getPortalConfigureData().recommend_list;
+        const recommend_list = data.map((item) => {
+            return {
+                id: item.type === "live" ? item.lid : item.rid,
+                type: item.type
+            }
+        });
+        // 提交数据
+        if (!checkUserInfo(this.props.history)) {
+            return;
         }
-        this.setState({
-            recommed_list: data
+        var user = getLocalStorage('user');
+        VCloudAPI.put(`/mportal/${user.cid}/recommend_list/`, {
+            id_list: recommend_list
+        }).then(response => {
+            if (response.data.code === 200) {
+                message.success('保存成功');
+            } else {
+                message.error('网络失败');
+            }
         })
+    }
+
+    getPortalConfigureData() {
+        const { portal_configure_data } = this.props.alitaState || {}
+        const portalData = portal_configure_data ? portal_configure_data.data : {};
+        return portalData;
+    }
+
+    deleteRecommedItem = (e, index) => {
+        e.preventDefault();
+        const { portal_configure_data } = this.props.alitaState || {};
+        const data = portal_configure_data ? portal_configure_data.data.recommend_list : [];
+        data.splice(index, 1);
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: {
+                ...portal_configure_data.data,
+                recommend_list: data
+            }
+        });
+        message.success('删除成功');
     }
 
     addRecommedClick = (e) => {
@@ -82,16 +119,18 @@ class RecommendEdit extends React.Component {
                                 pagination={{ pageSize: 3 }}
                                 style={{ maxHeight: "300px" }}
                                 dataSource={recommendListData} >
-                                <Column title="序号" dataIndex="order" key="order" />
-                                <Column title="名称" dataIndex="title" key="title" />
+                                <Column
+                                    title="序号"
+                                    align="center"
+                                    render={(text, record, index) => `${index + 1}`} />
+                                <Column title="名称" dataIndex="name" key="name" />
                                 <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
-                                    render={(text, record) => {
-                                        const obj = record;
+                                    render={(text, record, index) => {
                                         return (
                                             <div>
                                                 <a onClick={(e) => {
-                                                    this.deleteRecommedItem(e, obj)
+                                                    this.deleteRecommedItem(e, index)
                                                 }}>删除</a>
                                             </div>)
                                     }
