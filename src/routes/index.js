@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom'; // https://www.jianshu.com/p/e3adc9b5f75c
 import DocumentTitle from 'react-document-title';
-import AllComponents from '../components';          //导入所有的组件
-import routesConfig from './config';                //导入菜单栏路由配置
+import AllComponents from '../components'; //导入所有的组件
+import routesConfig from './config'; //导入菜单栏路由配置
 import queryString from 'query-string';
 import { connectAlita } from 'redux-alita';
 
