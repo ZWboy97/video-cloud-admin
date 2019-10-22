@@ -17,21 +17,18 @@ class BannerEdit extends React.Component {
         return portalData;
     }
 
-    deleteBannerItem = (e, obj) => {
+    deleteBannerItem = (e, index) => {
         e.preventDefault();
         const data = this.getPortalConfigureData();
         const banner_list = data ? this.getPortalConfigureData().banner_list : [] || [];
-        banner_list.splice(obj.order - 1, 1);
-        for (var i = 0; i < banner_list.length; i++) {
-            banner_list[i].order = i + 1;
-        }
+        banner_list.splice(index - 1, 1);
         this.props.setAlitaState({
             stateName: 'portal_configure_data',
             data: {
                 ...data,
                 banner_list: banner_list
             }
-        })
+        });
     }
 
     addBannerClick = (e) => {
@@ -112,16 +109,19 @@ class BannerEdit extends React.Component {
                                 pagination={{ pageSize: 3 }}
                                 style={{ maxHeight: "300px" }}
                                 dataSource={bannerData} >
-                                <Column title="序号" dataIndex="order" key="order" />
-                                <Column title="名称" dataIndex="title" key="title" />
+                                <Column
+                                    title="序号"
+                                    align="center"
+                                    render={(text, record, index) => `${index + 1}`} />
+                                <Column title="名称" dataIndex="name" key="name" />
                                 <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
-                                    render={(text, record) => {
+                                    render={(text, record, index) => {
                                         const obj = record;
                                         return (
                                             <div>
                                                 <a onClick={(e) => {
-                                                    this.deleteBannerItem(e, obj)
+                                                    this.deleteBannerItem(e, index)
                                                 }}>删除</a>
                                             </div>)
                                     }

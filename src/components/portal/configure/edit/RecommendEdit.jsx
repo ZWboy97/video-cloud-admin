@@ -1,20 +1,23 @@
 import React from 'react';
-import { Card, Form, Button, Table } from 'antd';
+import { Card, Form, Button, Table, message } from 'antd';
 import { connectAlita } from 'redux-alita';
 const { Column } = Table;
 
 class RecommendEdit extends React.Component {
 
-    deleteRecommedItem = (e, obj) => {
+    deleteRecommedItem = (e, index) => {
         e.preventDefault();
-        const data = this.state.recommend_list;
-        data.splice(obj.order - 1, 1);
-        for (var i = 0; i < data.length; i++) {
-            data[i].order = i + 1;
-        }
-        this.setState({
-            recommed_list: data
-        })
+        const { portal_configure_data } = this.props.alitaState || {};
+        const data = portal_configure_data ? portal_configure_data.data.recommend_list : [];
+        data.splice(index - 1, 1);
+        this.props.setAlitaState({
+            stateName: 'portal_configure_data',
+            data: {
+                ...portal_configure_data.data,
+                recommed_list: data
+            }
+        });
+        message.success('删除成功');
     }
 
     addRecommedClick = (e) => {
@@ -82,16 +85,18 @@ class RecommendEdit extends React.Component {
                                 pagination={{ pageSize: 3 }}
                                 style={{ maxHeight: "300px" }}
                                 dataSource={recommendListData} >
-                                <Column title="序号" dataIndex="order" key="order" />
-                                <Column title="名称" dataIndex="title" key="title" />
+                                <Column
+                                    title="序号"
+                                    align="center"
+                                    render={(text, record, index) => `${index + 1}`} />
+                                <Column title="名称" dataIndex="name" key="name" />
                                 <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
-                                    render={(text, record) => {
-                                        const obj = record;
+                                    render={(text, record, index) => {
                                         return (
                                             <div>
                                                 <a onClick={(e) => {
-                                                    this.deleteRecommedItem(e, obj)
+                                                    this.deleteRecommedItem(e, index)
                                                 }}>删除</a>
                                             </div>)
                                     }
