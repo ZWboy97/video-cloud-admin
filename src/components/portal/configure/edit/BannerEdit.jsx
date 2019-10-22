@@ -1,14 +1,43 @@
 import React from 'react';
 import { Card, Form, Input, Button, message, Table } from 'antd';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from 'myaxios/api';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 const { TextArea } = Input;
 const { Column } = Table;
 
 class BannerEdit extends React.Component {
 
     handleSubmit = (e) => {
-        // a
-        message.success('ok')
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('form data', values);
+                const data = this.getPortalConfigureData().banner_list;
+                const banner_list = data.map((item) => {
+                    return {
+                        id: item.type === "live" ? item.lid : item.rid,
+                        type: item.type
+                    }
+                });
+                // 提交数据
+                if (!checkUserInfo(this.props.history)) {
+                    return;
+                }
+                var user = getLocalStorage('user');
+                VCloudAPI.put(`/mportal/${user.cid}/banner_list/`, {
+                    ...values,
+                    id_list: banner_list
+                }).then(response => {
+                    if (response.data.code === 200) {
+                        message.success('保存成功');
+                    } else {
+                        message.error('网络失败');
+                    }
+                })
+            }
+        })
     }
 
     getPortalConfigureData() {
@@ -21,7 +50,7 @@ class BannerEdit extends React.Component {
         e.preventDefault();
         const data = this.getPortalConfigureData();
         const banner_list = data ? this.getPortalConfigureData().banner_list : [] || [];
-        banner_list.splice(index - 1, 1);
+        banner_list.splice(index, 1);
         this.props.setAlitaState({
             stateName: 'portal_configure_data',
             data: {
@@ -79,7 +108,7 @@ class BannerEdit extends React.Component {
                         onSubmit={(e) => this.handleSubmit(e)}
                     >
                         <Form.Item label="门户名称">
-                            {getFieldDecorator('portal_name', {
+                            {getFieldDecorator('title', {
                                 rules: [{ required: true, message: '请输入您的门户名称!' }],
                                 initialValue: portalTitle
                             })(
@@ -87,16 +116,14 @@ class BannerEdit extends React.Component {
                             )}
                         </Form.Item>
                         <Form.Item label="门户简介">
-                            {getFieldDecorator('portal_desc', {
+                            {getFieldDecorator('desc', {
                                 initialValue: portalDesc
                             })(
                                 <TextArea rows={3} />,
                             )}
                         </Form.Item >
                         <Form.Item label="Banner列表" >
-                            {getFieldDecorator('portal_desc')(
-                                <a onClick={(e) => this.addBannerClick(e)}>点击添加Banner</ a>,
-                            )}
+                            <a onClick={(e) => this.addBannerClick(e)}>点击添加Banner</ a>
                         </Form.Item>
                         <Form.Item
                             style={{ marginLeft: '10%', marginRight: '8%' }}
@@ -117,7 +144,6 @@ class BannerEdit extends React.Component {
                                 <Column title="类型" dataIndex="type" key="type" />
                                 <Column title="操作" key="action"
                                     render={(text, record, index) => {
-                                        const obj = record;
                                         return (
                                             <div>
                                                 <a onClick={(e) => {

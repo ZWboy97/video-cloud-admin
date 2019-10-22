@@ -111,9 +111,9 @@ class SelectFromLive extends React.Component {
         e.preventDefault();
         console.log('select live', record);
         const newItem = {
-            title: record.name,
+            name: record.name,
             type: 'live',
-            pic_url: record.picture_url,
+            picture_url: record.picture_url,
             link_url: record.display_url,
             lid: record.lid,
             intro: record.intro,

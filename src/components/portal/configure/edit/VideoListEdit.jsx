@@ -1,15 +1,49 @@
 import React from 'react';
 import { Card, Form, Input, Button, Table, message } from 'antd';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from 'myaxios/api';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 const { Column } = Table;
 
 class VideoListEdit extends React.Component {
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const data = this.getPortalConfigureData().video_list;
+        const video_list = data.map((item) => {
+            return {
+                id: item.type === "live" ? item.lid : item.rid,
+                type: item.type
+            }
+        });
+        // 提交数据
+        if (!checkUserInfo(this.props.history)) {
+            return;
+        }
+        var user = getLocalStorage('user');
+        VCloudAPI.put(`/mportal/${user.cid}/video_list/`, {
+            id_list: video_list
+        }).then(response => {
+            if (response.data.code === 200) {
+                message.success('保存成功');
+            } else {
+                message.error('网络失败');
+            }
+        })
+    }
+
+    getPortalConfigureData() {
+        const { portal_configure_data } = this.props.alitaState || {}
+        const portalData = portal_configure_data ? portal_configure_data.data : {};
+        return portalData;
+    }
 
     deleteVideoListItem = (e, index) => {
         e.preventDefault();
         const { portal_configure_data } = this.props.alitaState || {};
         const data = portal_configure_data ? portal_configure_data.data.video_list : [];
-        data.splice(index - 1, 1);
+        data.splice(index, 1);
         this.props.setAlitaState({
             stateName: 'portal_configure_data',
             data: {

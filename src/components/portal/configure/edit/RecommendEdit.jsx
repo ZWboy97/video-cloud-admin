@@ -1,20 +1,54 @@
 import React from 'react';
 import { Card, Form, Button, Table, message } from 'antd';
 import { connectAlita } from 'redux-alita';
+import { VCloudAPI } from 'myaxios/api';
+import { getLocalStorage } from 'myutils/index';
+import { checkUserInfo } from 'myutils/UserUtils';
 const { Column } = Table;
 
 class RecommendEdit extends React.Component {
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const data = this.getPortalConfigureData().recommend_list;
+        const recommend_list = data.map((item) => {
+            return {
+                id: item.type === "live" ? item.lid : item.rid,
+                type: item.type
+            }
+        });
+        // 提交数据
+        if (!checkUserInfo(this.props.history)) {
+            return;
+        }
+        var user = getLocalStorage('user');
+        VCloudAPI.put(`/mportal/${user.cid}/recommend_list/`, {
+            id_list: recommend_list
+        }).then(response => {
+            if (response.data.code === 200) {
+                message.success('保存成功');
+            } else {
+                message.error('网络失败');
+            }
+        })
+    }
+
+    getPortalConfigureData() {
+        const { portal_configure_data } = this.props.alitaState || {}
+        const portalData = portal_configure_data ? portal_configure_data.data : {};
+        return portalData;
+    }
 
     deleteRecommedItem = (e, index) => {
         e.preventDefault();
         const { portal_configure_data } = this.props.alitaState || {};
         const data = portal_configure_data ? portal_configure_data.data.recommend_list : [];
-        data.splice(index - 1, 1);
+        data.splice(index, 1);
         this.props.setAlitaState({
             stateName: 'portal_configure_data',
             data: {
                 ...portal_configure_data.data,
-                recommed_list: data
+                recommend_list: data
             }
         });
         message.success('删除成功');
