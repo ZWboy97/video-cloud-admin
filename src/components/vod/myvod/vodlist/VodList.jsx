@@ -108,7 +108,7 @@ class VodList extends React.Component {
                                                 }}
                                             >设置</a>
                                             <Divider type="vertical" />
-                                            <a href="http://">预览</a>
+                                            <a href={item.display_url} target="_blank" rel="noopener noreferrer">预览</a>
                                         </div>
                                     </Col>
                                 </Row>
