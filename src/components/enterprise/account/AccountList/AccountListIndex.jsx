@@ -4,6 +4,8 @@ import AccountTable from './AccountTable';
 import AccountPanel from './AccountPanel';
 import './style.less';
 import CreateAccountModal from './CreateAccountModal';
+import AccountAuth from './AccountAuth';
+
 import { connectAlita } from 'redux-alita';
 class AccountListIndex extends React.Component {
 
@@ -15,6 +17,7 @@ class AccountListIndex extends React.Component {
                     <AccountPanel />
                 </div>
                 <div className="account-table-panel">
+                    <AccountAuth />
                     <CreateAccountModal />
                     <AccountTable />
                 </div>

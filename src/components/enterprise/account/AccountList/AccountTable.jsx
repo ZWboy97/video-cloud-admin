@@ -39,7 +39,7 @@ class AccountTable extends React.Component {
                 align: 'center',
                 render: (text, record) =>
                     <div className="operation-item">
-                        <a className="live-link" href="http://" onClick={(e) => this.handleSetting(e, record)}>权限变更</a>
+                        <a className="live-link" href="http://" onClick={(e) => this.handleAuthUpdate(e, record)}>权限变更</a>
                     </div>
             }, {
                 title: '资源管理',
@@ -140,6 +140,18 @@ class AccountTable extends React.Component {
             stateName: 'live_setting_page',
             data: {
                 liveData: record
+            }
+        })
+
+
+    }
+    handleAuthUpdate(e, record) {
+        e.preventDefault();
+        this.props.setAlitaState({
+            stateName: 'auth_update',
+            data: {
+                visible:true,
+                accountData: record
             }
         })
 
