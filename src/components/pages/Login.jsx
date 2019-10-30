@@ -72,12 +72,12 @@ class Login extends React.Component {
                 <div className="login">
                     <div className="login-logo-image">
                         <img src={require('../../style/imgs/logo.png')} alt="logo" />
-                        <div className="logo-text">视频云</div>
+                        <div className="logo-text">游目云</div>
                     </div>
                     <Spin spinning={this.state.logining} delay={500}>
                         <div className="login-form-container">
                             <div className="login-form" >
-                                <div className="login-logo">视频云直播管理后台</div>
+                                <div className="login-logo">游目云视频分发管理后台</div>
                                 <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
                                     <FormItem>
                                         {getFieldDecorator('user_name', {
@@ -127,7 +127,7 @@ class Login extends React.Component {
                     </Spin>
                 </div>
                 <div className="login-footer">
-                    版权所有 © 2019 视频云管理平台
+                    版权所有 © 2019 游目云
                 </div>
             </div>
 

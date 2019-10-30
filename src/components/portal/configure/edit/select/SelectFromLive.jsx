@@ -126,10 +126,10 @@ class SelectFromLive extends React.Component {
         }
         const { data } = this.props.alitaState.portal_configure_data || {};
         const dataDesc = this.getDataDesc();
-        data[dataDesc].unshift(newItem);
-        for (var i = 0; i < data[dataDesc].length; i++) {
-            data[dataDesc][i].order = i + 1;
+        if (!data[dataDesc]) {
+            data[dataDesc] = [];
         }
+        data[dataDesc].unshift(newItem);
         this.props.setAlitaState({
             stateName: 'portal_configure_data',
             data: data,

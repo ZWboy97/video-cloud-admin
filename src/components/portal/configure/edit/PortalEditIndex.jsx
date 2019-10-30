@@ -80,7 +80,7 @@ class PortalEditIndex extends React.Component {
                                         this.setState({ edit_index: 0 });
                                     }}>
                                     {
-                                        bannerData.length > 0 ? (
+                                        bannerData && bannerData.length > 0 ? (
                                             <Carousel className=".ant-carousel .slick-slide">
                                                 {
                                                     bannerData.map((item) => {
@@ -112,7 +112,7 @@ class PortalEditIndex extends React.Component {
                                     <div className="card-title">推荐内容</div>
                                     <div className="recommend-list">
                                         {
-                                            recommendData.length > 0 ?
+                                            recommendData && recommendData.length > 0 ?
                                                 <div className="recommend-wrapper">
                                                     {
                                                         recommendData.map(v => (
@@ -146,7 +146,7 @@ class PortalEditIndex extends React.Component {
                                     <div className="card-title">视频列表</div>
                                     <div>
                                         {
-                                            videoListData.length > 0 ? (
+                                            videoListData && videoListData.length > 0 ? (
                                                 <div style={{ display: '-webkit-box', display: 'flex' }}>
                                                     <img style={{ width: '100%', height: '200px' }} src={videoListData[0].picture_url} alt="" />
                                                 </div>
