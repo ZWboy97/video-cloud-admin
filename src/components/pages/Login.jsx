@@ -19,13 +19,16 @@ class Login extends React.Component {
     }
 
     componentWillMount() {
-        document.title = '登录-视频云管理平台';
         const { redirect } = getUrlParams();
         if (redirect) {
             this.setState({
                 redirect: redirect  //从url读取参数，跳转来源（登录成功后要成功回去），为空的话就跳转到根首页
             });
         }
+    }
+
+    componentDidMount() {
+        document.title = '登录-游目云视频分发管理平台';
     }
 
     /**

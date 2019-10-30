@@ -8,6 +8,11 @@ class NotFound extends React.Component {
     state = {
         animated: ''
     };
+
+    componentDidMount() {
+        document.title = '游目-404页面不存在';
+    }
+
     enter = () => {
         this.setState({ animated: 'hinge' })
     };

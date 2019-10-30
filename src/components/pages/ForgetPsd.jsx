@@ -5,44 +5,48 @@
 // todo
 
 import {
-    Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message
+    Form, Input, Row, Col, Button, message
 } from 'antd';
 import React from 'react';
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI } from '../../axios/api'
-import { Link } from 'react-router-dom'
+import { VCloudAPI } from '../../axios/api';
+
 class ForgetPsd extends React.Component {
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
     };
 
-    handleGetCode=e=>{
+    componentDidMount() {
+        document.title = '忘记密码';
+    }
+
+    handleGetCode = e => {
         e.preventDefault();
-        const email_phone=this.props.form.getFieldValue("email_phone")
-           
-                VCloudAPI.post('/user/update/vcode/',
-                    {
-                        method: email_phone,
-                    })
-                    .then(response => {
-                        console.log('register response:', response)
-                        if (response.status === 200) {
-                            const { data } = response;
-                            if (data.code === 200) {
-                                message.info("已发送验证码");
-                            } else {
-                                message.info('获取验证码失败');
-                            }
-                        } else {
-                            message.warning("获取验证码失败，请重新尝试");
-                        }
-                    }).catch(r => {
-                        message.warning("网络错误，注册失败");
-                    }).finally(() => {
-                        this.setState({ logining: false })
-        });
-        
+        const email_phone = this.props.form.getFieldValue("email_phone")
+
+        VCloudAPI.post('/user/update/vcode/',
+            {
+                method: email_phone,
+            })
+            .then(response => {
+                console.log('register response:', response)
+                if (response.status === 200) {
+                    const { data } = response;
+                    if (data.code === 200) {
+                        message.info("已发送验证码");
+                    } else {
+                        message.info('获取验证码失败');
+                    }
+                } else {
+                    message.warning("获取验证码失败，请重新尝试");
+                }
+            }).catch(r => {
+                message.warning("网络错误，注册失败");
+            }).finally(() => {
+                this.setState({ logining: false })
+            });
+
 
     }
 
@@ -53,7 +57,7 @@ class ForgetPsd extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                VCloudAPI.post('/user/update/password/?cvcode='+values.cvcode,
+                VCloudAPI.post('/user/update/password/?cvcode=' + values.cvcode,
                     {
                         method: values.email_phone,
                         password: values.password
@@ -181,20 +185,20 @@ class ForgetPsd extends React.Component {
                                             {
                                                 required: true,
                                                 message: '请输入验证码',
-                                            } 
+                                            }
                                         ],
                                     })(<div>
                                         <Row>
                                             <Col span={15}>
-                                        <Input />
-                                        </Col>
-                                        <Col span={6} offset={3}>
-                                          <a href="javascript:;" onClick={this.handleGetCode}><u>获取验证码</u></a>
-                                          </Col>
-                                          </Row>
-                                       </div>)}
+                                                <Input />
+                                            </Col>
+                                            <Col span={6} offset={3}>
+                                                <a href="javascript:;" onClick={this.handleGetCode}><u>获取验证码</u></a>
+                                            </Col>
+                                        </Row>
+                                    </div>)}
                                 </Form.Item>
-                                
+
                                 <Form.Item {...tailFormItemLayout}>
                                     <Button className="forget-button" type="primary" htmlType="submit">
                                         确定重置 </Button>
