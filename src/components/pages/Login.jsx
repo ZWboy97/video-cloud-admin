@@ -73,14 +73,15 @@ class Login extends React.Component {
         return (
             <div className="login-container">
                 <div className="login">
-                    <div className="login-logo-image">
-                        <img src={require('../../style/imgs/logo.png')} alt="logo" />
-                        <div className="logo-text">游目云</div>
-                    </div>
+                    <a href="http://youmu.zwboy.cn" target="_blank">
+                        <div className="login-logo-image">
+                            <div>专业的互联网视频分发<br />SaaS服务平台</div>
+                            <img src={require('../../style/imgs/logo.png')} alt="logo" />
+                        </div>
+                    </a>
                     <Spin spinning={this.state.logining} delay={500}>
                         <div className="login-form-container">
                             <div className="login-form" >
-                                <div className="login-logo">游目云视频分发管理后台</div>
                                 <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
                                     <FormItem>
                                         {getFieldDecorator('user_name', {
