@@ -1,30 +1,74 @@
 /**
- * 注册界面
- * @author NingNing.Wang
+ *  用户登录页面
  */
 import React from 'react';
-import {
-    Form, Input, Tooltip, Icon, Row, Col, Button,message
-} from 'antd';
+import { Form, Icon, Input, Button, Tooltip, Row, message, Col } from 'antd';
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI } from '../../axios/api'
-import { Link, withRouter } from 'react-router-dom'
-class Register extends React.Component {
+import { VCloudAPI } from './../../../axios/api';
+import { Link, withRouter } from 'react-router-dom';
+import { setLocalStorage, getUrlParams } from './../../../utils/index';
 
+const FormItem = Form.Item;
+
+class EmailRegister extends React.Component {
+
+    //控制的state，不从Redux中读取
     state = {
-        confirmDirty: false,
-        autoCompleteResult: [],
-    };
+        logining: false,
+        redirect: ''
+    }
 
+    componentWillMount() {
+        document.title = '登录-视频云管理平台';
+        const { redirect } = getUrlParams();
+        if (redirect) {
+            this.setState({
+                redirect: redirect  //从url读取参数，跳转来源（登录成功后要成功回去），为空的话就跳转到根首页
+            });
+        }
+    }
+    handleGetCode=e=>{
+        e.preventDefault();
+        const email=this.props.form.getFieldValue("email")
+           
+                VCloudAPI.post('/user/email/',
+                    {
+                        email: email,
+                    })
+                    .then(response => {
+                        console.log('register response:', response)
+                        if (response.status === 200) {
+                            const { data } = response;
+                            if (data.code === 200) {
+                                message.info("已发送验证码");
+                            } else {
+                                message.info('获取验证码失败');
+                            }
+                        } else {
+                            message.warning("获取验证码失败，请重新尝试");
+                        }
+                    }).catch(r => {
+                        message.warning("网络错误，注册失败");
+                    }).finally(() => {
+                        this.setState({ logining: false })
+                    });
+        
+
+    }
+
+    /**
+     * 处理用户点击登录按钮
+     */
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                VCloudAPI.post('user/register',
+                VCloudAPI.post('/user/register/email/?cvcode='+values.cvcode,
                     {
                         email: values.email,
                         user_name: values.user_name,
                         password: values.password
+
                     })
                     .then(response => {
                         console.log('register response:', response)
@@ -33,8 +77,8 @@ class Register extends React.Component {
                             if (data.code === 200) {
                                 message.info("注册成功");
                                 this.props.history.push('/login');
-                            } else {
-                                message.info('注册失败');
+                            } else if(data.code === 408){
+                                message.info('验证码已失效');
                             }
                         } else {
                             message.warning("注册失败，请重新尝试");
@@ -70,38 +114,15 @@ class Register extends React.Component {
         callback();
     };
 
-
+    /**
+     * 渲染登录界面的布局和组件
+     */
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 12 },
-                sm: { span: 5 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
+        const { getFieldDecorator } = this.props.form;      //解析出getFieldDecorator方法
         return (
-            <div className="login-container">
-                <Row className="register-row" type="flex" justify="space-around" align="middle">
-                    <Col className="register-colum" span={5}>
-                        <div className="register-form">
-                            <div className="register-text">欢迎注册</div>
-                            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+
+            <div>
+                <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }} onSubmit={this.handleSubmit}>
                                 <Form.Item label="邮箱">
                                     {getFieldDecorator('email', {
                                         rules: [
@@ -157,20 +178,46 @@ class Register extends React.Component {
                                         ],
                                     })(<Input.Password onBlur={this.handleConfirmBlur} />)}
                                 </Form.Item>
-                                <Form.Item {...tailFormItemLayout}>
+                                <Form.Item label="验证码" >
+                                    {getFieldDecorator('cvcode', {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: '请输入验证码',
+                                            },
+                                        ],
+                                    })(<div>
+                                        <Row>
+                                            <Col span={15}>
+                                        <Input />
+                                        </Col>
+                                        <Col span={6} offset={3}>
+                                          <a href="javascript:;" onClick={this.handleGetCode}><u>获取验证码</u></a>
+                                          </Col>
+                                          </Row>
+                                       </div>)}
+                                </Form.Item>
+                                
+                                    
+                                        <div className="button-layout">
                                     <Button className="register-button" type="primary" htmlType="submit">
                                         注册 </Button>
+                                    
+                                        </div>
+                                        <div className="button-layout">
                                     <Link
                                         to='/login'>
-                                        &nbsp;&nbsp;&nbsp;?&nbsp;已有账号，去登陆
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<u>?已有账号，去登陆</u>
                                         </Link>
-                                </Form.Item>
+                                        </div>
+                                
                             </Form>
-                        </div>
-                    </Col>
-                </Row>
+
             </div>
+
+
         );
     }
 }
-export default withRouter(connectAlita()(Form.create()(Register)));
+
+export default connectAlita()(withRouter(Form.create()(EmailRegister)));

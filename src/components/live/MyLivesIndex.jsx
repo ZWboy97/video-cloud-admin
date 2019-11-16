@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import MyLivesPage from './mylives/MyLivesPage';
 import LiveSetting from './livesetting/LiveSetting';
 import LiveControlPanel from './livecontrolpanel/LiveControlPanel';
@@ -7,13 +7,13 @@ import LiveControlPanel from './livecontrolpanel/LiveControlPanel';
 /**
  * Page 页面， 由Router包裹
  */
-console.log('MyLiveIndex')
 export default () => (
 
     <Switch>
-        <Route exact path="/app/lives/mylives/" component={MyLivesPage} />
-        <Route path="/app/lives/mylives/setting/:lid" component={LiveSetting} />
-        <Route path="/app/lives/mylives/controlpanel/:lid" component={LiveControlPanel} />
+        <Route exact path="/app/mylive/" render={() => (<Redirect to="/app/mylive/livelist" />)} />
+        <Route exact path="/app/mylive/livelist/" component={MyLivesPage} />
+        <Route exact path="/app/mylive/livesetting/:lid" component={LiveSetting} />
+        <Route exact path="/app/mylive/controlpanel/:lid" component={LiveControlPanel} />
     </Switch>
 
 )

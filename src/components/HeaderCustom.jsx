@@ -4,9 +4,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connectAlita } from 'redux-alita';
-import { Menu, Icon, Layout, Badge, Popover } from 'antd';
+import { Menu, Icon, Layout, Popover } from 'antd';
 import SiderCustom from './SiderCustom';
-import { getUrlParams } from '../utils';//导入工具函数
 import screenfull from 'screenfull';
 import avater from '../style/imgs/default_avtar.png';
 
@@ -50,8 +49,8 @@ class HeaderCustom extends Component {
         switch (e.key) {
             case 'logout':
                 this.logout();
-            default:
-                { }
+                break;
+            default: break;
         }
     };
 

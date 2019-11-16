@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, message } from 'antd';
-import VideoPlayer from '../../videoplayer/FlvVideoPlayer/VideoPanel';
+import FlvPlayer from 'mycomponents/videoplayer/FlvVideoPlayer/FlvPlayer';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import ChattingPanel from './livechatting/ChattingPanel'
 import MeansPanel from './livemeans/MeansPanel'
@@ -37,7 +37,13 @@ class LiveControlPanel extends React.Component {
                 }
             }
         })
+    }
 
+    componentWillUnmount() {
+        this.props.setAlitaState({
+            stateName: "live_setting_page",
+            data: {}
+        })
     }
 
     render() {
@@ -57,27 +63,28 @@ class LiveControlPanel extends React.Component {
                     <Row>
                         <Col span={15}>
                             <Row>
-                                <Col span={17}>
-                                    <VideoPlayer
+                                <div className="monitor-container">
+                                    <FlvPlayer
+                                        className="video-player"
                                         url={liveData.pull_http_flv_url}
                                         poster={liveData.pre_pic}
+                                        type="flv"
+                                        width="100%"
+                                        height="300px"
                                     />
-                                </Col>
-                                <Col span={6} >
                                     <div className="data-show">
                                         <Card title="实时监控数据">
                                             <p>观看量：5</p>
                                             <p>在线人数：5</p>
                                             <p>&nbsp;</p>
                                             <p>&nbsp;</p>
-                                            <p>&nbsp;</p>
                                         </Card>
                                     </div>
-                                </Col>
+                                </div>
                             </Row>
                             <MeansPanel />
                         </Col>
-                        <Col span={9} >
+                        <Col span={8} >
                             <ChattingPanel />
                         </Col>
                     </Row>

@@ -5,6 +5,7 @@ import React from 'react';
 import { connectAlita } from 'redux-alita';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import OssUploader from '../../../../utils/OssUploader';
+import { VCloudAPI, YMOCKAPI } from '../../../../axios/api';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -23,32 +24,48 @@ const formItemLayout = {
 
 class LiveInfo extends React.Component {
 
-    beforeUpload = file => {
-        // 配置STS Token， 之后需要从STS服务器去取
-        const options = {
-            config: {
-                region: 'oss-cn-beijing',
-                accessKeyId: "STS.NHzCXAWswMA6UhUVMWBkxcNP4",
-                accessKeySecret: "9WBs9RAL4ioo48xf17au4k4pxK57FsKkNhEGi672e95i",
-                stsToken: "CAISkwJ1q6Ft5B2yfSjIr4vPCOL1uqxW+oPdV07ksk0CTuRUjIv71jz2IH1KeHBsAugctvw/mmFX7PgSlqB6T55OSAmcNZIoS2+qPq3kMeT7oMWQweEuuv/MQBquaXPS2MvVfJ+OLrf0ceusbFbpjzJ6xaCAGxypQ12iN+/m6/Ngdc9FHHP7D1x8CcxROxFppeIDKHLVLozNCBPxhXfKB0ca3WgZgGhku6Ok2Z/euFiMzn+Ck7dL99mgfsT1MJE8Yc8jD+3YhrImKvDztwdL8AVP+atMi6hJxCzKpNn1ASMKvkvaaraPqoc3dF8nN/dgRf5e3/H4lOxlvOvIjJjwyBtLMuxTXj7WWIe62szAFfM14h+KhSJhUhqAAYlpjDY6CbeFKJT0L8T47wsPEm9QPtSUf5/1Mgyqk58HhyymtTPgcK3yX7Mp7qUOa6cu21UUMfLEKqY6ZlLy74NNpiY5x8iI9Py4LIYoRJNpuJJOl6QR/s5DSGiXDupTDkuyH8PgYVu1qmjRxAVQuFH5WWhUHQ4TynjZsbY/U63J",
-                bucket: 'pic-cloud-bupt',
-            },
-            dirname: '',
-            progress: this.progress,
-
+    componentDidMount(){
+        VCloudAPI.get('sts/token').then(res => {
+            console.log(res)
+            this.options.config.accessKeySecret = res.data.AccessKeySecret
+            this.options.config.accessKeyId = res.data.AccessKeyId
+            this.options.config.stsToken = res.data.SecurityToken
+            console.log('options', this.options)
+        })
+    }
+    options = {
+        config: {
+            region: 'oss-cn-beijing',
+            accessKeyId: "",
+            accessKeySecret: "",
+            stsToken: "",
+            bucket: 'video-cloud-bupt',
+        },
+        dirname: '',
+        progress: (percent) => {
+            console.log('上传进度:', parseInt(percent * 100));
         }
+    }
+    beforeUpload = file => {
+        console.log('beforeuploascover');
+
+        console.log('上传文件名', file.name);
+        console.log(file.size);
+        //const video_type=file.name.substring(file.name.indexOf('.'),file.name.length);
         // 创建Uploader
         const upload = new OssUploader({
-            ...options,                 // 与文件无关的一些配置
-            file,                       // 待上传的文件
+            ...this.options,//与文件无关的一些配置
+            file,// 待上传的文件
         });
+        console.log('options', this.options)
         // 开始上传
         upload.start(
             res => {
                 console.log('OSS上传返回结果', res)
                 if (res.res.status === 200) {
                     message.success('文件上传成功');
-                    const url = res.res.requestUrls[0];
+                    const url = res.res.requestUrls[0].substring(0, res.res.requestUrls[0].indexOf('?'));
+                    console.log('上传文件的返回URL为', url);
                     const { live_setting_page = {} } = this.props.alitaState || {};
                     const { liveData = {} } = live_setting_page.data || {}
                     const data = { liveData: { ...liveData, "picture_url": url } }
@@ -56,7 +73,6 @@ class LiveInfo extends React.Component {
                         stateName: 'live_setting_page',
                         data: data
                     });
-                    console.log('上传文件的返回URL为', url);
                 } else {
                     message.error('文件上传失败');
                 }
@@ -65,13 +81,8 @@ class LiveInfo extends React.Component {
                 message.error('文件上传失败');
             }
         );
-        return false;       // 在这里，我们自己通过OSS上传，所以返回false，拦截Upload自己的上传
+        return false;// 在这里，我们自己通过OSS上传，所以返回false，拦截Upload自己的上传
     }
-    progress = (percent) => {
-        console.log('上传进度:', parseInt(percent * 100));
-    }
-
-
     render() {
         //从alitastate中解析数据
         const { live_setting_page = {} } = this.props.alitaState || {};

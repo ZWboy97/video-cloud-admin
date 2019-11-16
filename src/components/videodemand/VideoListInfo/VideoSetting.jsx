@@ -1,7 +1,7 @@
-import { Form, Input, Row, Col, Upload, Icon, Button, message, Modal } from 'antd';
+import {Form, Input, Row, Col, Upload, Icon, Button, message, Modal} from 'antd';
 import React from 'react';
-import { connectAlita } from 'redux-alita';
-import { TESTJYLAPI } from '../../../axios/api'
+import {connectAlita} from 'redux-alita';
+import {TESTJYLAPI} from '../../../axios/api'
 
 const props = {
     name: 'file',
@@ -22,15 +22,16 @@ const props = {
 };
 
 class VideoSetting extends React.Component {
-    state = {
-        modalVisible: false,
-    };
+
     normFile = e => {
         console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
         return e && e.fileList;
+    };
+    state = {
+        modalVisible: false,
     };
     setModalVisible(modalVisible) {
         this.setState({ modalVisible });
@@ -46,38 +47,38 @@ class VideoSetting extends React.Component {
             }
             //读取表单数据
             let formData = {
-                name: fieldsValue['name']
+                name:fieldsValue['name']
             }
             console.log(formData)
             this.props.setAlitaState({
-                stateName: 'video_setting',
-                data: { name: formData.name, isClicked: true },
+                stateName:'video_setting',
+                data:{name:formData.name,isClicked:true},
 
             })
-            const { rowSelectedInfo = {} } = this.props.alitaState
-            console.log('rowSel', rowSelectedInfo)
-            const { data_source = {} } = this.props.alitaState;
-            console.log('data_src', data_source)
+            const {rowSelectedInfo = {}} = this.props.alitaState
+            console.log('rowSel',rowSelectedInfo)
+            const {data_source = {}} = this.props.alitaState;
+            console.log('data_src',data_source)
             const data_send = []
-            if (typeof (rowSelectedInfo) !== 'undefined' && typeof (rowSelectedInfo.data) !== 'undefined' && typeof (rowSelectedInfo.data.selectedRows) !== 'undefined') {
+            if (typeof (rowSelectedInfo) !== 'undefined'&&typeof (rowSelectedInfo.data) !== 'undefined'&&typeof (rowSelectedInfo.data.selectedRows) !== 'undefined') {
 
-                for (var i = 0; i < rowSelectedInfo.data.selectedRowKeys.length; i++) {
+                for (var i = 0;i < rowSelectedInfo.data.selectedRowKeys.length;i++) {
 
 
-                    let data = {
-                        name: fieldsValue['name'],
-                        rid: rowSelectedInfo.data.selectedRows[i].rid,
-                        label: rowSelectedInfo.data.selectedRows[i].label,
+                    let data  = {
+                        name:fieldsValue['name'],
+                        rid:rowSelectedInfo.data.selectedRows[i].rid,
+                        label:rowSelectedInfo.data.selectedRows[i].label,
                         pic_url: rowSelectedInfo.data.selectedRows[i].pic_url,
                     }
 
                     data_source.data[rowSelectedInfo.data.selectedRowKeys[i]].name = fieldsValue['name']
                     data_send.push(data)
-                    TESTJYLAPI.put('com/test/resourses/?test', data)
+                    TESTJYLAPI.put('com/'+JSON.parse(localStorage.user).cid+'/resourses/?test',data)
                 }
                 this.props.setAlitaState({
                     stateName: 'data_source',
-                    data: data_source.data
+                    data:data_source.data
                 })
 
 
@@ -100,17 +101,17 @@ class VideoSetting extends React.Component {
         // console.log(disable())
         const formItemLayout = {
             labelCol: {
-                xs: { span: 12 },
-                sm: { span: 5 },
+                xs: {span: 12},
+                sm: {span: 5},
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 11 },
+                xs: {span: 24},
+                sm: {span: 11},
             },
         };
-        const { getFieldDecorator } = this.props.form;
-        const { video_setting = {} } = this.props.alitaState;
-        console.log('video_setting', video_setting)
+        const {getFieldDecorator} = this.props.form;
+        const {video_setting = {}} = this.props.alitaState;
+        console.log('video_setting',video_setting)
 
         return (
             <div>
@@ -118,7 +119,7 @@ class VideoSetting extends React.Component {
                 <Row type="flex" justify="space-around" align="middle">
                     <Col span="20">
                         <div>
-                            <Button type="primary" onClick={() => this.setModalVisible(true)} size="large" icon="edit" >
+                            <Button type="primary" onClick={() => this.setModalVisible(true)} size='large' icon = "edit" >
                                 视频设置
                             </Button>
                             <Modal
@@ -132,29 +133,29 @@ class VideoSetting extends React.Component {
                                 <Form className="form-style" {...formItemLayout} >
                                     <Form.Item label="标题">
                                         {getFieldDecorator('name', {
-                                            initialValue: "",
-                                            rules: [{ message: '请输入视频标题' }],
-                                        })(<Input />)}
+                                            initialValue:"",
+                                            rules: [{message: '请输入视频标题'}],
+                                        })(<Input/>)}
                                     </Form.Item>
-                                    <Form.Item label="简介">
-                                        {getFieldDecorator('introduction', {
-                                            initialValue: ""
-                                        })(<Input />)}
-                                    </Form.Item>
-                                    <Form.Item label="封面">
-                                        <div className="dropbox">
-                                            {getFieldDecorator('dragger', {
-                                                valuePropName: 'fileList',
-                                                getValueFromEvent: this.normFile,
-                                            })(
-                                                <Upload {...props}>
-                                                    <Button>
-                                                        <Icon type="upload" /> 点击上传封面
-                                                    </Button>
-                                                </Upload>,
-                                            )}
-                                        </div>
-                                    </Form.Item>
+                                    {/*<Form.Item label="简介">*/}
+                                        {/*{getFieldDecorator('introduction', {*/}
+                                            {/*initialValue:""*/}
+                                        {/*})(<Input/>)}*/}
+                                    {/*</Form.Item>*/}
+                                    {/*<Form.Item label="封面">*/}
+                                        {/*<div className="dropbox">*/}
+                                            {/*{getFieldDecorator('dragger', {*/}
+                                                {/*valuePropName: 'fileList',*/}
+                                                {/*getValueFromEvent: this.normFile,*/}
+                                            {/*})(*/}
+                                                {/*<Upload {...props}>*/}
+                                                    {/*<Button>*/}
+                                                        {/*<Icon type="upload" /> 点击上传封面*/}
+                                                    {/*</Button>*/}
+                                                {/*</Upload>,*/}
+                                            {/*)}*/}
+                                        {/*</div>*/}
+                                    {/*</Form.Item>*/}
                                 </Form>
                             </Modal>
 

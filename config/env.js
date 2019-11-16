@@ -2,11 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const paths = require('./paths');
+const paths = require('./paths'); // 一些路径配置
 
 // Make sure that including paths.js after env.js will read .env variables.
+// 在引入 ./paths.js 之后，需要立即把它从cache中删除掉，这样下次如果有其他的模块引入paths.js，
+// 就不会从缓存里面去获取，保证了paths.js里面执行逻辑都会用到最新的环境变量。
 delete require.cache[require.resolve('./paths')];
 
+// 检查node环境是否ready
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
   throw new Error(
@@ -14,6 +17,7 @@ if (!NODE_ENV) {
   );
 }
 
+// 加载包含环境变量的各种 .env* 配置文件
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 var dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
@@ -25,6 +29,7 @@ var dotenvFiles = [
   paths.dotenv,
 ].filter(Boolean);
 
+// 用dotenv-expand和dotenv来把文件里面的环境变量加载进来
 // Load environment variables from .env* files. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.  Variable expansion is supported in .env files.
@@ -56,6 +61,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter);
 
+// 返回一个 getClientEnvironment函数，这个函数执行后会返回客户端的环境变量。
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;

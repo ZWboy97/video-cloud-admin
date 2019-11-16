@@ -3,7 +3,8 @@ import React from 'react';
 import Lead from './Lead';
 import List from './List'
 import Professional from './Professional'
-import Pull from './Pull'
+import Pull from './Pull';
+import Mobile from './Mobile';
 const { TabPane } = Tabs;
 
 class MeansPanel extends React.Component {
@@ -24,7 +25,10 @@ class MeansPanel extends React.Component {
                     <TabPane tab="列表直播" key="3">
                         <List />
                     </TabPane>
-                    <TabPane tab="导播台直播" key="4">
+                    <TabPane tab="移动端直播" key="4">
+                        <Mobile />
+                    </TabPane>
+                    <TabPane tab="导播台直播" key="5">
                         <Lead />
                     </TabPane>
 

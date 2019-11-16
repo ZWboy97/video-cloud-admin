@@ -3,9 +3,8 @@ import Routes from './routes';
 import DocumentTitle from 'react-document-title';
 import SiderCustom from './components/SiderCustom';
 import HeaderCustom from './components/HeaderCustom';
-import { Layout, notification, Icon } from 'antd';
+import { Layout } from 'antd'; //jlaksdjf 
 import { connectAlita } from 'redux-alita';
-import { VCloudAPI } from './axios/api';
 
 const { Content, Footer } = Layout;
 
@@ -15,20 +14,18 @@ const { Content, Footer } = Layout;
  */
 class App extends Component {
 
+    constructor(props) {
+        super(props);
+        console.log('设置头部')
+    }
+
     /**
      * state，实现本地的简单控制，未经过redux框架
      */
     state = {
-        collapsed: false,       //边栏是否收缩
+        collapsed: false, //边栏是否收缩
         title: ''
     };
-
-    constructor(props) {
-        super(props);
-        const session_id = window.localStorage.getItem('session_id');
-        console.log('设置头部')
-        //VCloudAPI.defaults.headers.common['X-Session-Id'] = session_id;
-    }
 
     componentWillMount() {
         // 计算宽度，并存储到state中
@@ -87,9 +84,11 @@ class App extends Component {
                         <HeaderCustom
                             toggle={this.toggle}
                             collapsed={this.state.collapsed}
-                            user={auth.data || {}} />
+                            user={auth.data || {}}
+                        />
                         <Content
-                            style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
+                            style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}
+                        >
                             <Routes auth={auth} />
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>
@@ -102,4 +101,4 @@ class App extends Component {
     }
 }
 
-export default connectAlita(['auth', 'responsive'])(App);   // connect函数
+export default connectAlita(['auth', 'responsive'])(App); // connect函数
