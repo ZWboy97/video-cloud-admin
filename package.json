@@ -45,7 +45,7 @@
     "jest": "23.6.0",
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
-    "kind-of": "^6.0.2",
+    "kind-of": "^6.0.3",
     "less": "2.7.2",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "0.4.3",
